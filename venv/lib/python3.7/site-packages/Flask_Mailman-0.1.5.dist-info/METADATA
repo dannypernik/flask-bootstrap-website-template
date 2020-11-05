@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: Flask-Mailman
+Version: 0.1.5
+Summary: Porting Django's email implementation to your Flask applications.
+Home-page: https://github.com/waynerv/flask-mailman
+Author: Xie Wei
+Author-email: ampedee@gmail.com
+License: BSD-3-Clause
+Project-URL: Bug Reports, https://github.com/waynerv/flask-mailman/issues
+Project-URL: Source, https://github.com/waynerv/flask-mailman
+Keywords: flask mail smtp flask-mail
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Framework :: Django :: 2.2
+Classifier: Framework :: Flask
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: Topic :: Communications :: Email
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Requires-Python: >=3.3
+Description-Content-Type: text/markdown
+Requires-Dist: Flask (>=0.10)
+
+# Flask-Mailman
+
+Flask-Mailman is a Flask extension providing simple email sending capabilities.
+
+It was meant to replace unmaintained Flask-Mail with a better warranty and more features.
+
+## Usage
+
+Flask-Mail ported Django's email implementation to your Flask applications, which may be the best mail sending implementation that's available for python.
+
+The way of using this extension is almost the same as Flask-Mail and also Django.
+
+You can just read their documentation and choose a preferred style.
+
+Django documentation: https://docs.djangoproject.com/en/2.2/topics/email/
+
+Flask-Mail documentation: http://packages.python.org/Flask-Mail
+

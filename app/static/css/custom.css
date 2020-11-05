@@ -1,0 +1,188 @@
+@import "bootstrap.css";
+body {
+  font-family: "Montserrat", "Helvetica", sans-serif;
+  color: #171D96;
+}
+
+@media (max-width: 575px) {
+  h1 {
+    font-size: 2.125rem;
+  }
+
+  h2 {
+    font-size: 1.625rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+input, textarea {
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  padding: 1rem;
+  border: none;
+  border-bottom: 1px solid #999;
+  width: 100%;
+  outline: none;
+}
+
+input:focus, textarea:focus {
+  border-bottom: 1px solid #171D96;
+}
+
+input[type=submit] {
+  margin-top: 1.5rem;
+  background-color: transparent;
+  color: #171D96;
+  border: 2px solid #171D96;
+  font-size: 1.75rem;
+  transition: 0.3s;
+}
+
+button {
+  background-color: transparent;
+  border: 2px solid #171D96;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+button.lg {
+  font-size: calc(125% + 1vw);
+}
+
+.inverse button {
+  color: white;
+  border-color: white;
+}
+
+button:hover, input[type=submit]:hover {
+  background-color: #8c90ed;
+  border-color: #8c90ed;
+  color: white;
+}
+
+.navbar {
+  min-height: 88px;
+  background-color: white;
+}
+
+.navbar .container {
+  margin-top: 2rem;
+}
+
+.navbar-default .navbar-brand {
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: 400;
+  font-size: 44px;
+}
+
+#home-logo {
+  position: relative;
+  display: block;
+  margin: calc(8rem + 3vw) auto calc(3rem);
+  height: calc(80px + 3vw);
+}
+
+#home-title {
+  font-family: "Montserrat Alternates", sans-serif;
+  font-size: calc(1.8rem + 3vw);
+  font-weight: 400;
+}
+
+#home-tagline {
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+  font-size: calc(1.75rem + 1vw);
+  font-weight: 700;
+}
+
+.home-section .row {
+  width: 100%;
+  margin: auto;
+}
+
+.home-section.white {
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.home-section.white a {
+  color: #171D96;
+}
+
+.home-section.inverse {
+  min-height: 100vh;
+  overflow: auto;
+  color: white;
+}
+
+#home-1 {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center center no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.home-section.white > .row {
+  margin-top: calc(4rem + 3vw);
+}
+
+#home-3 {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.jpg) center center no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+#home-3 > .row {
+  margin-top: calc(1rem + 5vw);
+}
+
+.home-section.inverse a {
+  color: white;
+}
+
+.home-header {
+  font-family: "Montserrat Alternates", "Helvetica", sans-serif;
+  font-size: calc(1.75rem + 2vw);
+  margin-bottom: 2rem;
+}
+
+.home-button {
+  display: block;
+  margin: calc(3rem + 2vw) auto 0;
+}
+
+.home-next {
+  display: table;
+  margin: calc(2rem + 3vw) auto 3rem;
+  text-align: center;
+}
+
+.home-next a {
+  text-decoration: none;
+}
+
+.home-next a:hover h2 {
+  font-weight: 600;
+}
+
+.usp {
+  margin-top: calc(2rem + 3vw);
+}
+
+.usp-icon {
+  width: 7rem;
+  height: 7rem;
+  fill: #7ac534;
+  margin-bottom: 2rem;
+}
+
+.usp-title {
+  margin-bottom: 1.5rem;
+}
+
+.usp-text {
+  color: #888;
+}
+
+/*# sourceMappingURL=custom.css.map */
