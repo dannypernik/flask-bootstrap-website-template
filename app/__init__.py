@@ -1,4 +1,5 @@
 import os
+import sentry_sdk
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
@@ -8,6 +9,13 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 from flask_bootstrap import Bootstrap
 from flask_mailman import Mail
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+sentry_sdk.init(
+    dsn="https://7b07a0f6a2244061a029e1deaa863161@o473156.ingest.sentry.io/5507799",
+    integrations=[FlaskIntegration()],
+    traces_sample_rate=1.0
+)
 
 app = Flask(__name__)
 app.config.from_object(Config)
