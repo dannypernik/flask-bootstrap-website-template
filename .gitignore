@@ -1,3 +1,8 @@
+.DS_Store
+.env
 .flaskenv
-/__pycache__/
+__pycache__
 /venv/
+/logs/
+/certs/
+app.db
