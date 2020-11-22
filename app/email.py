@@ -15,7 +15,7 @@ def send_email(subject, sender, recipients, text_body, html_body):
 
 def send_inquiry_email(user, subject, message):
     send_email(subject,
-               sender=app.config['ADMINS'][0],
+               sender=("Ascended Learning", "ascendedlearningtutoring@gmail.com"),
                recipients=app.config['ADMINS'][0],
                text_body=render_template('email/inquiry-form.txt',
                                         user=user, message=message),
