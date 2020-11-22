@@ -7,7 +7,7 @@ def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
 
-def send_email(subject, sender, recipients, text_body, html_body):
+def send_email(subject, sender, recipients, reply_to, text_body, html_body):
     msg = Message(subject, sender=sender, recipients=recipients.split())
     msg.body = text_body
     msg.html = html_body
@@ -17,6 +17,7 @@ def send_inquiry_email(user, subject, message):
     send_email(subject,
                sender=("Ascended Learning", "ascendedlearningtutoring@gmail.com"),
                recipients=app.config['ADMINS'][0],
+               reply_to=user.email,
                text_body=render_template('email/inquiry-form.txt',
                                         user=user, message=message),
                html_body=render_template('email/inquiry-form.html',
