@@ -77,6 +77,11 @@ button:hover, input[type=submit]:hover {
   font-size: 44px;
 }
 
+.alert {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
 #home-logo {
   position: relative;
   display: block;
