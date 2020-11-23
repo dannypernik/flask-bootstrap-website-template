@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
+{% block styles %}
+  {{ super() }}
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+{% endblock styles %}
+
 {% block content %}
   <div id="home-1" class="home-section inverse text-center">
     <div class="row justify-content-center">
@@ -9,7 +14,7 @@
           src="{{ url_for('.static', filename='img/logo-white.svg') }}" alt="">
         <h1 id="home-title">Ascended Learning</h1>
         <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
-        <button type="button" name="button" class="lg home-button">
+        <button class="lg" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/ascendedlearning/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
           Schedule a free tutoring session
         </button>
         <div class="home-next">
@@ -85,48 +90,53 @@
     <div class="row justify-content-center">
       <div class="col-sm-10 col-lg-8">
         <h1 class="mb-5">In just about any academic subject, one factor can make the difference
-            between the best class ever and the most dreaded time of day:
-            <b>your teacher</b>.</h1>
+          between the best class ever and the most dreaded time of day:
+          <b>your teacher</b>.</h1>
         <h1 class="mb-5">The SAT and ACT are no different. If you don't enjoy your time with
-            a tutor, then the process will be painful. However, if you feel connected to
-            and respected by your tutor, then you'll be more willing to put in the work.</h1>
+          a tutor, then the process will be painful. However, if you feel connected to
+          and respected by your tutor, then you'll be more willing to put in the work.
+        </h1>
         <h1 class="mb-5">The only way to know is to try. That's why Ascended Learning
-            offers the <b>1st hour of tutoring free</b> with no purchase necessary.</h1>
-          <button type="button" name="button" class="lg home-button">
-            Schedule a free tutoring session
-          </button>
-          <div class="home-next">
-            <a href="#home-4">
-              <h2>
-                Have a question?
-              </h2>
-              <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
-                  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="home-4" class="home-section white">
-      <div class="row justify-content-center">
-        <div class="col-11 col-md-8">
-          <h1 class="home-header">Send us a message</h1>
-          <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <p class="mb-4">{{ form.first_name }}</p>
-            <p class="mb-4">{{ form.email }}</p>
-            <p class="mb-4">{{ form.subject }}</p>
-            <p class="mb-4">{{ form.message(rows='3') }}</p>
-            {{ form.submit }}
-          </form>
+          offers the <b>1st hour of tutoring free</b> with no purchase necessary.
+        </h1>
+        <button class="lg" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/ascendedlearning/intro'});return false;">
+          Schedule a free tutoring session
+        </button>
+        <div class="home-next">
+          <a href="#home-4">
+            <h2>
+              Have a question?
+            </h2>
+            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
   </div>
 
-  <script type="text/javascript"
-         src="{{ url_for('static', filename='js/smooth-scroll.js') }}"></script>
+  <div id="home-4" class="home-section white">
+    <div class="row justify-content-center">
+      <div class="col-11 col-md-8">
+        <h1 class="home-header">Send us a message</h1>
+        <form action="" method="post">
+          {{ form.hidden_tag() }}
+          <p class="mb-4">{{ form.first_name }}</p>
+          <p class="mb-4">{{ form.email }}</p>
+          <p class="mb-4">{{ form.subject }}</p>
+          <p class="mb-4">{{ form.message(rows='3') }}</p>
+          {{ form.submit }}
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript"
+          src="{{ url_for('static', filename='js/smooth-scroll.js') }}"></script>
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
+{% endblock scripts %}
