@@ -144,6 +144,12 @@ button:hover, input[type="submit"]:hover {
   background-size: cover;
 }
 
+@media screen and (max-width: 575px) {
+  #home-1, #home-3 {
+    background-attachment: scroll;
+  }
+}
+
 #home-3 > .row {
   margin-top: calc(1rem + 5vw);
 }
