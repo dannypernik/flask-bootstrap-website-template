@@ -80,6 +80,7 @@ button:hover, input[type=submit]:hover {
 .alert {
   text-align: center;
   font-size: 1.5rem;
+  margin-bottom: 0;
 }
 
 #home-logo {
