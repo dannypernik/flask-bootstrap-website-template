@@ -5,11 +5,7 @@
     {{ title }} - Ascended Learning{% else %}Ascended Learning{% endif %}
 {% endblock title %}
 
-{% block styles %}
-  {{super()}}
-  <link rel="stylesheet" href="{{url_for('.static', filename='css/custom.css')}}">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&family=Montserrat:wght@400&display=swap"
-    rel="stylesheet">
+{% block head %}
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5QY115CRR5"></script>
   <script>
@@ -19,6 +15,15 @@
 
     gtag('config', 'G-5QY115CRR5');
   </script>
+  
+  {{ super() }}
+{% endblock head %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{url_for('.static', filename='css/custom.css')}}">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&family=Montserrat:wght@400&display=swap"
+    rel="stylesheet">
 {% endblock styles %}
 
 {% block navbar %}
