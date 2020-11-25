@@ -1,4 +1,3 @@
-@import "bootstrap.css";
 body {
   font-family: "Montserrat", "Helvetica", sans-serif;
   color: #171D96;
@@ -17,6 +16,11 @@ body {
     font-size: 1.5rem;
   }
 }
+.justify-content-center {
+  -ms-flex-pack: center !important;
+  justify-content: center !important;
+}
+
 input, textarea {
   font-size: 1.5rem;
   line-height: 2.5rem;
