@@ -5,5 +5,4 @@ __pycache__
 /venv/
 /logs/
 /certs/
-/bootstrap/
 app.db

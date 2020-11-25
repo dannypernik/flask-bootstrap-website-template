@@ -1,4 +1,4 @@
-@import "bootstrap.css";
+//@import "bootstrap.css";
 
 $primary-color: #171D96;
 $hover-color: lighten($primary-color, 40%);
@@ -20,6 +20,11 @@ body {
   h3 {
     font-size: 1.5rem;
   }
+}
+
+.justify-content-center {
+  -ms-flex-pack: center !important;
+  justify-content: center !important;
 }
 
 input, textarea {
