@@ -4,13 +4,18 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
-
+{% for url in static_urls %}
 <url>
-  <loc>https://ascendedlearning.com/</loc>
-  <lastmod>2020-11-26T04:10:58+00:00</lastmod>
+  <loc>{{ url["loc"] }}</loc>
 </url>
+{% endfor %}
 
+{% for url in dynamic_urls %}
+<url>
+  <loc>{{ url["loc"] }}</loc>
+  <lastmod>{{ url["lastmod"] }}</lastmod>
+</url>
+{% endfor %}
 
 </urlset>
