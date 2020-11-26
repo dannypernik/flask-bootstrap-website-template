@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, make_response
+from flask import Flask, render_template, flash, redirect, url_for, request, send_from_directory
 from app import app, db
 from app.forms import InquiryForm, EmailForm, SignupForm, LoginForm, EditProfileForm
 from flask_login import current_user, login_user, logout_user, login_required
@@ -6,7 +6,6 @@ from app.models import User
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_inquiry_email
-from urllib.parse import urlparse
 
 @app.before_request
 def before_request():
@@ -111,41 +110,6 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
-@app.route("/sitemap")
-@app.route("/sitemap/")
-@app.route("/sitemap.xml")
-def sitemap():
-    """
-        Route to dynamically generate a sitemap of your website/application.
-        lastmod and priority tags omitted on static pages.
-        lastmod included on dynamic content such as blog posts.
-    """
-
-    host_components = urlparse(request.host_url)
-    host_base = host_components.scheme + "://" + host_components.netloc
-
-    # Static routes with static content
-    static_urls = list()
-    for rule in app.url_map.iter_rules():
-        if not str(rule).startswith("/admin") and not str(rule).startswith("/user"):
-            if "GET" in rule.methods and len(rule.arguments) == 0:
-                url = {
-                    "loc": f"{host_base}{str(rule)}"
-                }
-                static_urls.append(url)
-
-    # Dynamic routes with dynamic content
-    dynamic_urls = list()
-    blog_posts = Post.objects(published=True)
-    for post in blog_posts:
-        url = {
-            "loc": f"{host_base}/blog/{post.category.name}/{post.url}",
-            "lastmod": post.date_published.strftime("%Y-%m-%dT%H:%M:%SZ")
-            }
-        dynamic_urls.append(url)
-
-    xml_sitemap = render_template("public/sitemap.xml", static_urls=static_urls, dynamic_urls=dynamic_urls, host_base=host_base)
-    response = make_response(xml_sitemap)
-    response.headers["Content-Type"] = "application/xml"
-
-    return response
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
