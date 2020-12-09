@@ -26,7 +26,7 @@ def index():
         send_inquiry_email(user, subject, message)
         flash("Thank you for your message. We will be in touch!")
         print(app.config['ADMINS'])
-        return redirect(url_for('index'))
+        return redirect(url_for('index', _anchor='home'))
     return render_template('index.html', form=form)
 
 @app.route('/signup', methods=['GET', 'POST'])

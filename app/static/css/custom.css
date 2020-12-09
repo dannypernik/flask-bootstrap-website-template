@@ -91,7 +91,7 @@ button:hover, input[type=submit]:hover {
 #home-logo {
   position: relative;
   display: block;
-  margin: calc(8rem + 3vw) auto calc(3rem);
+  margin: 4rem auto calc(3rem);
   height: calc(80px + 3vw);
 }
 
@@ -134,8 +134,8 @@ button:hover, input[type=submit]:hover {
   background-size: cover;
 }
 
-.home-section.white > .row {
-  margin-top: calc(4rem + 3vw);
+.home-section {
+  padding-top: calc(4rem + 3vw);
 }
 
 #home-3 {
@@ -149,10 +149,6 @@ button:hover, input[type=submit]:hover {
     background-attachment: scroll;
   }
 }
-#home-3 > .row {
-  margin-top: calc(1rem + 5vw);
-}
-
 .home-section.inverse a {
   color: white;
 }
@@ -165,12 +161,12 @@ button:hover, input[type=submit]:hover {
 
 .home-section button {
   display: block;
-  margin: calc(3rem + 2vw) auto 0;
+  margin: calc(3rem + 1vw) auto 0;
 }
 
 .home-next {
   display: table;
-  margin: calc(2rem + 3vw) auto 3rem;
+  margin: calc(2rem + 2vw) auto 3rem;
   text-align: center;
 }
 
@@ -183,7 +179,7 @@ button:hover, input[type=submit]:hover {
 }
 
 .usp {
-  margin-top: calc(2rem + 3vw);
+  margin-top: calc(2rem + 2vw);
 }
 
 .usp-icon {
