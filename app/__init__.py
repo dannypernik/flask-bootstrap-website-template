@@ -55,4 +55,4 @@ if not app.debug:
         app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Ascended Learning')
+        app.logger.info('Open Path Tutoring')
