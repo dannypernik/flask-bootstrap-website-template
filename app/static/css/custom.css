@@ -17,11 +17,6 @@ body {
     font-size: 1.5rem;
   }
 }
-.justify-content-center {
-  -ms-flex-pack: center !important;
-  justify-content: center !important;
-}
-
 input, textarea {
   font-size: 1.5rem;
   line-height: 2.5rem;
@@ -52,6 +47,12 @@ button {
   transition: 0.3s;
 }
 
+button:hover, input[type=submit]:hover {
+  background-color: #8c90ed;
+  border-color: #8c90ed;
+  color: white;
+}
+
 button.lg {
   font-size: calc(125% + 1vw);
 }
@@ -61,36 +62,28 @@ button.lg {
   border-color: white;
 }
 
-button:hover, input[type=submit]:hover {
-  background-color: #8c90ed;
-  border-color: #8c90ed;
-  color: white;
+.home-section button {
+  display: block;
+  margin: calc(3rem + 1vw) auto 0;
 }
 
-.navbar {
-  min-height: 88px;
-  background-color: white;
+#home {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center top no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
-.navbar .container {
-  margin-top: 2rem;
+#free-trial {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.jpg) center top no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
-.navbar-default .navbar-brand {
-  font-family: "Montserrat Alternates", sans-serif;
-  font-weight: 400;
-  font-size: 44px;
+@media screen and (max-width: 575px) {
+  #home, #free-trial {
+    background-attachment: scroll;
+  }
 }
-
-.alert {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 0;
-}
-
 #home-logo {
   position: relative;
   display: block;
@@ -109,6 +102,19 @@ button:hover, input[type=submit]:hover {
   padding-bottom: 1rem;
   font-size: calc(1.75rem + 1vw);
   font-weight: 700;
+}
+
+.alert {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.home-section {
+  padding-top: calc(4rem + 3vw);
 }
 
 .home-section .row {
@@ -131,27 +137,6 @@ button:hover, input[type=submit]:hover {
   color: white;
 }
 
-#home {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center top no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-}
-
-.home-section {
-  padding-top: calc(4rem + 3vw);
-}
-
-#free-trial {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.jpg) center top no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-}
-
-@media screen and (max-width: 575px) {
-  #home-1, #home-3 {
-    background-attachment: scroll;
-  }
-}
 .home-section.inverse a {
   color: white;
 }
@@ -160,11 +145,6 @@ button:hover, input[type=submit]:hover {
   font-family: "Montserrat Alternates", "Helvetica", sans-serif;
   font-size: calc(1.75rem + 2vw);
   margin-bottom: 2rem;
-}
-
-.home-section button {
-  display: block;
-  margin: calc(3rem + 1vw) auto 0;
 }
 
 .home-next {
