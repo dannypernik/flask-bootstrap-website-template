@@ -18,15 +18,29 @@
       gtag('config', 'G-64JMLPC3H8');
     </script>
 
+    <!-- generics -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-32.png') }}" sizes="32x32">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-128.png') }}" sizes="128x128">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-192.png') }}" sizes="192x192">
+
+    <!-- Android -->
+    <link rel="shortcut icon" sizes="196x196" href="{{ url_for('static', filename='img/favicons/favicon-196.png') }}">
+
+    <!-- iOS -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-152.png') }}" sizes="152x152">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-180.png') }}" sizes="180x180">
+
+    <!-- Windows 8.1 + IE11 and above -->
+    <meta name="msapplication-config" content="{{ url_for('static', filename='img/favicons/browserconfig.xml') }}" />
+
   {{ super() }}
 {% endblock head %}
 
 {% block styles %}
   {{super()}}
-  <link rel="stylesheet" href="{{url_for('.static', filename='css/custom.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&family=Montserrat:wght@400&display=swap"
     rel="stylesheet">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-64.png') }}">
 {% endblock styles %}
 
 {% block navbar %}
