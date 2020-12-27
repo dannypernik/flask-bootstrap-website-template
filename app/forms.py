@@ -1,4 +1,4 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import ValidationError, InputRequired, Email, EqualTo, Length
 from app.models import User
@@ -11,6 +11,7 @@ class InquiryForm(FlaskForm):
     subject = StringField('Subject (optional)', render_kw={"placeholder": "Subject (optional)"})
     message = TextAreaField('Message', render_kw={"placeholder": "Message"}, \
         validators=[InputRequired()])
+    recaptcha = RecaptchaField()
     submit = SubmitField('Submit')
 
 
