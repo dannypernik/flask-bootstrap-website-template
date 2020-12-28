@@ -180,4 +180,8 @@ button.lg {
   color: #888;
 }
 
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
 /*# sourceMappingURL=custom.css.map */

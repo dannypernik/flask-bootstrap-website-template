@@ -6,7 +6,7 @@
   <meta property="og:title" content="Open Path Tutoring" />
   <meta property="og:description" content="Schedule your free SAT/ACT prep session today" />
   <meta property="og:image" content="{{ url_for('.static', filename='img/og-image.jpg') }}" />
-  <!--<script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
+  <script src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock head %}
 
 {% block styles %}
@@ -130,14 +130,13 @@
       <div class="col-11 col-md-8">
         <h1 class="home-header">Send us a message</h1>
 
-        <form action="" method="post">
+        <form id="inquiry-form" action="" method="post">
           {{ form.hidden_tag() }}
           <p class="mb-4">{{ form.first_name }}</p>
           <p class="mb-4">{{ form.email }}</p>
           <p class="mb-4">{{ form.subject }}</p>
           <p class="mb-4">{{ form.message(rows='3') }}</p>
-          <!--<div class="g-recaptcha" data-sitekey="6LeK0hIaAAAAAFaRn1dFMbFVLQbhf9k5vd9js8k3"></div>-->
-          {{ form.submit }}
+          <input type="submit" class='g-recaptcha', data-sitekey='6Lc3IBcaAAAAANQvPMR7J9MhHZyykxuamsKb4561', data-callback='onSubmit', data-action='submit' />
         </form>
       </div>
     </div>
@@ -149,4 +148,9 @@
   <script type="text/javascript"
           src="{{ url_for('static', filename='js/smooth-scroll.js') }}"></script>
   <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
+  <script>
+   function onSubmit(token) {
+     document.getElementById("inquiry-form").submit();
+   }
+ </script>
 {% endblock scripts %}
