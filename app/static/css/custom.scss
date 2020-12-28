@@ -52,12 +52,6 @@ button {
   transition: 0.3s;
 }
 
-button:hover, input[type="submit"]:hover {
-  background-color: $hover-color;
-  border-color: $hover-color;
-  color: white;
-}
-
 button.lg {
   font-size: calc(125% + 1vw);
 }
@@ -70,6 +64,12 @@ button.lg {
 .home-section button {
   display: block;
   margin: calc(3rem + 1vw) auto 0;
+}
+
+.home-section button:hover, input[type="submit"]:hover {
+  background-color: $hover-color;
+  border-color: $hover-color;
+  color: white;
 }
 
 #home {
