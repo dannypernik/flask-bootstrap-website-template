@@ -9,29 +9,29 @@
 
 {% block head %}
   <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-64JMLPC3H8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-64JMLPC3H8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-      gtag('config', 'G-64JMLPC3H8');
-    </script>
+    gtag('config', 'G-64JMLPC3H8');
+  </script>
 
-    <!-- generics -->
-    <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-32.png') }}" sizes="32x32">
-    <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-128.png') }}" sizes="128x128">
-    <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-192.png') }}" sizes="192x192">
+  <!-- generics -->
+  <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-32.png') }}" sizes="32x32">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-128.png') }}" sizes="128x128">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-192.png') }}" sizes="192x192">
 
-    <!-- Android -->
-    <link rel="shortcut icon" sizes="196x196" href="{{ url_for('static', filename='img/favicons/favicon-196.png') }}">
+  <!-- Android -->
+  <link rel="shortcut icon" sizes="196x196" href="{{ url_for('static', filename='img/favicons/favicon-196.png') }}">
 
-    <!-- iOS -->
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-152.png') }}" sizes="152x152">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-180.png') }}" sizes="180x180">
+  <!-- iOS -->
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-152.png') }}" sizes="152x152">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-180.png') }}" sizes="180x180">
 
-    <!-- Windows 8.1 + IE11 and above -->
-    <meta name="msapplication-config" content="{{ url_for('static', filename='img/favicons/browserconfig.xml') }}" />
+  <!-- Windows 8.1 + IE11 and above -->
+  <meta name="msapplication-config" content="{{ url_for('static', filename='img/favicons/browserconfig.xml') }}" />
 
   {{ super() }}
 {% endblock head %}
