@@ -1,7 +1,8 @@
 @import "bootstrap.css";
 
-$primary-color: #171D96;
-$hover-color: lighten($primary-color, 40%);
+$primary-color: #1C4D65;
+$secondary-color: #ababee;
+$hover-color: lighten($primary-color, 10%);
 $body-font: 'Montserrat', 'Helvetica', sans-serif;
 $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 
@@ -38,32 +39,26 @@ input:focus, textarea:focus {
 
 input[type="submit"] {
   margin-top: 1.5rem;
-  background-color: transparent;
-  color: $primary-color;
+  background-color: $primary-color;
+  color: white;
   border: 2px solid $primary-color;
-  font-size: 1.75rem;
+  font-size: 1.9rem;
   transition: 0.3s;
 }
 
 button {
-  background-color: transparent;
+  display: block;
+  margin: calc(3rem + 1vw) auto 0;
+  padding: 1rem 2rem;
+  background-color: $primary-color;
   border: 2px solid $primary-color;
-  padding: 10px;
+  color: white;
   transition: 0.3s;
 }
 
-button.lg {
-  font-size: calc(125% + 1vw);
-}
-
-.inverse button {
-  color: white;
+button.clr-btn {
+  background-color: transparent;
   border-color: white;
-}
-
-.home-section button {
-  display: block;
-  margin: calc(3rem + 1vw) auto 0;
 }
 
 .home-section button:hover, input[type="submit"]:hover {
@@ -93,7 +88,7 @@ button.lg {
 #home-logo {
   position: relative;
   display: block;
-  margin: 4rem auto calc(3rem);
+  margin: 5rem auto calc(3rem);
   height: calc(80px + 3vw);
 }
 
@@ -108,6 +103,36 @@ button.lg {
   padding-bottom: 1rem;
   font-size: calc(1.75rem + 1vw);
   font-weight: 700;
+}
+
+.lg-text {
+  font-size: calc(1.5rem + 0.7vw);
+}
+
+.navbar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  padding-top: 3rem;
+}
+
+.navbar a {
+  color: white;
+  font-size: 1.7rem;
+  text-decoration: underline solid transparent;
+  transition: text-decoration 0.3s ease;
+  text-underline-position: under;
+}
+
+.nav>li>a {
+  padding: 20px;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+  background-color: transparent;
+  text-decoration: underline solid white;
 }
 
 .alert {
@@ -155,7 +180,7 @@ button.lg {
 
 .home-next {
   display: table;
-  margin: calc(2rem + 2vw) auto 3rem;
+  margin: calc(2rem + 1vw) auto 3rem;
   text-align: center;
 }
 
@@ -174,7 +199,7 @@ button.lg {
 .usp-icon {
   width: 7rem;
   height: 7rem;
-  fill: #7ac534;
+  fill: $secondary-color;
   margin-bottom: 2rem;
 }
 
