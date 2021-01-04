@@ -1,6 +1,8 @@
 @import "bootstrap.css";
 @import "bootstrap2.css"
 
+// Sitewide stylings
+
 $primary-color: #1C4D65;
 $secondary-color: #ababee;
 $hover-color: lighten($primary-color, 10%);
@@ -99,6 +101,47 @@ button.clr-btn {
   color: white;
 }
 
+.lg-text {
+  font-size: calc(1.5rem + 0.7vw);
+}
+
+.navbar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  padding-top: 3rem;
+}
+
+.navbar a {
+  color: white;
+  font-size: 1.7rem;
+  text-decoration: underline solid transparent;
+  transition: text-decoration 0.3s ease;
+  text-underline-position: under;
+}
+
+.nav>li>a {
+  padding: 20px;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+  background-color: transparent;
+  text-decoration: underline solid white;
+}
+
+.alert {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+// Home page stylings
+
 #home {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center top no-repeat;
   background-attachment: fixed;
@@ -139,45 +182,6 @@ button.clr-btn {
 
 .grecaptcha-badge {
   visibility: hidden;
-}
-
-.lg-text {
-  font-size: calc(1.5rem + 0.7vw);
-}
-
-.navbar {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  padding-top: 3rem;
-}
-
-.navbar a {
-  color: white;
-  font-size: 1.7rem;
-  text-decoration: underline solid transparent;
-  transition: text-decoration 0.3s ease;
-  text-underline-position: under;
-}
-
-.nav>li>a {
-  padding: 20px;
-}
-
-.nav>li>a:focus, .nav>li>a:hover {
-  background-color: transparent;
-  text-decoration: underline solid white;
-}
-
-.alert {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 0;
 }
 
 .home-section {

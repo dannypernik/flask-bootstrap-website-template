@@ -1,9 +1,9 @@
 /* Error: expected ";".
  *   ,
- * 2 | @import "bootstrap2.css"
- *   |                         ^
+ * 4 | // Sitewide stylings
+ *   |                     ^
  *   '
- *   custom.scss 2:25  root stylesheet */
+ *   custom.scss 4:21  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -13,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: 'Error: expected ";".\a   \2577 \a 2 \2502  @import "bootstrap2.css"\a   \2502                          ^\a   \2575 \a   custom.scss 2:25  root stylesheet';
+  content: 'Error: expected ";".\a   \2577 \a 4 \2502  // Sitewide stylings\a   \2502                      ^\a   \2575 \a   custom.scss 4:21  root stylesheet';
 }
