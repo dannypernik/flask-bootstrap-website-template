@@ -137,7 +137,9 @@ button.clr-btn {
   font-weight: 700;
 }
 
-
+.grecaptcha-badge {
+  visibility: hidden;
+}
 
 .lg-text {
   font-size: calc(1.5rem + 0.7vw);
@@ -243,8 +245,4 @@ button.clr-btn {
 
 .usp-text {
   color: #888;
-}
-
-.grecaptcha-badge {
-  visibility: hidden;
 }
