@@ -17,20 +17,16 @@
 {% block navbar %}
   <nav class="navbar">
     <div class="container">
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-right">
-          <li><a href="{{ url_for('index', _anchor='home') }}">Home</a></li>
-          <li><a href="{{ url_for('index') }}">Reviews</a></li>
-          <li><a href="{{ url_for('index') }}">About</a></li>
-        </ul>
-      </div>
-      <div class="navbar d-md-none">
-        <ul class="nav justify-content-center">
-          <li><a href="#home">Home</a></li>
-          <li><a href="{{ url_for('index') }}">Reviews</a></li>
-          <li><a href="{{ url_for('index') }}">About</a></li>
-        </ul>
-      </div>
+      <ul class="nav d-none d-md-flex justify-content-end">
+        <li><a href="{{ url_for('index', _anchor='home') }}">Home</a></li>
+        <li><a href="{{ url_for('index') }}">Reviews</a></li>
+        <li><a href="{{ url_for('index') }}">About</a></li>
+      </ul>
+      <ul class="nav d-flex d-md-none justify-content-center">
+        <li><a href="#home">Home</a></li>
+        <li><a href="{{ url_for('index') }}">Reviews</a></li>
+        <li><a href="{{ url_for('index') }}">About</a></li>
+      </ul>
     </div>
   </nav>
 {% endblock navbar %}
@@ -40,7 +36,7 @@
     <div class="row justify-content-center">
       <div class="col-sm-11">
         <img id="home-logo" class="img-fluid"
-          src="{{ url_for('.static', filename='img/logo-white.svg') }}" alt="">
+          src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
         <h1 id="home-title">Open Path Tutoring</h1>
         <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
         <button class="lg-text" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
