@@ -1,17 +1,241 @@
-/* Error: expected ";".
- *   ,
- * 4 | // Sitewide stylings
- *   |                     ^
- *   '
- *   custom.scss 4:21  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: 'Error: expected ";".\a   \2577 \a 4 \2502  // Sitewide stylings\a   \2502                      ^\a   \2575 \a   custom.scss 4:21  root stylesheet';
+@import "bootstrap-custom.css";
+@import "bootstrap-extra.css";
+body {
+  font-family: "Montserrat", "Helvetica", sans-serif;
+  color: #1C4D65;
+  font-size: 1.6rem;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+input, textarea {
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  padding: 1rem;
+  border: none;
+  border-bottom: 1px solid #999;
+  width: 100%;
+  outline: none;
+}
+
+input:focus, textarea:focus {
+  border-bottom: 1px solid #1C4D65;
+}
+
+input[type=submit] {
+  margin-top: 1.5rem;
+  background-color: #1C4D65;
+  color: white;
+  border: 2px solid #1C4D65;
+  font-size: 1.9rem;
+  transition: 0.3s;
+}
+
+button {
+  display: block;
+  margin: calc(3rem + 1vw) auto 0;
+  padding: 1rem 2rem;
+  background-color: #1C4D65;
+  border: 2px solid #1C4D65;
+  color: white;
+  transition: 0.3s;
+}
+
+button.clr-btn {
+  background-color: transparent;
+  border-color: white;
+}
+
+.home-section button:hover, input[type=submit]:hover {
+  background-color: #276b8d;
+  border-color: #276b8d;
+  color: white;
+}
+
+.lg-text {
+  font-size: calc(1.5rem + 0.7vw);
+}
+
+.navbar-home {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+}
+
+.navbar-home a {
+  color: white;
+  font-size: 1.7rem;
+  text-decoration: underline solid transparent;
+  transition: text-decoration 0.3s ease;
+  text-underline-position: under;
+}
+
+.navbar {
+  height: 60px;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background-color: #1C4D65;
+  border: 1px solid #1C4D65;
+  z-index: 5;
+}
+
+.menu-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0;
+  color: white;
+}
+
+.navbar-img {
+  height: 36px;
+  margin: 12px 0;
+}
+
+.nav > li > a {
+  padding: 20px;
+}
+
+.nav > li > a:focus, .nav > li > a:hover {
+  background-color: transparent;
+  text-decoration: underline solid white;
+}
+
+.alert {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+#home {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center top no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+#free-trial {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.jpg) center top no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+@media screen and (max-width: 575px) {
+  #home, #free-trial {
+    background-attachment: scroll;
+  }
+}
+#home-logo {
+  position: relative;
+  display: block;
+  margin: 5rem auto calc(3rem);
+  height: calc(80px + 3vw);
+}
+
+#home-title {
+  font-family: "Montserrat Alternates", sans-serif;
+  font-size: calc(1.8rem + 3vw);
+  font-weight: 400;
+}
+
+#home-tagline {
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+  font-size: calc(1.75rem + 1vw);
+  font-weight: 700;
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+.home-section {
+  padding-top: calc(4rem + 3vw);
+}
+
+.page-padding {
+  padding-top: calc(8rem + 3vw);
+}
+
+.home-section .row {
+  width: 100%;
+  margin: auto;
+}
+
+.home-section.white {
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.home-section.white a {
+  color: #1C4D65;
+}
+
+.home-section.inverse {
+  min-height: 100vh;
+  overflow: auto;
+  color: white;
+}
+
+.home-section.inverse a {
+  color: white;
+}
+
+.page-title {
+  font-family: "Montserrat Alternates", "Helvetica", sans-serif;
+  font-size: calc(1.75rem + 2vw);
+}
+
+.home-next {
+  display: table;
+  margin: calc(2rem + 1vw) auto 3rem;
+  text-align: center;
+}
+
+.home-next a {
+  text-decoration: none;
+}
+
+.home-next a:hover h2 {
+  font-weight: 600;
+}
+
+.bi-chevron-down {
+  font-size: 1rem;
+}
+
+.usp {
+  margin-top: calc(2rem + 2vw);
+}
+
+.usp-icon {
+  width: 7rem;
+  height: 7rem;
+  fill: #ababee;
+  margin-bottom: 2rem;
+}
+
+.usp-title {
+  margin-bottom: 1.5rem;
+}
+
+.usp-text {
+  color: #888;
+}
+
+.profile-pic {
+  display: block;
+  border-radius: 100%;
+  margin: auto;
+  max-height: 177px;
+}
+
+/*# sourceMappingURL=custom.css.map */

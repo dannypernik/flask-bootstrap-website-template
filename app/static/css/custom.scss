@@ -1,7 +1,7 @@
-@import "bootstrap.css";
-@import "bootstrap2.css"
+@import "bootstrap-custom.css";
+@import "bootstrap-extra.css";
 
-// Sitewide stylings
+// Sitewide stylings //
 
 $primary-color: #1C4D65;
 $secondary-color: #ababee;
@@ -12,49 +12,13 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 body {
   font-family: $body-font;
   color: $primary-color;
-  font-size: 1rem;
+  font-size: 1.6rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
-}
-
-h1 {
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.75rem;
-}
-
-h4 {
-  font-size: 1.5rem;
-}
-
-h5 {
-  font-size: 1.25rem;
-}
-
-h6 {
-  font-size: 1rem;
-}
-
-@media (max-width: 575px) {
-  h1 {
-    font-size: 2.125rem;
-  }
-  h2 {
-    font-size: 1.625rem;
-  }
-  h3 {
-    font-size: 1.5rem;
-  }
 }
 
 input, textarea {
@@ -105,21 +69,42 @@ button.clr-btn {
   font-size: calc(1.5rem + 0.7vw);
 }
 
-.navbar {
+.navbar-home {
   position: absolute;
   left: 0;
   width: 100%;
   background-color: transparent;
   border: none;
-  padding-top: 3rem;
 }
 
-.navbar a {
+.navbar-home a {
   color: white;
   font-size: 1.7rem;
   text-decoration: underline solid transparent;
   transition: text-decoration 0.3s ease;
   text-underline-position: under;
+}
+
+.navbar {
+  height: 60px;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background-color: $primary-color;
+  border: 1px solid $primary-color;
+  z-index: 5;
+}
+
+.menu-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0;
+  color: white;
+}
+
+.navbar-img {
+  height: 36px;
+  margin: 12px 0;
 }
 
 .nav>li>a {
@@ -140,7 +125,7 @@ button.clr-btn {
   margin-bottom: 0;
 }
 
-// Home page stylings
+// Home page
 
 #home {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center top no-repeat;
@@ -188,6 +173,10 @@ button.clr-btn {
   padding-top: calc(4rem + 3vw);
 }
 
+.page-padding {
+  padding-top: calc(8rem + 3vw);
+}
+
 .home-section .row {
   width: 100%;
   margin: auto;
@@ -212,10 +201,9 @@ button.clr-btn {
   color: white;
 }
 
-.home-header {
+.page-title {
   font-family: $title-font;
   font-size: calc(1.75rem + 2vw);
-  margin-bottom: 2rem;
 }
 
 .home-next {
@@ -230,6 +218,10 @@ button.clr-btn {
 
 .home-next a:hover h2 {
   font-weight: 600;
+}
+
+.bi-chevron-down {
+  font-size: 1rem;
 }
 
 .usp {
@@ -249,4 +241,13 @@ button.clr-btn {
 
 .usp-text {
   color: #888;
+}
+
+// About page
+
+.profile-pic {
+  display: block;
+  border-radius: 100%;
+  margin: auto;
+  max-height: 177px;
 }
