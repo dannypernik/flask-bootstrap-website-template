@@ -1,5 +1,12 @@
-@import "bootstrap-custom.css";
-@import "bootstrap-extra.css";
+@import "../scss/_functions.scss";
+@import "../scss/_variables.scss";
+@import "../scss/_mixins.scss";
+
+@import "../scss/_grid.scss";
+@import "../scss/_nav.scss";
+@import "../scss/_navbar.scss";
+@import "../scss/_containers.scss";
+@import "../scss/_transitions.scss";
 
 // Sitewide stylings //
 
