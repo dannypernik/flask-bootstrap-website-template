@@ -45,7 +45,6 @@
 {% endblock head %}
 
 {% block styles %}
-  {{super()}}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&family=Montserrat:wght@400&display=swap"
     rel="stylesheet">
@@ -61,36 +60,53 @@
 {% endblock body %}
 
 {% block navbar %}
-  <!--<nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{{ url_for('index') }}">Open Path Tutoring</a>
-      </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          {% if current_user.is_anonymous %}
-            <li><a href="{{ url_for('login') }}">Login</a></li>
-          {% else %}
-            <li><a href="{{ url_for('profile', username=current_user.username) }}">Profile</a></li>
-            <li><a href="{{ url_for('logout') }}">Logout</a></li>
-          {% endif %}
-        </ul>
+  <div class="site-nav container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-10">
+        <div class="row">
+          <div class="col-9">
+            <a href="{{ url_for('index') }}">
+              <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
+            </a>
+          </div>
+          <div class="col-3">
+            <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
+              <div id="menu-title">Menu</div>
+              <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-  </nav>-->
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-info" role="alert">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+  </div>
+
+  <section class="drawer" id="site-menu" data-drawer-target>
+    <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
+    <div class="drawer__wrapper">
+      <div class="drawer__header">
+        <div class="drawer__title">
+
+        </div>
+        <button class="drawer__close" data-drawer-close aria-label="Close Drawer"></button>
+      </div>
+      <div class="drawer__content">
+        <a href="{{ url_for('index') }}">
+          <div class="menu-link">
+            <p>Home</p>
+          </div>
+        </a>
+        <a href="{{ url_for('about') }}">
+          <div class="menu-link">
+            <p>About</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
 {% endblock navbar %}
 
 {% block content %}{% endblock content %}
+
+{% block scripts %}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/menu.js') }}"></script>
+{% endblock scripts %}

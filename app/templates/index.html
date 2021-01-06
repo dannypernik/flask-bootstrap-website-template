@@ -14,16 +14,33 @@
   <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 {% endblock styles %}
 
+{% block navbar %}
+  <nav class="navbar home-nav">
+    <div class="container">
+      <ul class="nav d-none d-md-flex p-5 justify-content-end">
+        <li><a href="#home">Home</a></li>
+        <li><a href="{{ url_for('index') }}">Reviews</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+      </ul>
+      <ul class="nav d-flex d-md-none justify-content-center">
+        <li><a href="#home">Home</a></li>
+        <li><a href="{{ url_for('index') }}">Reviews</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+      </ul>
+    </div>
+  </nav>
+{% endblock navbar %}
+
 {% block content %}
   <div id="home" class="home-section inverse text-center">
     <div class="row justify-content-center">
       <div class="col-sm-11">
         <img id="home-logo" class="img-fluid"
-          src="{{ url_for('.static', filename='img/logo-white.svg') }}" alt="">
+          src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
         <h1 id="home-title">Open Path Tutoring</h1>
         <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
-        <button class="lg" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
-          Schedule a free tutoring session
+        <button class="lg-text" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+          Schedule a free trial session
         </button>
         <div class="home-next">
           <a href="#benefits">
@@ -44,7 +61,7 @@
     <div class="row text-center justify-content-center">
       <div class="col-10">
         <div class="row justify-content-center">
-          <h1 class="home-header">Why choose Open Path Tutoring?</h1>
+          <h1 class="page-title">Why choose Open Path Tutoring?</h1>
         </div>
         <div class="row justify-content-center">
           <div class="usp col-md-4">
@@ -107,8 +124,8 @@
         <h1 class="mb-5">The only way to know is to try. That's why Open Path Tutoring
           offers the <b>1st hour of tutoring free</b> with no purchase necessary.
         </h1>
-        <button class="lg" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
-          Schedule a free tutoring session
+        <button class="lg-text clr-btn" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+          Schedule a free trial session
         </button>
         <div class="home-next">
           <a href="#contact">
@@ -126,9 +143,17 @@
   </div>
 
   <div id="contact" class="home-section white">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <div class="row justify-content-center">
       <div class="col-11 col-md-8">
-        <h1 class="home-header">Send us a message</h1>
+        <h1 class="page-title">Send us a message</h1>
 
         <form id="inquiry-form" action="" method="post">
           {{ form.hidden_tag() }}
@@ -148,7 +173,7 @@
   <script type="text/javascript"
           src="{{ url_for('static', filename='js/smooth-scroll.js') }}"></script>
   <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
-  <script>
+  <script type="text/javascript">
    function onSubmit(token) {
      document.getElementById("inquiry-form").submit();
    }

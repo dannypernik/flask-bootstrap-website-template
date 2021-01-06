@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container-fluid page-padding justify-content-center">
+    <div class="row justify-content-center">
+      <div class="col-6 col-sm-4">
+        <img class="profile-pic" src="{{ url_for('static', filename='img/danny.jpg') }}" alt="Danny Pernik">
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <h1 class="page-title text-center mt-5">Meet Your Tutor</h1>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-sm-9">
+        <p class="h2">Hello! My name is Danny Pernik. I've had the privilege of working with
+          hundreds of students over the past 5 years to help them substantially
+          increase grades and test scores, strengthen confidence in and out of the
+          classroom, and get accepted into some of the most selective and
+          prestigious universities in the country.
+        </p>
+
+        <p class="h2">I love to tutor. I really enjoy getting to connect one-on-one with
+          students as a peer rather than as an authority figure. Prior to Open
+          Path Tutoring, I worked for two of the leading test prep companies in
+          the country. I gained valuable perspective regarding not only the
+          variety of test prep strategies but also the subtle art of building
+          trust and rapport with high schoolers. Students tend to be more receptive
+          to ideas or feedback when I share them than when a parent or teacher
+          shares them. I feel fortunate to be given the opportunity to connect
+          meaningfully with so many fantastic teenagers.
+        </p>
+
+        <p class="h2">I love to spend time with my family, explore and support ideas to
+          change the world, play soccer, and grow my spiritual connection.
+          Online tutoring has allowed me to spend more time with my son Ember
+          and daughter Zeta as they grow up. It brings challenges too, of course,
+          but I will gladly accept. The kids are a long way from college, but when
+          they start test prep, I will find them a tutor too. I know better than
+          to expect them to listen to me!
+        </p>
+
+        <p class="h2">Open Path Tutoring is the third entrepreneurial journey I've
+          embarked upon since 2011. I love to explore ideas that forge new
+          connections within communities and make the world a better place.
+          I previously cofounded an organization called openCurrents that
+          aimed to provide a living wage to volunteers of nonprofits through
+          digital currency. Nonprofits issued 1 "Current" to volunteers for
+          each hour worked, and businesses in the community gave discounts
+          to volunteers in exchange for Currents. While our pilot program
+          got off to a promising start, all three cofounders became fathers
+          within the first year of operations, and family responsibilities
+          ultimately took priority.
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

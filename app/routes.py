@@ -29,10 +29,9 @@ def index():
         return redirect(url_for('index', _anchor='home'))
     return render_template('index.html', form=form)
 
-@app.route('/favicon-64.png')
-def favicon():
-    return send_from_directory(app.static_folder,
-                               'favicon-64.png', mimetype='image/vnd.microsoft.icon')
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
