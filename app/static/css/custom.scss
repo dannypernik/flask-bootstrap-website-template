@@ -165,9 +165,7 @@ button.clr-btn {
 .home-nav a {
   color: white;
   font-size: 2rem;
-  text-decoration: underline solid transparent;
-  transition: text-decoration 0.3s ease;
-  text-underline-position: under;
+  text-decoration: none;
 }
 
 .site-nav {
@@ -184,9 +182,8 @@ button.clr-btn {
   padding: 20px;
 }
 
-.nav>li>a:focus, .nav>li>a:hover {
-  background-color: transparent;
-  text-decoration: underline solid white;
+.home-nav a:focus, .home-nav a:hover {
+  font-weight: 600;
 }
 
 .alert {
