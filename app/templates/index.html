@@ -168,8 +168,9 @@
 
 {% block scripts %}
   {{ super() }}
-  <script type="text/javascript" src="{{ url_for('static', filename='js/zenscroll-min.js') }}">
-
+  <script type="text/javascript" src="{{ url_for('static', filename='js/zenscroll-min.js') }}"></script>
+  <script type="text/javascript">
+    zenscroll.setup(null, -1);
   </script>
   <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
   <script type="text/javascript">
