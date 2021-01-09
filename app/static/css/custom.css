@@ -625,6 +625,10 @@ progress {
   content: "— ";
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Montserrat", "Helvetica", sans-serif;
   color: #1C4D65;

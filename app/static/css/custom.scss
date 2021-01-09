@@ -15,6 +15,10 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 
 // Sitewide stylings //
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: $body-font;
   color: $primary-color;
