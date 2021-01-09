@@ -18,11 +18,6 @@
 :root {
   font-size: 10px;
 }
-@media (prefers-reduced-motion: no-preference) {
-  :root {
-    scroll-behavior: smooth;
-  }
-}
 
 body {
   margin: 0;
@@ -623,10 +618,6 @@ progress {
 }
 .blockquote-footer::before {
   content: "— ";
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 body {

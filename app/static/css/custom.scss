@@ -1,4 +1,5 @@
 $font-size-root: 10px;
+$enable-smooth-scroll: false;
 $primary-color: #1C4D65;
 $secondary-color: #ababee;
 $hover-color: lighten($primary-color, 10%);
@@ -14,10 +15,6 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 @import "menu.css";
 
 // Sitewide stylings //
-
-html {
-  scroll-behavior: smooth;
-}
 
 body {
   font-family: $body-font;
