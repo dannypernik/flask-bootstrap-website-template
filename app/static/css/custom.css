@@ -627,8 +627,6 @@ progress {
 
 html {
   scroll-behavior: smooth;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
 }
 
 body {
