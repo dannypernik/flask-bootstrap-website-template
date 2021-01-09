@@ -17,6 +17,8 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 
 html {
   scroll-behavior: smooth;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
