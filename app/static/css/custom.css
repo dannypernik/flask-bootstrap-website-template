@@ -798,15 +798,6 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   font-weight: 600;
 }
 
-.alert {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 0;
-}
-
 #home {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center top no-repeat;
   background-attachment: fixed;
@@ -853,12 +844,17 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 }
 
 .alert {
-  position: absolute;
-  top: 0;
   width: 100%;
+  padding: 0.5rem 0;
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 0;
+}
+
+.alert-info {
+  color: #004085;
+  background-color: #cce5ff;
+  border-color: #b8daff;
 }
 
 .home-section {
@@ -931,6 +927,10 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   border-radius: 100%;
   margin: auto;
   max-height: 177px;
+}
+
+.review-img {
+  width: 100px;
 }
 
 /*# sourceMappingURL=custom.css.map */

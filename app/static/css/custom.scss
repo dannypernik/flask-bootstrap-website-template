@@ -197,15 +197,6 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   font-weight: 600;
 }
 
-.alert {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 0;
-}
-
 // Home page
 
 #home {
@@ -254,14 +245,18 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   font-size: calc(1.5rem + 0.7vw);
 }
 
-
 .alert {
-  position: absolute;
-  top: 0;
   width: 100%;
+  padding: 0.5rem 0;
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 0;
+}
+
+.alert-info {
+  color: #004085;
+  background-color: #cce5ff;
+  border-color: #b8daff;
 }
 
 .home-section {
@@ -329,11 +324,17 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   color: #888;
 }
 
-// About page
+// About page //
 
 .profile-pic {
   display: block;
   border-radius: 100%;
   margin: auto;
   max-height: 177px;
+}
+
+// Reviews page //
+
+.review-img {
+  width: 100px;
 }
