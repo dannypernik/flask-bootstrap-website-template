@@ -683,9 +683,17 @@ input[type=submit] {
   transition: 0.3s;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover h2, a:hover .h2 {
+  font-weight: 600;
+}
+
 button {
   display: block;
-  margin: calc(3rem + 1vw) auto 0;
+  margin: 2rem auto;
   padding: 1rem 2rem;
   background-color: #1C4D65;
   border: 2px solid #1C4D65;
@@ -698,10 +706,17 @@ button.clr-btn {
   border-color: white;
 }
 
-.home-section button:hover, input[type=submit]:hover {
+button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   background-color: #276b8d;
   border-color: #276b8d;
   color: white;
+}
+
+.sec-btn {
+  color: #1C4D65;
+  border-color: #1C4D65;
+  background-color: transparent;
+  padding: 0.5rem 2rem;
 }
 
 .lg-text {
@@ -753,11 +768,6 @@ button.clr-btn {
   border-bottom: 1px solid #ddd;
   color: #1C4D65;
   transition: 0.3s;
-}
-
-.menu-link:hover {
-  background-color: #276b8d;
-  color: white;
 }
 
 .menu-link p {
@@ -859,9 +869,8 @@ button.clr-btn {
   padding-top: calc(8rem + 3vw);
 }
 
-.home-section .row {
-  width: 100%;
-  margin: auto;
+.home-section button {
+  margin: calc(3rem + 1vw) auto 0;
 }
 
 .home-section.white {
@@ -892,14 +901,6 @@ button.clr-btn {
   display: table;
   margin: calc(2rem + 1vw) auto 3rem;
   text-align: center;
-}
-
-.home-next a {
-  text-decoration: none;
-}
-
-.home-next a:hover h2, .home-next a:hover .h2 {
-  font-weight: 600;
 }
 
 .bi-chevron-down {

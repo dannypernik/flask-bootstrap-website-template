@@ -9,11 +9,6 @@
   <script src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock head %}
 
-{% block styles %}
-  {{ super() }}
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-{% endblock styles %}
-
 {% block navbar %}
   <nav class="navbar home-nav">
     <div class="container">
@@ -30,7 +25,7 @@
 {% endblock navbar %}
 
 {% block content %}
-  <div id="home" class="home-section inverse text-center">
+  <div id="home" class="home-section inverse text-center container-fluid">
     <div class="row justify-content-center">
       <div class="col-sm-11">
         <img id="home-logo" class="img-fluid"
@@ -172,7 +167,6 @@
   <script type="text/javascript">
     zenscroll.setup(null, -1);
   </script>
-  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
   <script type="text/javascript">
    function onSubmit(token) {
      document.getElementById("inquiry-form").submit();
