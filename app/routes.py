@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, request, send_from_directory
+from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory
 from app import app, db
 from app.forms import InquiryForm, EmailForm, SignupForm, LoginForm, EditProfileForm
 from flask_login import current_user, login_user, logout_user, login_required
@@ -17,6 +17,11 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = InquiryForm()
+    alert = Markup('Since 2015, Open Path tutors have strived to provide the \
+    best online tutoring experience available. Now more than ever, effective \
+    virtual learning strategies are essential for success. It is our privilege \
+    to serve students of all income levels during this challenging time. \
+    Please <a href="#contact">contact us</a> for more details.')
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, email=form.email.data)
         subject = form.subject.data
@@ -24,14 +29,18 @@ def index():
         db.session.add(user)
         db.session.commit()
         send_inquiry_email(user, subject, message)
-        flash("Thank you for your message. We will be in touch!")
+        alert = "Thank you for your message. We will be in touch!"
         print(app.config['ADMINS'])
-        return redirect(url_for('index', _anchor='home'))
+    flash(alert)
     return render_template('index.html', form=form)
 
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/reviews')
+def reviews():
+    return render_template('reviews.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():

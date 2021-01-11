@@ -57,6 +57,11 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 input, textarea {
   font-size: 1.5rem;
   line-height: 2.5rem;
@@ -220,7 +225,7 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 #home-logo {
   position: relative;
   display: block;
-  margin: 5rem auto calc(3rem);
+  margin: 2rem auto calc(3rem);
   height: calc(80px + 3vw);
 }
 
@@ -259,21 +264,22 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   border-color: #b8daff;
 }
 
-.home-section {
-  padding-top: calc(4rem + 3vw);
+.alert a {
+  text-decoration: underline;
+  white-space: nowrap;
 }
 
-.page-padding {
-  padding-top: calc(8rem + 3vw);
+.home-section {
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.page-start {
+  padding-top: calc(4rem + 3vw);
 }
 
 .home-section button {
   margin: calc(3rem + 1vw) auto 0;
-}
-
-.home-section.white {
-  min-height: 100vh;
-  overflow: auto;
 }
 
 .home-section.white a {
@@ -281,8 +287,6 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 }
 
 .home-section.inverse {
-  min-height: 100vh;
-  overflow: auto;
   color: white;
 }
 
@@ -329,8 +333,8 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 .profile-pic {
   display: block;
   border-radius: 100%;
-  margin: auto;
-  max-height: 177px;
+  margin: 4rem auto 2rem;
+  max-height: 155px;
 }
 
 // Reviews page //
