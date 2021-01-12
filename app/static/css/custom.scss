@@ -57,6 +57,18 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
+@media screen and (max-width: 575px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+
 .row {
   margin-left: 0;
   margin-right: 0;
@@ -204,18 +216,15 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 
 // Home page
 
-#home, #free-trial {
-  background-attachment: fixed;
-  background-size: cover;
-}
-
 // X-large backgrounds //
 #home {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student-xl.webp) center top no-repeat;
+  background-attachment: fixed;
 }
 
 #free-trial {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2-xl.webp) center top no-repeat;
+  background-attachment: fixed;
 }
 
 // Med-Large backgrounds //
@@ -240,6 +249,10 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
     background-attachment: scroll;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.jpg) center top no-repeat;
   }
+}
+
+#home, #free-trial {
+ background-size: cover;
 }
 
 #home-logo {
