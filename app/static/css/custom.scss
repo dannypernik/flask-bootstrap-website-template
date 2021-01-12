@@ -204,32 +204,42 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 
 // Home page
 
-#home {
-  background-image: url(../img/student.jpg); // JPG fallback
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.webp) center top no-repeat;
+#home, #free-trial {
   background-attachment: fixed;
   background-size: cover;
+}
+
+// X-large backgrounds //
+#home {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student-xl.webp) center top no-repeat;
 }
 
 #free-trial {
-  background-image: url(../img/student2.jpg); // JPG fallback
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.webp) center top no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2-xl.webp) center top no-repeat;
 }
 
-@media screen and (max-width: 575px) {
-  #home, #free-trial {
-    background-attachment: scroll;
-  }
-
-  /*#home {
-    background-image: url(../img/student-mobile.jpg);
+// Med-Large backgrounds //
+@media screen and (max-width: 1200px) {
+  #home {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student-lg.webp) center top no-repeat;
   }
 
   #free-trial {
-    background-image: url(../img/student2-mobile.jpg);
-  }*/
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2-lg.webp) center top no-repeat;
+  }
+}
+
+// Mobile backgrounds //
+@media screen and (max-width: 575px) {
+  #home {
+    background-attachment: scroll;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg) center top no-repeat;
+  }
+
+  #free-trial {
+    background-attachment: scroll;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.jpg) center top no-repeat;
+  }
 }
 
 #home-logo {
