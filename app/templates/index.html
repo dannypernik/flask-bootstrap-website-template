@@ -22,143 +22,165 @@
     {% endif %}
   {% endwith %}
   <nav class="navbar home-nav">
-    <div class="container">
-      <ul class="nav d-none d-md-flex p-4 justify-content-end">
-        <li><a href="#home">Home</a></li>
-        <li><a href="{{ url_for('about') }}">About</a></li>
-      </ul>
-      <ul class="nav d-flex d-md-none p-4 justify-content-center">
-        <li><a href="#home">Home</a></li>
-        <li><a href="{{ url_for('about') }}">About</a></li>
-      </ul>
+    <div class="row justify-content-center">
+      <div class="col-sm-11 col-xl-10">
+        <ul class="d-none d-md-flex p-4 justify-content-end">
+          <li><a href="#home">Home</a></li>
+          <li><a href="{{ url_for('reviews') }}">Reviews</a></li>
+          <li><a href="{{ url_for('about') }}">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <ul class="d-flex d-md-none p-4 justify-content-center">
+          <li><a href="#home">Home</a></li>
+          <li><a href="{{ url_for('reviews') }}">Reviews</a></li>
+          <li><a href="{{ url_for('about') }}">About</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
 {% endblock navbar %}
 
 {% block content %}
-  <div id="home" class="home-section inverse text-center home-start">
-    <div class="row justify-content-center">
-      <div class="col-sm-11">
-        <img id="home-logo" class="img-fluid"
-          src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
-        <h1 id="home-title">Open Path Tutoring</h1>
-        <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
-        <button class="lg-text" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
-          Schedule a free trial session
-        </button>
-        <div class="home-next">
-          <a href="#benefits">
-            <h2>
-              Why Open Path?
-            </h2>
-            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi
-                bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </a>
+  <div class="content">
+    <div id="home" class="home-section inverse text-center">
+      <div class="row justify-content-center">
+        <div class="col-sm-11">
+          <img id="home-logo" class="img-fluid"
+            src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
+          <h1 id="home-title">Open Path Tutoring</h1>
+          <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
+          <button class="lead" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+            Schedule a free trial session
+          </button>
+          <div class="home-next">
+            <a href="#benefits">
+              <h2>
+                Why Open Path?
+              </h2>
+              <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi
+                  bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="benefits" class="home-section white page-start">
-    <div class="row text-center justify-content-center">
-      <div class="col-10">
-        <div class="row justify-content-center">
-          <h1 class="page-title">Why choose Open Path Tutoring?</h1>
-        </div>
-        <div class="row justify-content-center">
-          <div class="usp col-md-4">
-            <svg class="usp-icon" viewBox="0 0 16 16" class="bi bi-shield-fill-check" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M8 .5c-.662 0-1.77.249-2.813.525a61.11 61.11 0 0 0-2.772.815 1.454 1.454 0 0 0-1.003 1.184c-.573 4.197.756 7.307 2.368 9.365a11.192 11.192 0 0 0 2.417 2.3c.371.256.715.451 1.007.586.27.124.558.225.796.225s.527-.101.796-.225c.292-.135.636-.33 1.007-.586a11.191 11.191 0 0 0 2.418-2.3c1.611-2.058 2.94-5.168 2.367-9.365a1.454 1.454 0 0 0-1.003-1.184 61.09 61.09 0 0 0-2.772-.815C9.77.749 8.663.5 8 .5zm2.854 6.354a.5.5 0 0 0-.708-.708L7.5 8.793 6.354 7.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
-            </svg>
-            <h1 class="usp-title">Proven</h1>
-            <h3 class="usp-text text-md-start">Over the past 5 years, Open Path tutors have helped
-                hundreds of students significantly raise test scores, improve grades,
-                and get accepted into top universities.
-            </h3>
+    <div id="benefits" class="home-section white">
+      <div class="row text-center justify-content-center">
+        <div class="col-10">
+          <div class="row justify-content-center">
+            <h1 class="page-title">Why choose Open Path Tutoring?</h1>
           </div>
-          <div class="usp col-md-4">
-            <svg class="usp-icon bi bi-person-plus-fill" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.5-3a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
-            </svg>
-            <h1 class="usp-title">Personalized</h1>
-            <h3 class="usp-text text-md-start">Not only do we use score analyses of practice tests to tailor
-                sessions to each student's strengths and opportunities, but we also seek to
-                grow a sense of connection with a student to uncover sources of motivation or self-limitation.
-                Sometimes a small shift in mindset can have a major impact on results.
-            </h3>
+          <div class="row justify-content-center">
+            <div class="usp col-md-4">
+              <svg class="usp-icon" viewBox="0 0 16 16" class="bi bi-shield-fill-check" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 .5c-.662 0-1.77.249-2.813.525a61.11 61.11 0 0 0-2.772.815 1.454 1.454 0 0 0-1.003 1.184c-.573 4.197.756 7.307 2.368 9.365a11.192 11.192 0 0 0 2.417 2.3c.371.256.715.451 1.007.586.27.124.558.225.796.225s.527-.101.796-.225c.292-.135.636-.33 1.007-.586a11.191 11.191 0 0 0 2.418-2.3c1.611-2.058 2.94-5.168 2.367-9.365a1.454 1.454 0 0 0-1.003-1.184 61.09 61.09 0 0 0-2.772-.815C9.77.749 8.663.5 8 .5zm2.854 6.354a.5.5 0 0 0-.708-.708L7.5 8.793 6.354 7.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+              </svg>
+              <h1 class="usp-title">Proven</h1>
+              <h3 class="usp-text text-md-start">Over the past 5 years, Open Path tutors have helped
+                  hundreds of students significantly raise test scores, improve grades,
+                  and get accepted into top universities.
+              </h3>
+            </div>
+            <div class="usp col-md-4">
+              <svg class="usp-icon bi bi-person-plus-fill" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.5-3a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+              </svg>
+              <h1 class="usp-title">Personalized</h1>
+              <h3 class="usp-text text-md-start">Not only do we use score analyses of practice tests to tailor
+                  sessions to each student's strengths and opportunities, but we also seek to
+                  grow a sense of connection with a student to uncover sources of motivation or self-limitation.
+                  Sometimes a small shift in mindset can have a major impact on results.
+              </h3>
+            </div>
+            <div class="usp col-md-4">
+              <svg class="usp-icon bi bi-bookmark-star-fill" viewBox="0 0 16 16" class="" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm4.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z"/>
+              </svg>
+              <h1 class="usp-title">Proficient</h1>
+              <h3 class="usp-text text-md-start">Open Path tutors are experts in both the subject matter
+                being taught and the art of tutoring itself. They are two different skillsets!
+                We are always seeking to grow more effective in both aspects.
+              </h3>
+            </div>
           </div>
-          <div class="usp col-md-4">
-            <svg class="usp-icon bi bi-bookmark-star-fill" viewBox="0 0 16 16" class="" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm4.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z"/>
-            </svg>
-            <h1 class="usp-title">Proficient</h1>
-            <h3 class="usp-text text-md-start">Open Path tutors are experts in both the subject matter
-              being taught and the art of tutoring itself. They are two different skillsets!
-              We are always seeking to grow more effective in both aspects.
-            </h3>
+          <div class="row justify-content-center mt-4">
+            <div class="col-md-10">
+              <p class="mb-1 fst-italic text-md-start">
+                "Just wanted to let you know my son's mood was immediately better
+                after meeting with you, after being down for about a week and a half.
+                I think this is going to be so great for him. Thank you again!"
+              </p>
+              <p><strong>&#8211; Parent of Study Skills student</strong></p>
+              <a href="{{ url_for('reviews') }}">
+                <button class="btn sec mt-0">
+                  See more reviews
+                </button>
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="home-next">
-          <a href="#free-trial">
-            <h2>
-              See if we are right for you
-            </h2>
-            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi
-                bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </a>
+          <div class="home-next">
+            <a href="#free-trial">
+              <h2>
+                Why we offer a free trial
+              </h2>
+              <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi
+                  bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="free-trial" class="home-section inverse page-start">
-    <div class="row justify-content-center">
-      <div class="col-11 col-sm-10 col-lg-8">
-        <h1 class="mb-4">In just about any academic subject, one factor can make the difference
-          between the best class ever and the most dreaded time of day:
-          <b>your teacher</b>.</h1>
-        <h1 class="mb-4">The SAT and ACT are no different. If you don't enjoy your time with
-          a tutor, then the process will be painful. However, if you feel connected to
-          and respected by your tutor, then you'll be more willing to put in the work.
-        </h1>
-        <h1 class="mb-4">The only way to know is to try. That's why Open Path Tutoring
-          offers the <b>1st hour of tutoring free</b> with no purchase necessary.
-        </h1>
-        <button class="lg-text clr-btn" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
-          Schedule a free trial session
-        </button>
-        <div class="home-next">
-          <a href="#contact">
-            <h2>
-              Have a question?
-            </h2>
-            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
-                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </a>
+    <div id="free-trial" class="home-section inverse">
+      <div class="row justify-content-center">
+        <div class="col-11 col-sm-10 col-lg-8">
+          <h1 class="mb-4">In just about any academic subject, one factor can make the difference
+            between the best class ever and the most dreaded time of day:
+            <b>your teacher</b>.</h1>
+          <h1 class="mb-4">The SAT and ACT are no different. If you don't enjoy your time with
+            a tutor, then the process will be painful. However, if you feel connected to
+            and respected by your tutor, then you'll be more willing to put in the work.
+          </h1>
+          <h1 class="mb-4">The only way to know is to try. That's why Open Path Tutoring
+            offers the <b>1st hour of tutoring free</b> with no purchase necessary.
+          </h1>
+          <button class="lead btn clr" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+            Schedule a free trial session
+          </button>
+          <div class="home-next">
+            <a href="#contact">
+              <h2>
+                Have a question?
+              </h2>
+              <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="contact" class="home-section white page-start">
-    <div class="row justify-content-center">
-      <div class="col-11 col-md-8">
-        <h1 class="page-title">Send us a message</h1>
+    <div id="contact" class="home-section white">
+      <div class="row justify-content-center">
+        <div class="col-11 col-md-8">
+          <h1 class="page-title">Send us a message</h1>
 
-        <form id="inquiry-form" action="" method="post">
-          {{ form.hidden_tag() }}
-          <p class="mb-3">{{ form.first_name }}</p>
-          <p class="mb-3">{{ form.email }}</p>
-          <p class="mb-3">{{ form.subject }}</p>
-          <p class="mb-3">{{ form.message(rows='3') }}</p>
-          <input type="submit" class='g-recaptcha', data-sitekey='6Lc3IBcaAAAAANQvPMR7J9MhHZyykxuamsKb4561', data-callback='onSubmit', data-action='submit' />
-        </form>
+          <form id="inquiry-form" action="" method="post">
+            {{ form.hidden_tag() }}
+            <p class="mb-3">{{ form.first_name }}</p>
+            <p class="mb-3">{{ form.email }}</p>
+            <p class="mb-3">{{ form.subject }}</p>
+            <p class="mb-3">{{ form.message(rows='3') }}</p>
+            <input type="submit" class='g-recaptcha', data-sitekey='6Lc3IBcaAAAAANQvPMR7J9MhHZyykxuamsKb4561', data-callback='onSubmit', data-action='submit' />
+          </form>
+        </div>
       </div>
     </div>
   </div>

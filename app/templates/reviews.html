@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="container-fluid page-start">
+  <div class="container page-start">
     <div class="row justify-content-center">
-      <div class="col-10">
+      <div class="col-11 col-xl-10">
         <div class="row justify-content-end">
           <div class="col-9 col-md-10">
             <h1 class="page-title mb-4">Reviews</h1>
@@ -11,16 +11,16 @@
         </div>
         <div class="row">
           <div class="col-3 col-md-2">
-            <img class="img-fluid review-img" src="{{ url_for('static', filename='img/grad.svg') }}">
+            <img class="img-fluid review-img" src="{{ url_for('static', filename='img/logo.svg') }}">
           </div>
           <div class="col-9 col-md-10">
-            <p class="mb-2">
+            <p class="mb-1">
               I could not have asked for a better tutor than Danny for my SAT.
               With his help, I was able to score a SAT score in the 99th percentile.
               Through his effective ways of teaching and explaining the material,
               I was able to easily learn and retain the information. Thanks to Danny
               I was way more prepared for the exam compared to my peers and, I would
-              not hesitate to ask Danny to be my tutor if I ever need help with
+              not hesitate to ask him to be my tutor if I ever need help with
               something again.
             </p>
             <p>
@@ -36,20 +36,20 @@
           <div class="col-9 col-md-10">
             <p class="mb-2">
               With Danny’s help as my tutor for the SAT, I was able to achieve a
-              1460 on my first attempt. I contacted Danny again because I wanted
+              1460 on my first attempt. I contacted him again because I wanted
               to improve my score and on my second attempt I was able to achieve
               a score of 1500.
             </p>
-            <p class="mb-2">
+            <p class="mb-1">
               In addition to helping with my success on the traditional SAT, my
               work with Danny provided me with the framework needed to excel on
               the PSAT as a Junior. I attribute my time with Danny as a crucial
               factor which allowed me to become a National Merit Scholar. As a
               freshman at the University of Florida with aspirations for medical
               school, I am still reaping the numerous benefits provided to me &#8211;
-              in terms of scholarships and opportunities &#8211; thanks to my time with
-              Danny. I am extremely grateful that I was able to have Danny as my
-              tutor.
+              in terms of scholarships and opportunities &#8211; thanks to my time
+              working with him. I am extremely grateful that I was able to have
+              Danny as my tutor.
             </p>
             <p>
               <strong>&#8211; Olusegun S, SAT Prep student</strong>
@@ -59,26 +59,43 @@
 
         <div class="row">
           <div class="col-3 col-md-2">
-            <img class="img-fluid review-img" src="{{ url_for('static', filename='img/grad.svg') }}">
+            <img class="img-fluid review-img" src="{{ url_for('static', filename='img/usc.png') }}">
           </div>
           <div class="col-9 col-md-10">
-            <p class="mb-2">
-              Just wanted to let you know my son's mood was immediately better
-              after meeting with you, after being down for about a week and a half.
-              I think this is going to be so great for him. Thank you again!
+            <p class="mb-1">
+              My son needed to take the ACT early because he was going through
+              the college athletic recruiting process. He sometimes has difficulty
+              with standardized tests - and does not enjoy studying or test preparations.
+              Danny made the tutoring sessions fun and interesting. My son achieved
+              an ACT score strong enough for the most selective schools in the country.
+              Danny did an incredible job and my son is heading to USC this Fall.
             </p>
             <p>
-              <strong>&#8211; Parent of Study Skills student</strong>
+              <strong>&#8211; John A, parent of ACT Prep student</strong>
             </p>
           </div>
         </div>
+
+        <!--<div class="row">
+          <div class="col-3 col-md-2">
+            <img class="img-fluid review-img" src="{{ url_for('static', filename='img/logo.svg') }}">
+          </div>
+          <div class="col-9 col-md-10">
+            <p class="mb-1">
+
+            </p>
+            <p>
+              <strong></strong>
+            </p>
+          </div>
+        </div>-->
 
         <div class="row">
           <div class="col-3 col-md-2">
             <img class="img-fluid review-img" src="{{ url_for('static', filename='img/pitt.png') }}">
           </div>
           <div class="col-9 col-md-10">
-            <p class="mb-2">
+            <p class="mb-1">
               Danny tutored me in preparation for the SAT my junior year of high
               school and I only have great things to say about him. He was always
               patient and prepared, providing helpful tools and amazing guidance.
@@ -98,24 +115,17 @@
             <img class="img-fluid review-img" src="{{ url_for('static', filename='img/logo.svg') }}">
           </div>
           <div class="col-9 col-md-10">
-            <p>
-              Danny is fantastic &#8211; he is very able to understand my son's strengths, and then focus on areas for development. He has a calm and patient way that makes tutoring something my son doesn’t dread! He’s very in-tune with my son's interests, and uses that as a basis for the learning as much as possible. This helps my son stay engaged and interested because he feels understood, and can relate to the material. 10/10 would recommend Danny.
+            <p class="mb-1">
+              Danny is fantastic &#8211; he is very able to understand my son's
+              strengths, and then focus on areas for development. He has a calm
+              and patient way that makes tutoring something my son doesn’t dread!
+              He’s very in-tune with my son's interests, and uses that as a basis
+              for the learning as much as possible. This helps my son stay engaged
+              and interested because he feels understood, and can relate to the
+              material. 10/10 would recommend Open Path Tutoring.
             </p>
             <p>
-              <strong>&#8211;</strong>
-            </p>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-3 col-md-2">
-            <img class="img-fluid review-img" src="{{ url_for('static', filename='img/logo.svg') }}">
-          </div>
-          <div class="col-9 col-md-10">
-            <p>
-            </p>
-            <p>
-              <strong></strong>
+              <strong>&#8211; Alyssa Z, parent of SAT Prep student</strong>
             </p>
           </div>
         </div>
@@ -125,13 +135,31 @@
             <img class="img-fluid review-img" src="{{ url_for('static', filename='img/logo.svg') }}">
           </div>
           <div class="col-9 col-md-10">
-            <p>
+            <p class="mb-1">
+              Danny is an engaging and patient teacher who is insightful and
+              thoughtful. He takes the time to get to know his students so he
+              can really understand their needs and personalities. He has helped
+              my daughter achieve a strong SAT score - and I’ve noticed her grammar
+              and writing skills in everyday life have improved greatly, too. I
+              highly recommend Danny.
             </p>
             <p>
-              <strong></strong>
+              <strong>&#8211; Beatrix M, parent of SAT Prep student</strong>
             </p>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row text-center mt-2">
+      <div class="col">
+        <button class="lead" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+          Schedule a free trial session
+        </button>
+        <a href="{{ url_for('index', _anchor='contact') }}">
+          <button class="sec btn mt-0">
+            Get in touch
+          </button>
+        </a>
       </div>
     </div>
   </div>

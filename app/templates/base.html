@@ -60,63 +60,84 @@
   {{ super() }}
 {% endblock body %}
 
-<div class="container-fluid">
-  {% block content %}
-
-    {% block navbar %}
-      <div class="site-nav">
-        <div class="row justify-content-center">
-          <div class="col-10">
-            <div class="row">
-              <div class="col-9">
-                <a href="{{ url_for('index') }}">
-                  <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
-                </a>
-              </div>
-              <div class="col-3">
-                <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
-                  <div id="menu-title" class="d-none d-sm-block">Menu</div>
-                  <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
-                </a>
-              </div>
+{% block content %}
+  {% block navbar %}
+    <div class="site-nav">
+      <div class="row justify-content-center">
+        <div class="col-10">
+          <div class="row">
+            <div class="col-9">
+              <a href="{{ url_for('index') }}">
+                <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
+              </a>
+            </div>
+            <div class="col-3">
+              <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
+                <div id="menu-title" class="d-none d-sm-block">Menu</div>
+                <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
+              </a>
             </div>
           </div>
         </div>
       </div>
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
+    </div>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
-      <section class="drawer" id="site-menu" data-drawer-target>
-        <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
-        <div class="drawer__wrapper">
-          <div class="drawer__header">
-            <div class="drawer__title">
+    <section class="drawer" id="site-menu" data-drawer-target>
+      <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
+      <div class="drawer__wrapper">
+        <div class="drawer__header">
+          <div class="drawer__title">
 
-            </div>
-            <button class="drawer__close" data-drawer-close aria-label="Close Drawer"></button>
           </div>
-          <div class="drawer__content">
-            <a href="{{ url_for('index') }}">
-              <div class="menu-link">
-                <p>Home</p>
-              </div>
-            </a>
-            <a href="{{ url_for('about') }}">
-              <div class="menu-link">
-                <p>About</p>
-              </div>
-            </a>
-          </div>
+          <button class="drawer__close" data-drawer-close aria-label="Close Drawer"></button>
         </div>
-      </section>
-    {% endblock navbar %}
-  {% endblock content %}
-</div>
+        <div class="drawer__content">
+          <a href="{{ url_for('index') }}">
+            <div class="menu-link">
+              <p>Home</p>
+            </div>
+          </a>
+          <a href="{{ url_for('reviews') }}">
+            <div class="menu-link">
+              <p>Reviews</p>
+            </div>
+          </a>
+          <a href="{{ url_for('about') }}">
+            <div class="menu-link">
+              <p>About</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  {% endblock navbar %}
+{% endblock content %}
+
+{% block footer %}
+  <footer class="footer">
+    <div class="row justify-content-center">
+      <div class="col-5">
+
+      </div>
+      <div class="col-5 text-end">
+
+      </div>
+    </div>
+    <div class="row">
+      <p class="text-center mb-0">
+        &copy; <script>document.write(new Date().getFullYear())</script>
+        Open Path Tutoring LLC
+      </p>
+    </div>
+  </footer>
+{% endblock footer %}
 
 {% block scripts %}
   <script type="text/javascript" src="{{ url_for('static', filename='js/menu.js') }}"></script>

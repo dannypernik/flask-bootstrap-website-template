@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="container-fluid page-start justify-content-center">
+  <div class="page-start justify-content-center">
     <div class="row justify-content-center">
       <div class="col-6 col-sm-4">
         <img class="profile-pic" src="{{ url_for('static', filename='img/danny.jpg') }}" alt="Danny Pernik">
@@ -9,11 +9,11 @@
     </div>
 
     <div class="row justify-content-center">
-      <h1 class="page-title text-center">Meet Your Tutor</h1>
+      <h1 class="page-title text-center mb-4">Meet Your Tutor</h1>
     </div>
 
     <div class="row justify-content-center">
-      <div class="col-sm-9">
+      <div class="col-11 col-md-10 col-lg-9">
         <p class="h2">Hello! My name is Danny Pernik. I've had the privilege of working with
           hundreds of students over the past 5 years to help them substantially
           increase grades and test scores, strengthen confidence in and out of the
@@ -61,11 +61,11 @@
     </div>
     <div class="row text-center">
       <div class="col">
-        <button class="lg-text" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+        <button class="lead" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
           Schedule a free trial session
         </button>
         <a href="{{ url_for('index', _anchor='contact') }}">
-          <button class="sec-btn">
+          <button class="sec btn mt-0">
             Get in touch
           </button>
         </a>

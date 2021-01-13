@@ -1,4 +1,6 @@
 $font-size-root: 10px;
+$lead-font-size: calc(1.5rem + 0.7vw) !important;
+$lead-font-weight: inherit;
 $spacer: 2rem;
 $enable-smooth-scroll: false;
 $primary-color: #1C4D65;
@@ -10,8 +12,8 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 @import "../scss/bootstrap-reboot.scss";
 @import "bootstrap/bootstrap-grid.min.css";
 @import "../scss/bootstrap-utilities.scss";
-@import "../scss/_nav.scss";
 @import "../scss/_type.scss";
+@import "../scss/_buttons.scss";
 
 @import "menu.css";
 
@@ -76,7 +78,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 input, textarea {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   line-height: 2.5rem;
   padding: 1rem;
   border: none;
@@ -99,14 +101,20 @@ input[type="submit"] {
 }
 
 a {
+  display: inline-block;
   text-decoration: none;
+  color: $primary-color;
+}
+
+a:hover {
+  color: $primary-color;
 }
 
 a:hover h2 {
   font-weight: 600;
 }
 
-button {
+button, .btn {
   display: block;
   margin: 2rem auto;
   padding: 1rem 2rem;
@@ -114,11 +122,19 @@ button {
   border: 2px solid $primary-color;
   color: white;
   transition: 0.3s;
+  font-size: 1.7rem;
 }
 
-button.clr-btn {
+.btn.clr {
   background-color: transparent;
   border-color: white;
+}
+
+.btn.sec {
+  color: $primary-color;
+  border-color: $primary-color;
+  background-color: transparent;
+  padding: 0.5rem 2rem;
 }
 
 button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
@@ -127,15 +143,8 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   color: white;
 }
 
-.sec-btn {
-  color: $primary-color;
-  border-color: $primary-color;
-  background-color: transparent;
-  padding: 0.5rem 2rem;
-}
-
-.lg-text {
-  font-size: calc(1.5rem + 0.7vw);
+.drawer__close:hover {
+  background-color: white;
 }
 
 .img-fluid {
@@ -143,12 +152,43 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   height: auto;
 }
 
-.home-nav {
-  position: absolute;
-  left: 0;
+.alert {
   width: 100%;
-  background-color: transparent;
-  border: none;
+  padding: 0.5rem 0;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.alert-info {
+  color: #004085;
+  background-color: #cce5ff;
+  border-color: #b8daff;
+}
+
+.alert a {
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.page-start {
+  padding-top: calc(8rem + 3vw);
+}
+
+.page-title {
+  font-family: $title-font;
+  font-size: calc(1.75rem + 2vw);
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+.footer {
+  padding: 20px;
+  background-color: $primary-color;
+  color: white;
+  margin-top: 15rem;
 }
 
 // Nav //
@@ -180,6 +220,10 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   padding-left: 15px;
 }
 
+.drawer__content a {
+  display: inline;
+}
+
 .menu-link {
   height: 60px;
   border-bottom: 1px solid #ddd;
@@ -191,12 +235,6 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   padding: 1.7rem;
 }
 
-.home-nav a {
-  color: white;
-  font-size: 2rem;
-  text-decoration: none;
-}
-
 .site-nav {
   height: 60px;
   position: fixed;
@@ -205,14 +243,6 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   background-color: $primary-color;
   border: 1px solid $primary-color;
   z-index: 5;
-}
-
-.nav>li>a {
-  padding: 20px;
-}
-
-.home-nav a:focus, .home-nav a:hover {
-  font-weight: 600;
 }
 
 // Home page
@@ -279,48 +309,37 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   visibility: hidden;
 }
 
-.lg-text {
-  font-size: calc(1.5rem + 0.7vw);
-}
-
-.alert {
+.home-nav {
+  position: absolute;
+  left: 0;
   width: 100%;
-  padding: 0.5rem 0;
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 0;
+  background-color: transparent;
+  border: none;
 }
 
-.alert-info {
-  color: #004085;
-  background-color: #cce5ff;
-  border-color: #b8daff;
+.home-nav li {
+  list-style: none;
 }
 
-.alert a {
-  text-decoration: underline;
-  white-space: nowrap;
+.home-nav a {
+  color: white;
+  font-size: 2rem;
+  text-decoration: none;
+  padding: 0 20px;
+}
+
+.home-nav a:focus, .home-nav a:hover {
+  font-weight: 600;
 }
 
 .home-section {
   min-height: 100vh;
   overflow: auto;
-}
-
-.home-start {
   padding-top: calc(4rem + 3vw);
-}
-
-.page-start {
-  padding-top: calc(8rem + 3vw);
 }
 
 .home-section button {
   margin: calc(3rem + 1vw) auto 0;
-}
-
-.home-section.white a {
-  color: $primary-color;
 }
 
 .home-section.inverse {
@@ -329,11 +348,6 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 
 .home-section.inverse a {
   color: white;
-}
-
-.page-title {
-  font-family: $title-font;
-  font-size: calc(1.75rem + 2vw);
 }
 
 .home-next {
@@ -378,4 +392,5 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 
 .review-img {
   width: 100px;
+  margin-bottom: 2rem;
 }
