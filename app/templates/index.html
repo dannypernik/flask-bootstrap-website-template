@@ -23,11 +23,11 @@
   {% endwith %}
   <nav class="navbar home-nav">
     <div class="container">
-      <ul class="nav d-none d-md-flex p-5 justify-content-end">
+      <ul class="nav d-none d-md-flex p-4 justify-content-end">
         <li><a href="#home">Home</a></li>
         <li><a href="{{ url_for('about') }}">About</a></li>
       </ul>
-      <ul class="nav d-flex d-md-none p-5 justify-content-center">
+      <ul class="nav d-flex d-md-none p-4 justify-content-center">
         <li><a href="#home">Home</a></li>
         <li><a href="{{ url_for('about') }}">About</a></li>
       </ul>
@@ -36,7 +36,7 @@
 {% endblock navbar %}
 
 {% block content %}
-  <div id="home" class="home-section inverse text-center page-start">
+  <div id="home" class="home-section inverse text-center home-start">
     <div class="row justify-content-center">
       <div class="col-sm-11">
         <img id="home-logo" class="img-fluid"
@@ -118,14 +118,14 @@
   <div id="free-trial" class="home-section inverse page-start">
     <div class="row justify-content-center">
       <div class="col-11 col-sm-10 col-lg-8">
-        <h1 class="mb-5">In just about any academic subject, one factor can make the difference
+        <h1 class="mb-4">In just about any academic subject, one factor can make the difference
           between the best class ever and the most dreaded time of day:
           <b>your teacher</b>.</h1>
-        <h1 class="mb-5">The SAT and ACT are no different. If you don't enjoy your time with
+        <h1 class="mb-4">The SAT and ACT are no different. If you don't enjoy your time with
           a tutor, then the process will be painful. However, if you feel connected to
           and respected by your tutor, then you'll be more willing to put in the work.
         </h1>
-        <h1 class="mb-5">The only way to know is to try. That's why Open Path Tutoring
+        <h1 class="mb-4">The only way to know is to try. That's why Open Path Tutoring
           offers the <b>1st hour of tutoring free</b> with no purchase necessary.
         </h1>
         <button class="lg-text clr-btn" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
@@ -153,10 +153,10 @@
 
         <form id="inquiry-form" action="" method="post">
           {{ form.hidden_tag() }}
-          <p class="mb-4">{{ form.first_name }}</p>
-          <p class="mb-4">{{ form.email }}</p>
-          <p class="mb-4">{{ form.subject }}</p>
-          <p class="mb-4">{{ form.message(rows='3') }}</p>
+          <p class="mb-3">{{ form.first_name }}</p>
+          <p class="mb-3">{{ form.email }}</p>
+          <p class="mb-3">{{ form.subject }}</p>
+          <p class="mb-3">{{ form.message(rows='3') }}</p>
           <input type="submit" class='g-recaptcha', data-sitekey='6Lc3IBcaAAAAANQvPMR7J9MhHZyykxuamsKb4561', data-callback='onSubmit', data-action='submit' />
         </form>
       </div>

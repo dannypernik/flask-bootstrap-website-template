@@ -1,4 +1,5 @@
 $font-size-root: 10px;
+$spacer: 2rem;
 $enable-smooth-scroll: false;
 $primary-color: #1C4D65;
 $secondary-color: #ababee;
@@ -8,7 +9,7 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 
 @import "../scss/bootstrap-reboot.scss";
 @import "bootstrap/bootstrap-grid.min.css";
-@import "bootstrap/bootstrap-utilities.min.css";
+@import "../scss/bootstrap-utilities.scss";
 @import "../scss/_nav.scss";
 @import "../scss/_type.scss";
 
@@ -306,8 +307,12 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   overflow: auto;
 }
 
-.page-start {
+.home-start {
   padding-top: calc(4rem + 3vw);
+}
+
+.page-start {
+  padding-top: calc(8rem + 3vw);
 }
 
 .home-section button {
@@ -365,7 +370,7 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 .profile-pic {
   display: block;
   border-radius: 100%;
-  margin: 4rem auto 2rem;
+  margin: 0 auto 2rem;
   max-height: 155px;
 }
 
