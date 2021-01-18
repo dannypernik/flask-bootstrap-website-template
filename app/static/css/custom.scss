@@ -110,6 +110,11 @@ a:hover {
   color: $primary-color;
 }
 
+a.white:hover {
+  color: white;
+  text-decoration: underline;
+}
+
 a:hover h2 {
   font-weight: 600;
 }
@@ -123,6 +128,10 @@ button, .btn {
   color: white;
   transition: 0.3s;
   font-size: 1.7rem;
+}
+
+.white {
+  color: white;
 }
 
 .btn.clr {
