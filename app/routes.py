@@ -23,12 +23,11 @@ def index():
     to serve students of all income levels during this challenging time. \
     Please <a href="#contact">contact us</a> for more details.')
     if form.validate_on_submit():
-        user = User(first_name=form.first_name.data, email=form.email.data)
-        subject = form.subject.data
+        user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         db.session.add(user)
         db.session.commit()
-        send_inquiry_email(user, subject, message)
+        send_inquiry_email(user, message)
         alert = "Thank you for your message. We will be in touch!"
         print(app.config['ADMINS'])
     flash(alert)

@@ -11,7 +11,7 @@ def send_email(subject, text_body, from_email, to, reply_to):
     msg = EmailMessage(subject=subject, body=text_body, from_email=from_email, to=to.split(), reply_to=reply_to)
     Thread(target=send_async_email, args=(app, msg)).start()
 
-def send_inquiry_email(user, subject, message):
+def send_inquiry_email(user, message):
     send_email(subject="Contact Form Submission",
                from_email=("OpenPath Tutoring", app.config['MAIL_USERNAME']),
                to=app.config['ADMINS'][0],
