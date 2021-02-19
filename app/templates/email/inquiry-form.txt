@@ -1,1 +1,3 @@
-{{ user.first_name }} ({{ user.email }}) has sent you a message: {{ message }}
+{{ user.first_name }} ({{ user.email }} {{ user.phone }}) has sent you a message:
+
+{{ message }}

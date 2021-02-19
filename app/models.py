@@ -6,10 +6,11 @@ from flask_login import UserMixin
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(32), index=True, unique=False)
-    last_name = db.Column(db.String(32), index=True, unique=False)
+    first_name = db.Column(db.String(32), index=True)
+    last_name = db.Column(db.String(32), index=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(64), index=True)
+    phone = db.Column(db.String(32), index=True)
     password_hash = db.Column(db.String(128))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
