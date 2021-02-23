@@ -12,7 +12,7 @@ def send_email(subject, text_body, from_email, to, reply_to):
     Thread(target=send_async_email, args=(app, msg)).start()
 
 def send_inquiry_email(user, message):
-    send_email(subject="Contact Form Submission",
+    send_email(subject="Contact Form Submission: " + user.first_name,
                from_email=("OpenPath Tutoring", app.config['MAIL_USERNAME']),
                to=app.config['ADMINS'][0],
                reply_to=[user.email],
