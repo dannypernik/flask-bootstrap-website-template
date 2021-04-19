@@ -17,20 +17,15 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = InquiryForm()
-    alert = Markup('Since 2015, Open Path tutors have strived to provide the \
-    best online tutoring experience available. Now more than ever, effective \
-    virtual learning strategies are essential for success. It is our privilege \
-    to serve students of all income levels during this challenging time. \
-    Please <a href="#contact">contact us</a> for more details.')
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         db.session.add(user)
         db.session.commit()
         send_inquiry_email(user, message)
-        alert = "Thank you for your message. We will be in touch!"
         print(app.config['ADMINS'])
-    flash(alert)
+        flash("Thank you for your message. We will be in touch!")
+        return redirect(url_for('index'))
     return render_template('index.html', form=form)
 
 @app.route('/about')
