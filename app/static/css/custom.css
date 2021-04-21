@@ -5742,6 +5742,15 @@ a:hover h2, a:hover .h2 {
   font-weight: 600;
 }
 
+a:before {
+  display: block;
+  font-weight: 600;
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
 button, .btn {
   display: block;
   margin: 2rem auto;
@@ -5910,7 +5919,7 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 #home-logo {
   position: relative;
   display: block;
-  margin: 2rem auto calc(3rem);
+  margin: 5rem auto 3rem;
   height: calc(80px + 3vw);
 }
 
@@ -5948,6 +5957,7 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   font-size: 2rem;
   text-decoration: none;
   padding: 0 20px;
+  text-transform: capitalize;
 }
 
 .home-nav a:focus, .home-nav a:hover {

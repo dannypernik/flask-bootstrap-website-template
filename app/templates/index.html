@@ -24,16 +24,16 @@
   <nav class="navbar home-nav">
     <div class="row justify-content-center">
       <div class="col-sm-11 col-xl-10">
-        <ul class="d-none d-md-flex p-4 justify-content-end">
-          <li><a href="#home">Home</a></li>
-          <li><a href="{{ url_for('reviews') }}">Reviews</a></li>
-          <li><a href="{{ url_for('about') }}">About</a></li>
-          <li><a href="#contact">Contact</a></li>
+        <ul class="d-none d-md-flex p-4 mt-3 justify-content-end">
+          <li><a href="#home" data-text="home">home</a></li>
+          <li><a href="{{ url_for('reviews') }}" data-text="reviews">reviews</a></li>
+          <li><a href="{{ url_for('about') }}" data-text="about">about</a></li>
+          <li><a href="#contact" data-text="contact">contact</a></li>
         </ul>
         <ul class="d-flex d-md-none p-4 justify-content-center">
-          <li><a href="#home">Home</a></li>
-          <li><a href="{{ url_for('reviews') }}">Reviews</a></li>
-          <li><a href="{{ url_for('about') }}">About</a></li>
+          <li><a href="#home" data-text="home">home</a></li>
+          <li><a href="{{ url_for('reviews') }}" data-text="reviews">reviews</a></li>
+          <li><a href="{{ url_for('about') }}" data-text="about">About</a></li>
         </ul>
       </div>
     </div>
