@@ -1,163 +1,166 @@
-{% extends "bootstrap/base.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+      <title>
+        {% block title %}
+          {% if title %}
+            {{ title }} -
+          {% endif %}
+            Open Path Tutoring
+        {% endblock title %}
+      </title>
 
-{% block title %}
-  {% if title %}
-    {{ title }} -
-  {% endif %}
-    Open Path Tutoring
-{% endblock title %}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block head %}
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-T7HJRW6');</script>
-  <!-- End Google Tag Manager -->
+      <!-- Google Tag Manager -->
+      <script async>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-T7HJRW6');</script>
+      <!-- End Google Tag Manager -->
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-64JMLPC3H8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-64JMLPC3H8"></script>
+      <script async>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    gtag('config', 'G-64JMLPC3H8');
-  </script>
+        gtag('config', 'G-64JMLPC3H8');
+      </script>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-186105291-1">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-186105291-1"></script>
+      <script async>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-  gtag('config', 'UA-186105291-1');
-</script>
+        gtag('config', 'UA-186105291-1');
+      </script>
 
-  <!-- generics -->
-  <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-32.png') }}" sizes="32x32">
-  <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-128.png') }}" sizes="128x128">
-  <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-192.png') }}" sizes="192x192">
+      <!-- generics -->
+      <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-32.png') }}" sizes="32x32">
+      <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-128.png') }}" sizes="128x128">
+      <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-192.png') }}" sizes="192x192">
 
-  <!-- Android -->
-  <link rel="shortcut icon" sizes="196x196" href="{{ url_for('static', filename='img/favicons/favicon-196.png') }}">
+      <!-- Android -->
+      <link rel="shortcut icon" sizes="196x196" href="{{ url_for('static', filename='img/favicons/favicon-196.png') }}">
 
-  <!-- iOS -->
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-152.png') }}" sizes="152x152">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-180.png') }}" sizes="180x180">
+      <!-- iOS -->
+      <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-152.png') }}" sizes="152x152">
+      <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-180.png') }}" sizes="180x180">
 
-  <!-- Windows 8.1 + IE11 and above -->
-  <meta name="msapplication-config" content="{{ url_for('static', filename='img/favicons/browserconfig.xml') }}" />
+      <!-- Windows 8.1 + IE11 and above -->
+      <meta name="msapplication-config" content="{{ url_for('static', filename='img/favicons/browserconfig.xml') }}" />
 
-  {{ super() }}
-{% endblock head %}
+      {% block styles %}
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&display=swap"
+          rel="stylesheet">
+          <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+          <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+      {% endblock styles %}
 
-{% block styles %}
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&display=swap"
-    rel="stylesheet">
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
-{% endblock styles %}
+      {% block scripts %}
+        <script async src="{{ url_for('static', filename='js/menu.js') }}"></script>
+        <script async src="https://assets.calendly.com/assets/external/widget.js"></script>
+      {% endblock scripts %}
+    {% endblock head %}
+  </head>
+  <body>
+    {% block body %}
+      <!-- Google Tag Manager (noscript) -->
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7HJRW6"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <!-- End Google Tag Manager (noscript) -->
+    {% endblock body %}
 
-{% block body %}
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7HJRW6"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-
-  {{ super() }}
-{% endblock body %}
-
-{% block content %}
-  {% block navbar %}
-    <div class="site-nav">
-      <div class="row justify-content-center">
-        <div class="col-10">
-          <div class="row">
-            <div class="col-9">
-              <a href="{{ url_for('index') }}">
-                <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
-              </a>
-            </div>
-            <div class="col-3">
-              <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
-                <div id="menu-title" class="d-none d-sm-block">Menu</div>
-                <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
-              </a>
+    {% block navbar %}
+      <div class="site-nav">
+        <div class="row justify-content-center">
+          <div class="col-10">
+            <div class="row">
+              <div class="col-9">
+                <a href="{{ url_for('index') }}">
+                  <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
+                </a>
+              </div>
+              <div class="col-3">
+                <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
+                  <div id="menu-title" class="d-none d-sm-block">Menu</div>
+                  <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-info" role="alert">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
 
-    <section class="drawer" id="site-menu" data-drawer-target>
-      <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
-      <div class="drawer__wrapper">
-        <div class="drawer__header">
-          <div class="drawer__title">
+      <section class="drawer" id="site-menu" data-drawer-target>
+        <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
+        <div class="drawer__wrapper">
+          <div class="drawer__header">
+            <div class="drawer__title">
 
+            </div>
+            <button class="drawer__close" data-drawer-close aria-label="Close Drawer"></button>
           </div>
-          <button class="drawer__close" data-drawer-close aria-label="Close Drawer"></button>
+          <div class="drawer__content">
+            <a href="{{ url_for('index') }}">
+              <div class="menu-link">
+                <p>Home</p>
+              </div>
+            </a>
+            <a href="{{ url_for('reviews') }}">
+              <div class="menu-link">
+                <p>Reviews</p>
+              </div>
+            </a>
+            <a href="{{ url_for('about') }}">
+              <div class="menu-link">
+                <p>About</p>
+              </div>
+            </a>
+            <a href="{{ url_for('index', _anchor='contact') }}">
+              <div class="menu-link">
+                <p>Contact</p>
+              </div>
+            </a>
+          </div>
         </div>
-        <div class="drawer__content">
-          <a href="{{ url_for('index') }}">
-            <div class="menu-link">
-              <p>Home</p>
-            </div>
-          </a>
-          <a href="{{ url_for('reviews') }}">
-            <div class="menu-link">
-              <p>Reviews</p>
-            </div>
-          </a>
-          <a href="{{ url_for('about') }}">
-            <div class="menu-link">
-              <p>About</p>
-            </div>
-          </a>
-          <a href="{{ url_for('index', _anchor='contact') }}">
-            <div class="menu-link">
-              <p>Contact</p>
-            </div>
-          </a>
+      </section>
+    {% endblock navbar %}
+
+    {% block content %}{% endblock content %}
+
+    {% block footer %}
+      <footer class="footer">
+        <div class="row justify-content-center">
+          <div class="col-sm-10">
+            <p class="mb-2 mt-3">
+              <img src="{{ url_for('static', filename='img/phone.svg') }}"/>
+              <a class="ms-2 white" href="tel:+17173222292">(717) 322-2292</a>
+            </p>
+            <p class="mb-2">
+              <img src="{{ url_for('static', filename='img/mail.svg') }}"/>
+              <a class="ms-2 white" href="mailto:hello@openpathtutoring.com">hello@openpathtutoring.com</a>
+            </p>
+            <p class="">
+              <span class="me-3 h2">&copy;</span><script>document.write(new Date().getFullYear())</script>
+              Open Path Tutoring LLC
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
-  {% endblock navbar %}
-{% endblock content %}
-
-{% block footer %}
-  <footer class="footer">
-    <div class="row justify-content-center">
-      <div class="col-sm-10">
-        <p class="mb-2 mt-3">
-          <img src="{{ url_for('static', filename='img/phone.svg') }}"/>
-          <a class="ms-2 white" href="tel:+17173222292">(717) 322-2292</a>
-        </p>
-        <p class="mb-2">
-          <img src="{{ url_for('static', filename='img/mail.svg') }}"/>
-          <a class="ms-2 white" href="mailto:hello@openpathtutoring.com">hello@openpathtutoring.com</a>
-        </p>
-        <p class="">
-          <span class="me-3 h2">&copy;</span><script>document.write(new Date().getFullYear())</script>
-          Open Path Tutoring LLC
-        </p>
-      </div>
-    </div>
-  </footer>
-{% endblock footer %}
-
-{% block scripts %}
-  <script type="text/javascript" src="{{ url_for('static', filename='js/menu.js') }}"></script>
-  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
-{% endblock scripts %}
+      </footer>
+    {% endblock footer %}
+  </body>
+</html>

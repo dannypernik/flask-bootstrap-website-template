@@ -6,7 +6,7 @@
   <meta property="og:title" content="Open Path Tutoring" />
   <meta property="og:description" content="Schedule your free SAT or ACT prep session" />
   <meta property="og:image" content="{{ url_for('static', filename='img/og-image.jpg') }}" />
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script async src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock head %}
 
 {% block navbar %}
@@ -192,17 +192,15 @@
       </div>
     </div>
   </div>
-{% endblock content %}
 
-{% block scripts %}
-  {{ super() }}
-  <script type="text/javascript" src="{{ url_for('static', filename='js/zenscroll-min.js') }}"></script>
-  <script type="text/javascript">
+  <script src="{{ url_for('static', filename='js/zenscroll-min.js') }}"></script>
+  <script>
     zenscroll.setup(null, 0);
   </script>
-  <script type="text/javascript">
+
+  <script>
    function onSubmit(token) {
      document.getElementById("inquiry-form").submit();
    }
  </script>
-{% endblock scripts %}
+{% endblock content %}
