@@ -3,12 +3,10 @@
   <head>
     {% block head %}
       <title>
-        {% block title %}
-          {% if title %}
-            {{ title }} -
-          {% endif %}
-            Open Path Tutoring
-        {% endblock title %}
+        {% if title %}
+          {{ title }} -
+        {% endif %}
+        Open Path Tutoring
       </title>
 
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,26 +39,20 @@
         gtag('config', 'UA-186105291-1');
       </script>
 
-      <!-- generics -->
+      <!-- favicons -->
       <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-32.png') }}" sizes="32x32">
       <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-128.png') }}" sizes="128x128">
       <link rel="icon" href="{{ url_for('static', filename='img/favicons/favicon-192.png') }}" sizes="192x192">
-
-      <!-- Android -->
       <link rel="shortcut icon" sizes="196x196" href="{{ url_for('static', filename='img/favicons/favicon-196.png') }}">
-
-      <!-- iOS -->
       <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-152.png') }}" sizes="152x152">
       <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicons/favicon-180.png') }}" sizes="180x180">
-
-      <!-- Windows 8.1 + IE11 and above -->
       <meta name="msapplication-config" content="{{ url_for('static', filename='img/favicons/browserconfig.xml') }}" />
 
       {% block styles %}
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&display=swap"
           rel="stylesheet">
           <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-          <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+          <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css', u=last_updated) }}">
       {% endblock styles %}
 
       {% block scripts %}
