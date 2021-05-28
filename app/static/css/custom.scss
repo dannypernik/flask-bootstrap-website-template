@@ -266,11 +266,17 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 
 // X-large backgrounds //
 
+// #home photo by Ekaterina Bolovtsova on Pexels
+// https://www.pexels.com/@ekaterina-bolovtsova
+
 #home {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student-xl.webp) center top no-repeat;
   background-attachment: fixed;
   background-size: cover;
 }
+
+// #free-trial photo by Julia M Cameron on Pexels
+// https://www.pexels.com/@julia-m-cameron
 
 #free-trial {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2-xl.webp) center top no-repeat;
