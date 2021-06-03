@@ -3,10 +3,12 @@
   <head>
     {% block head %}
       <title>
-        {% if title %}
-          {{ title }} -
-        {% endif %}
-        Open Path Tutoring
+        {% block title %}
+          {% if title %}
+            {{ title }} |
+          {% endif %}
+          Open Path Tutoring
+        {% endblock title %}
       </title>
 
       <meta name="viewport" content="width=device-width, initial-scale=1.0">

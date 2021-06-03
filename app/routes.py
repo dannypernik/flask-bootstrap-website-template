@@ -36,11 +36,11 @@ def index():
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('about.html', title="About")
 
 @app.route('/reviews')
 def reviews():
-    return render_template('reviews.html')
+    return render_template('reviews.html', title="Reviews")
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
