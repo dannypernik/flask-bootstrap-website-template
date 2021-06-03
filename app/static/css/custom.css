@@ -5766,7 +5766,7 @@ button, .btn {
   color: white;
 }
 
-.btn.clr {
+button.clr {
   background-color: transparent;
   border-color: white;
 }
@@ -5794,6 +5794,7 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 }
 
 .alert {
+  position: absolute;
   width: 100%;
   padding: 0.5rem 0;
   text-align: center;
@@ -5888,6 +5889,8 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student-xl.webp) center top no-repeat;
   background-attachment: fixed;
   background-size: cover;
+  min-height: 100vh;
+  overflow: auto;
 }
 
 #free-trial {
@@ -5919,7 +5922,7 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 #home-logo {
   position: relative;
   display: block;
-  margin: 5rem auto 3rem;
+  margin: 0 auto 3rem;
   height: calc(80px + 3vw);
 }
 
@@ -5941,9 +5944,8 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 }
 
 .home-nav {
-  position: absolute;
-  left: 0;
-  width: 100%;
+  display: flex;
+  justify-content: space-between;
   background-color: transparent;
   border: none;
 }
@@ -5956,7 +5958,7 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   color: white;
   font-size: 2rem;
   text-decoration: none;
-  padding: 0 20px;
+  padding: calc(4rem + 2vw) 0;
   text-transform: capitalize;
 }
 
@@ -5970,15 +5972,16 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   padding-top: calc(4rem + 3vw);
 }
 
-.home-section button {
-  margin: calc(3rem + 1vw) auto 0;
+button.cta {
+  margin-top: calc(3rem + 1vw);
+  font-size: calc(1.5rem + 0.7vw) !important;
 }
 
-.home-section.inverse {
+.inverse {
   color: white;
 }
 
-.home-section.inverse a {
+.inverse a {
   color: white;
 }
 

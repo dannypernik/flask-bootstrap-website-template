@@ -31,7 +31,7 @@ def index():
         send_inquiry_email(user, message)
         print(app.config['ADMINS'])
         flash("Thank you for your message. We will be in touch!")
-        return redirect(url_for('index'))
+        return redirect(url_for('index', _anchor="home"))
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
 
 @app.route('/about')

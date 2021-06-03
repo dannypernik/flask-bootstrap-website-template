@@ -9,47 +9,42 @@
   <script async src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock head %}
 
-{% block navbar %}
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for message in messages %}
-        <div class="row justify-content-center alert alert-info">
-          <div class="col-sm-11 col-md-10 col-lg-9">
-            <div role="alert">{{ message }}</div>
-          </div>
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-  <nav class="navbar home-nav">
-    <div class="row justify-content-center">
-      <div class="col-sm-11 col-xl-10">
-        <ul class="d-none d-md-flex p-4 mt-3 justify-content-end">
-          <li><a href="#home" data-text="home">home</a></li>
-          <li><a href="{{ url_for('reviews') }}" data-text="reviews">reviews</a></li>
-          <li><a href="{{ url_for('about') }}" data-text="about">about</a></li>
-          <li><a href="#contact" data-text="contact">contact</a></li>
-        </ul>
-        <ul class="d-flex d-md-none p-4 justify-content-center">
-          <li><a href="#home" data-text="home">home</a></li>
-          <li><a href="{{ url_for('reviews') }}" data-text="reviews">reviews</a></li>
-          <li><a href="{{ url_for('about') }}" data-text="about">About</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-{% endblock navbar %}
+{% block navbar %}{% endblock navbar %}
 
 {% block content %}
   <div class="content">
-    <div id="home" class="home-section inverse text-center">
+    <div id="home" class="inverse text-center">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="row justify-content-center alert alert-info">
+              <div class="col-sm-11 col-md-10 col-lg-9">
+                <div role="alert">{{ message }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <nav class="row justify-content-center">
+        <div class="col col-md-10">
+          <div class="row justify-content-center justify-content-md-end">
+            <div class="home-nav col col-md-7 col-lg-6 col-xl-5">
+              <div class="d-none d-md-block"><a href="#home" data-text="home">home</a></div>
+              <div><a href="{{ url_for('reviews') }}" data-text="reviews">reviews</a></div>
+              <div><a href="{{ url_for('about') }}" data-text="about">about</a></div>
+              <div><a href="#contact" data-text="contact">contact</a></div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       <div class="row justify-content-center">
-        <div class="col-sm-11">
+        <div class="col-11">
           <img id="home-logo" class="img-fluid"
             src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
           <h1 id="home-title">Open Path Tutoring</h1>
           <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
-          <button class="lead" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+          <button class="cta" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
             Schedule a free trial session
           </button>
           <div class="home-next">
@@ -156,7 +151,7 @@
             The only way to know is to try. That's why we offer a
             <b>free tutoring session</b> with no purchase necessary.
           </h1>
-          <button class="lead btn clr" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+          <button class="cta clr" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
             Schedule a free trial session
           </button>
           <div class="home-next">
@@ -203,8 +198,8 @@
   </script>
 
   <script>
-   function onSubmit(token) {
+    function onSubmit(token) {
      document.getElementById("inquiry-form").submit();
-   }
- </script>
+    }
+  </script>
 {% endblock content %}
