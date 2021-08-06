@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import ValidationError, InputRequired, Email, EqualTo, Length
-from app.models import User
+from app.models import User, Student
 
 class InquiryForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
@@ -12,7 +12,6 @@ class InquiryForm(FlaskForm):
     message = TextAreaField('Message', render_kw={"placeholder": "Message"}, \
         validators=[InputRequired()])
     submit = SubmitField('Submit')
-
 
 class EmailForm(FlaskForm):
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
