@@ -44,7 +44,7 @@ def upgrade():
     op.create_index(op.f('ix_user_first_name'), 'user', ['first_name'], unique=False)
     op.create_index(op.f('ix_user_last_name'), 'user', ['last_name'], unique=False)
     op.create_index(op.f('ix_user_timestamp'), 'user', ['timestamp'], unique=False)
-    op.add_column('post', sa.Column('timestamp', sa.DateTime(), nullable=True)
+    op.add_column('post', sa.Column('timestamp', sa.DateTime(), nullable=True))
 #op.create_table('student',
     #sa.Column('id', sa.Integer(), nullable=False),
     #sa.Column('first_name', sa.String(length=32)),
