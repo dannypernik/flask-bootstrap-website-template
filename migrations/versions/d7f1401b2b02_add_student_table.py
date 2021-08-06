@@ -27,6 +27,34 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
+
+    op.create_table('user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('first_name', sa.String(length=64), nullable=True),
+    sa.Column('last_name', sa.String(length=64), nullable=True),
+    sa.Column('email', sa.String(length=64), nullable=True),
+    sa.Column('password_hash', sa.String(length=128), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('last_viewed', sa.DATETIME(), nullable=True),
+    sa.Column('about_me', sa.String(length=500), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
+    op.create_index(op.f('ix_user_first_name'), 'user', ['first_name'], unique=False)
+    op.create_index(op.f('ix_user_last_name'), 'user', ['last_name'], unique=False)
+    op.create_index(op.f('ix_user_timestamp'), 'user', ['timestamp'], unique=False)
+    #op.create_table('student',
+    #sa.Column('id', sa.Integer(), nullable=False),
+    #sa.Column('first_name', sa.String(length=32)),
+    #sa.Column('last_name', sa.String(length=32)),
+    #sa.Column('username', sa.String(length=64)),
+    #sa.Column('email', sa.String(length=64)),
+    #sa.Column('phone', sa.String(length=32)),
+    #sa.Column('password_hash', sa.String(length=128)),
+    #sa.Column('timestamp', sa.DateTime(length=32)),
+    #sa.Column('posts'),
+    #sa.Column('about_me'),
+    #sa.Column('last_viewed')
     # ### end Alembic commands ###
 
 
