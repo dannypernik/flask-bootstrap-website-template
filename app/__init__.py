@@ -21,7 +21,6 @@ mail = Mail(app)
 
 from app import routes, models, errors
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.run(debug=True)
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
