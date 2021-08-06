@@ -5826,7 +5826,14 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   flex: 1 0 auto;
 }
 
+#contact {
+  position: relative;
+}
+
 .footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
   padding: 20px;
   background-color: #1C4D65;
   color: white;
