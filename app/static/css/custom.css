@@ -5831,8 +5831,6 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 }
 
 .footer {
-  position: absolute;
-  width: 100%;
   bottom: 0;
   padding: 20px;
   background-color: #1C4D65;
