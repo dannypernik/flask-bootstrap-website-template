@@ -22,7 +22,7 @@ def upgrade():
         batch_op.add_column(sa.Column('student_name', sa.VARCHAR(length=64), nullable=True))
         batch_op.add_column(sa.Column('student_email', sa.VARCHAR(length=64), nullable=True))
         batch_op.add_column(sa.Column('parent_name', sa.VARCHAR(length=64), nullable=True))
-        batch_op.add_column(sa.Column('timezone'), sa.INTEGER(), nullable=True)
+        batch_op.add_column(sa.Column('timezone', sa.INTEGER(), nullable=True))
         batch_op.create_unique_constraint(batch_op.f('uq_student_student_name'), ['student_name'])
         batch_op.drop_column('tz')
         batch_op.drop_column('email')
