@@ -18,7 +18,7 @@
         <h1 class="page-start">Student list</h1>
 
         {% for s in students %}
-          <h2 class="mb-1">{{ s.student_name }}: {{ s.student_email }}</h2>
+          <h2 class="mb-1">{{ s.student_name }} ({{ s.student_email }})</h2>
           <ul class="mb-3">
             <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
             <li>Timezone:

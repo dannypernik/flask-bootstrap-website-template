@@ -64,7 +64,7 @@ def login():
 @login_required
 def students():
     form = AddStudentForm()
-    students = Student.query.order_by(-Student.id).all()
+    students = Student.query.order_by(Student.student_name).all()
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, student_email=form.student_email.data, parent_name=form.parent_name.data, parent_email=form.parent_email.data, timezone=form.timezone.data)
         db.session.add(student)
