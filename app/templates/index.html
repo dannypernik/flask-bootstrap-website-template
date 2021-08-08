@@ -16,7 +16,7 @@
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           {% for message in messages %}
-            <div class="row justify-content-center alert alert-info">
+            <div id="home-alert" class="row justify-content-center alert alert-info">
               <div class="col-sm-11 col-md-10 col-lg-9">
                 <div role="alert">{{ message }}</div>
               </div>

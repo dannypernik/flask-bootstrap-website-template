@@ -169,9 +169,12 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   height: auto;
 }
 
-.alert {
+#home-alert {
   position: absolute;
   width: 100%;
+}
+
+.alert {
   padding: 0.5rem 0;
   text-align: center;
   font-size: 1.5rem;
@@ -190,7 +193,7 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 }
 
 .page-start {
-  padding-top: calc(8rem + 3vw);
+  padding-top: calc(2rem + 3vw);
 }
 
 .page-title {
@@ -266,6 +269,11 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   background-color: $primary-color;
   border: 1px solid $primary-color;
   z-index: 5;
+}
+
+.nav-gap {
+  height: 60px;
+  width: 100%;
 }
 
 // Home page
