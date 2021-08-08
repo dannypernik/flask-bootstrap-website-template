@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="page-start row justify-content-center">
+    <div class="col-10 col-md-8">
+      <h1>Add student</h1>
+      <form id="add-student-form" action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.student_name }}
+        {{ form.student_email }}
+        {{ form.parent_name }}
+        {{ form.parent_email }}
+        {{ form.timezone }}
+        <div class="mt-2">
+          {{ form.submit }}
+        </div>
+
+        <h1 class="page-start">Student list</h1>
+
+        {% for s in students %}
+          <h2 class="mb-1">{{ s.student_name }}: {{ s.student_email }}</h2>
+          <ul class="mb-3">
+            <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
+            <li>Timezone:
+              {% if s.timezone == -8 %}
+                Pacific
+                {% elif s.timezone == -7 %}
+                  Mountain
+                {% elif s.timezone == -6 %}
+                  Central
+                {% elif s.timezone == -5 %}
+                  Eastern
+                {% else %}
+                  {{ s.timezone }}
+              {% endif %}
+            </li>
+          </ul>
+        {% endfor %}
+
+      </form>
+    </div>
+  </div>
+{% endblock content %}

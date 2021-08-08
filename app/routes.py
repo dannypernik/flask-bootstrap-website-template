@@ -1,9 +1,9 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory
 from app import app, db
-from app.forms import InquiryForm, EmailForm, SignupForm, LoginForm, EditProfileForm
+from app.forms import InquiryForm, EmailForm, SignupForm, LoginForm, EditProfileForm, AddStudentForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from app.models import User, Student
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_inquiry_email
@@ -42,30 +42,6 @@ def about():
 def reviews():
     return render_template('reviews.html', title="Reviews")
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = SignupForm()
-    if form.validate_on_submit():
-        username = form.first_name.data.lower() + "." + form.last_name.data.lower()
-        username_id = 1
-        username_check = User.query.filter_by(username=username).first()
-        while username_check is not None:
-            username_next = ''.join((str(username), str(username_id)))
-            username_check = User.query.filter_by(username=username_next).first()
-            if username_check is None:
-                username = username_next
-            username_id += 1
-        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-        email=form.email.data, username=username)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("You are now registered. We're glad you're here!")
-        return redirect(url_for('index'))
-    return render_template('signup.html', title='Sign up', form=form)
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -80,9 +56,41 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
+            next_page = url_for('students')
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title="Login", form=form)
+
+@app.route('/students', methods=['GET', 'POST'])
+@login_required
+def students():
+    form = AddStudentForm()
+    students = Student.query.order_by(-Student.id).all()
+    if form.validate_on_submit():
+        student = Student(student_name=form.student_name.data, student_email=form.student_email.data, parent_name=form.parent_name.data, parent_email=form.parent_email.data, timezone=form.timezone.data)
+        db.session.add(student)
+        db.session.commit()
+        flash("Student added")
+        return redirect(url_for('students'))
+    return render_template('students.html', title="Students", form=form, students=students)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = SignupForm()
+    if form.validate_on_submit():
+        username_check = User.query.filter_by(username=form.email.data).first()
+        if username_check is not None:
+            flash('User already exists.')
+            return redirect(url_for('signup'))
+        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
+        email=form.email.data, username=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("You are now registered. We're glad you're here!")
+        return redirect(url_for('index'))
+    return render_template('signup.html', title='Sign up', form=form)
 
 @app.route('/logout')
 def logout():

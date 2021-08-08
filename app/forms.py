@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, IntegerField
 from wtforms.validators import ValidationError, InputRequired, Email, EqualTo, Length
 from app.models import User, Student
 
@@ -47,4 +47,17 @@ class LoginForm(FlaskForm):
 class EditProfileForm(FlaskForm):
     username = StringField ('Username', validators=[InputRequired()])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=500)])
+    submit = SubmitField('Save')
+
+class AddStudentForm(FlaskForm):
+    student_name = StringField('Student name', render_kw={"placeholder": "Student name"}, \
+        validators=[InputRequired()])
+    student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    parent_name = StringField('Parent name', render_kw={"placeholder": "Parent name"}, \
+        validators=[InputRequired()])
+    parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
+        validators=[InputRequired()])
     submit = SubmitField('Save')
