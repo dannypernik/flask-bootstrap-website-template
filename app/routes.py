@@ -76,6 +76,7 @@ def students():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
+        flash('You are already signed in')
         return redirect(url_for('index'))
     form = SignupForm()
     if form.validate_on_submit():
@@ -90,7 +91,7 @@ def signup():
         db.session.commit()
         flash("You are now registered. We're glad you're here!")
         return redirect(url_for('index'))
-    return render_template('signup.html', title='Sign up', form=form)
+    return render_template('ignup.html', title='Sign up', form=form)
 
 @app.route('/logout')
 def logout():

@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-  This page could not be found.
+  <div class="row justify-content-center">
+    <div class="page-start col-10 col-md-8">
+      <h1>This page could not be found.</h1>
+      <div class="">
+        Apologies for the inconvenience. If you're arriving here unexpectedly,
+        it would be very helpful if you let us know how you got here.
+      </div>
+      <div class="mt-3">
+        <a href="{{ url_for('index', _anchor='contact') }}" class="btn">
+          Contact us
+        </a>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
