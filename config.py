@@ -16,4 +16,6 @@ class Config(object):
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAILJET_KEY = os.environ.get('MAILJET_KEY')
+    MAILJET_SECRET = os.environ.get('MAILJET_SECRET')
     ADMINS = [os.environ.get('ADMINS')]

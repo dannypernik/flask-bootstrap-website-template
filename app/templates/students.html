@@ -22,13 +22,13 @@
           <ul class="mb-3">
             <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
             <li>Timezone:
-              {% if s.timezone == -8 %}
+              {% if s.timezone == -2 %}
                 Pacific
-                {% elif s.timezone == -7 %}
+                {% elif s.timezone == -1 %}
                   Mountain
-                {% elif s.timezone == -6 %}
+                {% elif s.timezone == 0 %}
                   Central
-                {% elif s.timezone == -5 %}
+                {% elif s.timezone == 1 %}
                   Eastern
                 {% else %}
                   {{ s.timezone }}
