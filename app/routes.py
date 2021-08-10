@@ -67,8 +67,15 @@ def students():
     students = Student.query.order_by(Student.student_name).all()
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, student_email=form.student_email.data, parent_name=form.parent_name.data, parent_email=form.parent_email.data, timezone=form.timezone.data)
-        db.session.add(student)
-        db.session.commit()
+        try:
+            db.session.add(student)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('Student name already exists', 'error')
+            return redirect(url_for('students'))
+        finally:
+            db.session.close()
         flash("Student added")
         return redirect(url_for('students'))
     return render_template('students.html', title="Students", form=form, students=students)
@@ -82,7 +89,7 @@ def signup():
     if form.validate_on_submit():
         username_check = User.query.filter_by(username=form.email.data).first()
         if username_check is not None:
-            flash('User already exists.')
+            flash('User already exists', 'error')
             return redirect(url_for('signup'))
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
         email=form.email.data, username=form.email.data)
@@ -115,7 +122,7 @@ def edit_profile():
     if form.validate_on_submit():
         username = User.query.filter_by(username=form.username.data).first()
         if username.id is not current_user.id and not None:
-            flash("The username " + form.username.data + " is already taken")
+            flash("The username " + form.username.data + " is already taken", 'error')
             flash(username.id)
             form.username.data = current_user.username
             current_user.about_me = form.about_me.data
@@ -124,7 +131,7 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db.session.commit()
-        flash('Your changes have been saved.')
+        flash('Your changes have been saved')
         return redirect(url_for('edit_profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username

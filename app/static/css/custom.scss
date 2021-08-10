@@ -179,12 +179,15 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 0;
-}
-
-.alert-info {
   color: #004085;
   background-color: #cce5ff;
   border-color: #b8daff;
+}
+
+.alert.error {
+  color: #850017;
+  background-color: #ffd4db;
+  border-color: #ffd4db;
 }
 
 .alert a {
