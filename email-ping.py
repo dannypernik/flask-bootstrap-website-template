@@ -2,7 +2,7 @@
 import smtplib
 import time
 from email.mime.text import MIMEText
-from app import app
+from app import app.config
 
 to_email = app.config['MAIL_USERNAME']  # add recipient (your remote account) here
 from_email = app.config['MAIL_USERNAME']  # email from which the e-mail is sent; must be accepted by SMTP
