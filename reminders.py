@@ -68,18 +68,9 @@ def main():
     for event in events:
         for student in students:
             if " " + student.student_name + " " in event.get('summary'):
-                send_reminder_email(event, student)
-                return
-                #
-        #start = event['start'].get('dateTime', event['start'].get('timeZone'))
-        #start = event['start'].get('timeZone')
-        #attendees = []
-        #if event.get('attendees'):
-        #    for attendee in event.get('attendees'):
-        #        email = attendee.get('email')
-        #        attendees.append(email)
-        #print(start, attendees)
-
+                print(student.student_name)
+                #send_reminder_email(event, student)
+                #return
 
 
 def send_reminder_email(event, student):
