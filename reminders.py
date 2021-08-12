@@ -18,7 +18,7 @@ load_dotenv(os.path.join(basedir, '.env'))
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
-def main():
+def init():
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
@@ -129,5 +129,5 @@ def send_reminder_email(event, student):
     print(result.json())
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == '__init__':
+    init()
