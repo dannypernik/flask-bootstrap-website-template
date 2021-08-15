@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from __future__ import print_function
 import datetime
 from dateutil.parser import parse
@@ -26,6 +24,14 @@ def main():
     """
     flow = Flow.from_client_secrets_file(
                 os.path.join(basedir, 'credentials.json'), SCOPES)
+
+    authorization_url, state = flow.authorization_url(
+    # Enable offline access so that you can refresh an access token without
+    # re-prompting the user for permission. Recommended for web server apps.
+    access_type='offline',
+    # Enable incremental authorization. Recommended as a best practice.
+    include_granted_scopes='true')
+
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -43,13 +49,6 @@ def main():
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
-
-    authorization_url, state = flow.authorization_url(
-    # Enable offline access so that you can refresh an access token without
-    # re-prompting the user for permission. Recommended for web server apps.
-    access_type='offline',
-    # Enable incremental authorization. Recommended as a best practice.
-    include_granted_scopes='true')
 
     service = build('calendar', 'v3', credentials=creds)
 
@@ -70,9 +69,9 @@ def main():
     for event in events:
         for student in students:
             if " " + student.student_name + " " in event.get('summary'):
-                print(student.student_name)
-                #send_reminder_email(event, student)
-                #return
+                print(student.student_email, student.parent_email)
+                send_reminder_email(event, student)
+                return
 
 
 def send_reminder_email(event, student):
