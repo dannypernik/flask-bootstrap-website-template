@@ -71,7 +71,6 @@ def main():
             if " " + student.student_name + " " in event.get('summary'):
                 print(student.student_email, student.parent_email)
                 send_reminder_email(event, student)
-                return
 
 
 def send_reminder_email(event, student):
