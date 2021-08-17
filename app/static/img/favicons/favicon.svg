@@ -3,12 +3,6 @@
     <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
     <title>logo-bg</title>
     <desc>Created with Sketch.</desc>
-    <style>
-      @media (prefers-color-scheme: dark) {
-        circle {
-          fill: transparent;
-        }
-    </style>
     <g id="logo-bg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="Oval" fill="#1C4D65" cx="389" cy="390" r="376"></circle>
         <g id="logo" transform="translate(172.000000, 104.000000)" fill="#FFFFFF">
