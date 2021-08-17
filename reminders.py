@@ -120,6 +120,11 @@ def send_reminder_email(event, student):
                 "Email": student.parent_email
                 }
             ],
+            "Bcc": [
+                {
+                "Email": app.config['MAIL_USERNAME']
+                }
+            ],
             "Subject": "Reminder for " + event.get('summary'),
             "HTMLPart": "Hello, this is an automated reminder that a tutoring session is scheduled on " + \
             start_date + " from  " + start_display + " to " + end_display + " " + \
