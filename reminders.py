@@ -63,14 +63,20 @@ def main():
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
     students = Student.query.order_by(-Student.id).all()
+    reminder_list = []
 
-    if not events:
-        print('No upcoming events found.')
     for event in events:
         for student in students:
             if " " + student.student_name + " " in event.get('summary'):
-                print(student.student_email, student.parent_email)
+                reminder_list.append(student.student_name)
                 send_reminder_email(event, student)
+
+    if len(reminder_list) > 0:
+        print("Reminders sent to:\r")
+        for name in reminder_list:
+            print(name + "\r")
+    else:
+        print("No reminders sent.")
 
 
 def send_reminder_email(event, student):
