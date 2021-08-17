@@ -6,3 +6,5 @@ __pycache__
 /logs/
 /certs/
 app.db
+token.json
+credentials.json

@@ -55,8 +55,8 @@ def main():
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     today = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
-    upcoming_start = (today + datetime.timedelta(days=2)).isoformat() + 'Z'
-    upcoming_end = (today + datetime.timedelta(days=3)).isoformat() + 'Z'
+    upcoming_start = (today + datetime.timedelta(hours=44)).isoformat() + 'Z'
+    upcoming_end = (today + datetime.timedelta(hours=68)).isoformat() + 'Z'
     print('Getting upcoming events with attendees from ' + upcoming_start + ' to ' + upcoming_end)
     events_result = service.events().list(calendarId='primary', timeMin=upcoming_start,
                                         timeMax=upcoming_end, singleEvents=True,
