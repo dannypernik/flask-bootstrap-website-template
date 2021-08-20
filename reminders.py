@@ -11,6 +11,7 @@ from app import app
 from mailjet_rest import Client
 from dotenv import load_dotenv
 from app.models import Student
+import re
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
@@ -88,7 +89,8 @@ def send_reminder_email(event, student):
 
     start_date = dt.strftime(parse(event['start'].get('dateTime')), format="%A, %b %-d %Y")
     start_time = event['start'].get('dateTime')
-    start_offset = dt.strptime(start_time, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
+    start_time_formatted = re.sub(r'([-+]\d{2}):(\d{2})(?:(\d{2}))?$', r'\1\2\3', start_time)
+    start_offset = dt.strptime(start_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
     end_time = event['end'].get('dateTime')
     end_offset = dt.strptime(end_time, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
     start_display = dt.strftime(start_offset, "%-I:%M") + dt.strftime(start_offset, "%p").lower()
