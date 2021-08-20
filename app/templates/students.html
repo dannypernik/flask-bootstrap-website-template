@@ -11,6 +11,7 @@
         {{ form.parent_name }}
         {{ form.parent_email }}
         {{ form.timezone }}
+        {{ form.location }}
         <div class="mt-2">
           {{ form.submit }}
         </div>
@@ -23,17 +24,18 @@
             <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
             <li>Timezone:
               {% if s.timezone == -2 %}
-                Pacific
+                  Pacific
                 {% elif s.timezone == -1 %}
-                  Mountain
+                    Mountain
                 {% elif s.timezone == 0 %}
-                  Central
+                    Central
                 {% elif s.timezone == 1 %}
-                  Eastern
+                    Eastern
                 {% else %}
-                  {{ s.timezone }}
+                    {{ s.timezone }}
               {% endif %}
             </li>
+            <li>Location: {{ s.location }}</li>
           </ul>
         {% endfor %}
 

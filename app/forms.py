@@ -60,4 +60,6 @@ class AddStudentForm(FlaskForm):
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
         validators=[InputRequired()])
+    location = StringField('Location', render_kw={"placeholder": "Location"}, \
+        validators=[InputRequired()])
     submit = SubmitField('Save')

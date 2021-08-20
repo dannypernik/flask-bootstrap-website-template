@@ -22,6 +22,7 @@ def dir_last_updated(folder):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+
     form = InquiryForm()
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
@@ -66,7 +67,9 @@ def students():
     form = AddStudentForm()
     students = Student.query.order_by(Student.student_name).all()
     if form.validate_on_submit():
-        student = Student(student_name=form.student_name.data, student_email=form.student_email.data, parent_name=form.parent_name.data, parent_email=form.parent_email.data, timezone=form.timezone.data)
+        student = Student(student_name=form.student_name.data, student_email=form.student_email.data, \
+        parent_name=form.parent_name.data, parent_email=form.parent_email.data, \
+        timezone=form.timezone.data, location=form.location.data)
         try:
             db.session.add(student)
             db.session.commit()

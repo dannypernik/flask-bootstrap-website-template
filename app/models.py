@@ -33,6 +33,7 @@ class Student(db.Model):
     parent_name = db.Column(db.String(64))
     parent_email = db.Column(db.String(64))
     timezone = db.Column(db.Integer)
+    location = db.Column(db.String(128))
 
 
 @login.user_loader
