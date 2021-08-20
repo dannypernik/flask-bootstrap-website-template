@@ -101,7 +101,7 @@ def signup():
         db.session.commit()
         flash("You are now registered. We're glad you're here!")
         return redirect(url_for('index'))
-    return render_template('signup.html', title='Sign up', form=form)
+    return render_template('ignup.html', title='Sign up', form=form)
 
 @app.route('/reminders-privacy-policy')
 def reminders_privacy():
