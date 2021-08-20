@@ -95,7 +95,7 @@ def signup():
             flash('User already exists', 'error')
             return redirect(url_for('signup'))
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-        email=form.email.data, username=form.email.data)
+        email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
