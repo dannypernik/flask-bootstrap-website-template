@@ -92,7 +92,8 @@ def send_reminder_email(event, student):
     start_time_formatted = re.sub(r'([-+]\d{2}):(\d{2})(?:(\d{2}))?$', r'\1\2\3', start_time)
     start_offset = dt.strptime(start_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
     end_time = event['end'].get('dateTime')
-    end_offset = dt.strptime(end_time, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
+    end_time_formatted = re.sub(r'([-+]\d{2}):(\d{2})(?:(\d{2}))?$', r'\1\2\3', end_time)
+    end_offset = dt.strptime(end_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
     start_display = dt.strftime(start_offset, "%-I:%M") + dt.strftime(start_offset, "%p").lower()
     end_display = dt.strftime(end_offset, "%-I:%M") + dt.strftime(end_offset, "%p").lower()
 
