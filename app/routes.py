@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email import send_inquiry_email
+from app.email import send_contact_email
 
 @app.before_request
 def before_request():
@@ -22,14 +22,13 @@ def dir_last_updated(folder):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-
     form = InquiryForm()
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         db.session.add(user)
         db.session.commit()
-        send_inquiry_email(user, message)
+        send_contact_email(user, message)
         print(app.config['ADMINS'])
         flash("Thank you for your message. We will be in touch!")
         return redirect(url_for('index', _anchor="home"))

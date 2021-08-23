@@ -12,6 +12,7 @@ from mailjet_rest import Client
 from dotenv import load_dotenv
 from app.models import Student
 import re
+import requests
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
@@ -65,12 +66,15 @@ def main():
     events = events_result.get('items', [])
     students = Student.query.order_by(-Student.id).all()
     reminder_list = []
+    quote = requests.get("https://quotes.rest/qod?category=inspire&language=en")
+    print(quote.text)
+    #author = response.json(author())
 
     for event in events:
         for student in students:
             if " " + student.student_name + " " in event.get('summary'):
                 reminder_list.append(student.student_name)
-                send_reminder_email(event, student)
+                send_reminder_email(event, student, quote)
 
     if len(reminder_list) > 0:
         print("Reminders sent to:\r")
@@ -80,7 +84,7 @@ def main():
         print("No reminders sent.")
 
 
-def send_reminder_email(event, student):
+def send_reminder_email(event, student, quote):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -96,6 +100,8 @@ def send_reminder_email(event, student):
     end_offset = dt.strptime(end_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
     start_display = dt.strftime(start_offset, "%-I:%M") + dt.strftime(start_offset, "%p").lower()
     end_display = dt.strftime(end_offset, "%-I:%M") + dt.strftime(end_offset, "%p").lower()
+    message = quote.json()['contents']['quotes'][0]['quote']
+    author = quote.json()['contents']['quotes'][0]['author']
 
     if student.timezone is -2:
         timezone = "Pacific"
@@ -128,12 +134,18 @@ def send_reminder_email(event, student):
                 "Email": app.config['MAIL_USERNAME']
                 }
             ],
-            "Subject": "Reminder for " + event.get('summary'),
-            "HTMLPart": "Hello, this is an automated reminder that a tutoring session is scheduled on " + \
-            start_date + " from  " + start_display + " to " + end_display + " " + \
-            timezone + " time. <br/><br/>You are welcome to reply to this email with any questions. " + \
+            "Subject": "Reminder for " + event.get('summary') + " + a quote from " + author,
+            "HTMLPart": "Hello, this is an automated reminder that " + student.student_name + \
+            " is scheduled for a tutoring session on " + start_date + " from  " + \
+            start_display + " to " + end_display + " " + timezone + " time. <br/><br/>" + \
+            "Location: " + student.location + "<br/><br/>" + \
+            "You are welcome to reply to this email with any questions. " + \
             "Please provide at least 24 hours notice when cancelling or rescheduling " + \
-            "in order to avoid losing the session. <br/><br/>Thank you,<br/>Danny"
+            "in order to avoid losing the session. Note that you will not receive a " + \
+            "reminder email for sessions scheduled with less than 2 days notice.<br/><br/>" + \
+            "Thank you,<br/>Danny <br/><br/><br/>" + \
+            "<strong>Random inspirational quote of the day:</strong><br/>"
+            '"' + message + '"' + "<br/>&mdash; " + author
             }
         ]
     }

@@ -8,7 +8,6 @@ from flask_login import LoginManager
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 from flask_bootstrap import Bootstrap
-from flask_mailman import Mail
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -17,7 +16,6 @@ migrate = Migrate(app, db, render_as_batch=True)
 login = LoginManager(app)
 login.login_view = 'login'
 bootstrap = Bootstrap(app)
-mail = Mail(app)
 
 from app import routes, models, errors
 app.config['TEMPLATES_AUTO_RELOAD'] = True
