@@ -93,6 +93,8 @@ def main():
     session_count = 0
     tutoring_hours = 0
     print(day_of_week)
+    unscheduled_students = set([])
+
     if day_of_week == "Friday":
         for e in week_events:
             for s in students:
@@ -104,8 +106,10 @@ def main():
                     (h, m, s) = duration.split(':')
                     hours = int(h) + int(m) / 60 + int(s) / 3600
                     tutoring_hours += hours
+                else:
+                    unscheduled_students.add(s.student_name)
         print(upcoming_start, week_end)
-        weekly_report_email(str(session_count), str(tutoring_hours), str(len(students)), today)
+        weekly_report_email(str(session_count), str(tutoring_hours), str(len(students)), unscheduled_students, today)
 
 
 if __name__ == '__main__':

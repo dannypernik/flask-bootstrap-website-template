@@ -112,7 +112,7 @@ def send_reminder_email(event, student, quote):
     print(result.json())
 
 
-def weekly_report_email(sessions, hours, students, now):
+def weekly_report_email(sessions, hours, students, unscheduled, now):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -122,6 +122,7 @@ def weekly_report_email(sessions, hours, students, now):
     start_date = dt.strftime(parse(start), format="%A, %b %-d @ %-I:%M%p")
     end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
     end_date = dt.strftime(parse(end), format="%A, %b %-d @ %-I:%M%p")
+    unscheduled_students = ', '.join(unscheduled)
 
     data = {
         'Messages': [
@@ -138,7 +139,8 @@ def weekly_report_email(sessions, hours, students, now):
                 "Subject": "Scheduled tutoring from " + start_date + " to " + end_date,
                 "HTMLPart": "Scheduled sessions: " + sessions + "<br/>" + \
                     "Scheduled hours: " + hours + \
-                    "<br/>Active students: " + students
+                    "<br/>Active students: " + students + \
+                    "<br/>Unscheduled students: " + unscheduled_students
             }
         ]
     }
