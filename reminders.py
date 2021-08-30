@@ -97,7 +97,7 @@ def main():
     tutoring_hours = 0
     unscheduled_students = []
 
-    if day_of_week == "Monday":
+    if day_of_week == "Friday":
         for e in week_events:
             week_events_list.append(e.get('summary'))
 
