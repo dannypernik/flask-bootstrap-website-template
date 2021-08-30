@@ -102,10 +102,6 @@ def signup():
         return redirect(url_for('index'))
     return render_template('ignup.html', title='Sign up', form=form)
 
-@app.route('/reminders-privacy-policy')
-def reminders_privacy():
-    return render_template('reminders-privacy-policy.html')
-
 @app.route('/logout')
 def logout():
     logout_user()
