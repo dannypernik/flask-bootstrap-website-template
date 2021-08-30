@@ -103,7 +103,7 @@ def send_reminder_email(event, student, quote):
                     "You are welcome to reply to this email with any questions. " + \
                     "Please provide at least 24 hours notice when cancelling or rescheduling " + \
                     "in order to avoid losing the session. Note that you will not receive a " + \
-                    "reminder email for sessions scheduled with less than 2 days notice.<br/><br/>" + \
+                    "reminder email for sessions scheduled less than 2 days in advance.<br/><br/>" + \
                     "Thank you,<br/>Danny <br/><br/><br/>" + \
                     quote_header + '"' + message + '"' + "<br/>&mdash; " + author
             }
@@ -137,6 +137,12 @@ def weekly_report_email(sessions, hours, students, unscheduled, now):
                 "To": [
                     {
                     "Email": app.config['MAIL_USERNAME']
+                    },
+                    {
+                    "Email": app.config['MOM_EMAIL']
+                    },
+                    {
+                    "Email": app.config['DAD_EMAIL']
                     }
                 ],
                 "Subject": "Tutoring schedule summary for " + start_date + " to " + end_date,
