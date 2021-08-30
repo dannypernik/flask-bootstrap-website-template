@@ -52,6 +52,8 @@ def send_reminder_email(event, student, quote):
     end_offset = dt.strptime(end_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
     start_display = dt.strftime(start_offset, "%-I:%M") + dt.strftime(start_offset, "%p").lower()
     end_display = dt.strftime(end_offset, "%-I:%M") + dt.strftime(end_offset, "%p").lower()
+
+    # Use fallback quote if request fails
     if quote is not None:
         message = quote.json()['contents']['quotes'][0]['quote']
         author = quote.json()['contents']['quotes'][0]['author']
@@ -93,7 +95,8 @@ def send_reminder_email(event, student, quote):
                     }
                 ],
                 "Subject": "Reminder for " + event.get('summary') + " + a quote from " + author,
-                "HTMLPart": "Hello, this is an automated reminder that " + student.student_name + \
+                "HTMLPart": "Hi " + student.student_name + " and " + student.parent_name + \
+                    ", this is an automated reminder that " + student.student_name + \
                     " is scheduled for a tutoring session on " + start_date + " from  " + \
                     start_display + " to " + end_display + " " + timezone + " time. <br/><br/>" + \
                     "Location: " + student.location + "<br/><br/>" + \
@@ -112,17 +115,17 @@ def send_reminder_email(event, student, quote):
     print(result.json())
 
 
-def weekly_report_email(sessions, hours, students, now):
+def weekly_report_email(sessions, hours, students, unscheduled, now):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 
     dt = datetime.datetime
     start = (now + datetime.timedelta(hours=39)).isoformat() + 'Z'
-    start_date = dt.strftime(parse(start), format="%A, %b %-d @ %-I:%M%p")
+    start_date = dt.strftime(parse(start), format="%b %-d")
     end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
-    end_date = dt.strftime(parse(end), format="%A, %b %-d @ %-I:%M%p")
-    #unscheduled_students = ', '.join(unscheduled)
+    end_date = dt.strftime(parse(end), format="%b %-d")
+    unscheduled_students = ', '.join(unscheduled)
 
     data = {
         'Messages': [
@@ -136,10 +139,11 @@ def weekly_report_email(sessions, hours, students, now):
                     "Email": app.config['MAIL_USERNAME']
                     }
                 ],
-                "Subject": "Scheduled tutoring from " + start_date + " to " + end_date,
+                "Subject": "Tutoring schedule summary for " + start_date + " to " + end_date,
                 "HTMLPart": "Scheduled sessions: " + sessions + "<br/>" + \
                     "Scheduled hours: " + hours + \
-                    "<br/>Active students: " + students
+                    "<br/>Active students: " + students + \
+                    "<br/>Unscheduled students: " + unscheduled_students
             }
         ]
     }

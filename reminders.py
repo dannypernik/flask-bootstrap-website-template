@@ -65,8 +65,10 @@ def main():
     events = events_result.get('items', [])
     students = Student.query.order_by(-Student.id).all()
     reminder_list = []
-    quote = requests.get("https://quotes.rest/qod?category=inspire&language=en")
 
+    # Use fallback quote if request fails
+    quote = None
+    quote = requests.get("https://quotes.rest/qod?category=inspire&language=en")
     if quote.status_code is not 200:
         quote = None
 
@@ -90,24 +92,34 @@ def main():
                                         timeMax=week_end, singleEvents=True,
                                         orderBy='startTime').execute()
     week_events = week_events_result.get('items', [])
+    week_events_list = []
     session_count = 0
     tutoring_hours = 0
-    #unscheduled_students = set([])
+    unscheduled_students = []
 
     if day_of_week == "Friday":
         for e in week_events:
+            week_events_list.append(e.get('summary'))
+
+            # Get total duration of week's tutoring
             for s in students:
                 if " " + s.student_name + " " in e.get('summary'):
-                    session_count += 1
                     start = isoparse(e['start'].get('dateTime'))
                     end = isoparse(e['end'].get('dateTime'))
                     duration = str(end - start)
                     (h, m, s) = duration.split(':')
                     hours = int(h) + int(m) / 60 + int(s) / 3600
                     tutoring_hours += hours
-                #else:
-                #    unscheduled_students.add(s.student_name)
-        weekly_report_email(str(session_count), str(tutoring_hours), str(len(students)), today)
+
+        #Get number of sessions and list of unscheduled students
+        for s in students:
+            count = sum(" " + s.student_name + " " in e for e in week_events_list)
+            session_count += count
+            print(count)
+            if count is 0:
+                unscheduled_students.append(s.student_name)
+        print("Weekly report email sent")
+        weekly_report_email(str(session_count), str(tutoring_hours), str(len(students)), unscheduled_students, today)
 
 
 if __name__ == '__main__':
