@@ -34,6 +34,7 @@ class Student(db.Model):
     parent_email = db.Column(db.String(64))
     timezone = db.Column(db.Integer)
     location = db.Column(db.String(128))
+    active = db.Column(db.Boolean, default = True)
 
 
 @login.user_loader

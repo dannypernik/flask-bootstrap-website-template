@@ -62,4 +62,5 @@ class AddStudentForm(FlaskForm):
         validators=[InputRequired()])
     location = StringField('Location', render_kw={"placeholder": "Location"}, \
         validators=[InputRequired()])
+    active = BooleanField('Active?')
     submit = SubmitField('Save')
