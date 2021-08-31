@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="page-start row justify-content-center">
-    <div class="col-10 col-md-8">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-9">
       <h1>Add student</h1>
       <form id="add-student-form" action="" method="post">
         {{ form.hidden_tag() }}
@@ -15,31 +15,60 @@
         <div class="mt-2">
           {{ form.submit }}
         </div>
-
-        <h1 class="page-start">Student list</h1>
-
-        {% for s in students %}
-          <h2 class="mb-1">{{ s.student_name }} ({{ s.student_email }})</h2>
-          <ul class="mb-3">
-            <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
-            <li>Timezone:
-              {% if s.timezone == -2 %}
-                  Pacific
-                {% elif s.timezone == -1 %}
-                    Mountain
-                {% elif s.timezone == 0 %}
-                    Central
-                {% elif s.timezone == 1 %}
-                    Eastern
-                {% else %}
-                    {{ s.timezone }}
-              {% endif %}
-            </li>
-            <li>Location: {{ s.location }}</li>
-          </ul>
-        {% endfor %}
-
       </form>
+
+      <h1 class="section-margin">Active students</h1>
+
+      {% for s in students %}
+        {% if s.active == True %}
+          <div class="row justify-content-centered">
+            <div class="col-9 col-md-10">
+              <h2 class="mb-1">{{ s.student_name }} ({{ s.student_email }})</h2>
+              <ul class="mb-3">
+                <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
+                <li>Timezone:
+                  {% if s.timezone == -2 %}
+                      Pacific
+                    {% elif s.timezone == -1 %}
+                        Mountain
+                    {% elif s.timezone == 0 %}
+                        Central
+                    {% elif s.timezone == 1 %}
+                        Eastern
+                    {% else %}
+                        {{ s.timezone }}
+                  {% endif %}
+                </li>
+                <li>Location: {{ s.location }}</li>
+              </ul>
+            </div>
+
+            <div class="col-3 col-md-2">
+              <a class="edit btn sec" href="{{ url_for('edit_student', id=s.id) }}">
+                Edit
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <h1 class="mt-3">Inactive students</h1>
+
+      {% for s in students %}
+        {% if s.active == False %}
+          <div class="row justify-content-centered">
+            <div class="col-9 col-md-10">
+              <h2 class="mb-2">{{ s.student_name }}</h2>
+            </div>
+
+            <div class="col-3 col-md-2">
+              <a class="edit btn sec" href="{{ url_for('edit_student', id=s.id) }}">
+                Edit
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
 {% endblock content %}

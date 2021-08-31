@@ -5802,6 +5802,15 @@ button.clr {
   padding: 0.5rem 2rem;
 }
 
+.btn.edit {
+  display: none;
+  margin: 0;
+}
+
+.row:hover > div > .btn.edit {
+  display: block;
+}
+
 button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   background-color: #276b8d;
   border-color: #276b8d;
@@ -5923,7 +5932,7 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 }
 
 .nav-gap {
-  height: calc(8rem + 3vw);
+  height: 60px;
   width: 100%;
 }
 

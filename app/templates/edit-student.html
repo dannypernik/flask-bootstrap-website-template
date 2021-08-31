@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-9">
+      <h1>Edit student</h1>
+      <form class="" action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.student_name }}
+        {{ form.student_email }}
+        {{ form.parent_name }}
+        {{ form.parent_email }}
+        {{ form.timezone }}
+        {{ form.location }}
+        <label for="active" class="m-2">
+          Active?
+          {{ form.active(class_="ms-2") }}
+        </label>
+        <div class="mt-2 text-center">
+          {{ form.submit }}
+          <a href="{{ url_for('students') }}">
+            <button class="btn sec">
+              Student list
+            </button>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

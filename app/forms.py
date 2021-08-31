@@ -44,12 +44,7 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me')
     submit = SubmitField('Log in')
 
-class EditProfileForm(FlaskForm):
-    username = StringField ('Username', validators=[InputRequired()])
-    about_me = TextAreaField('About me', validators=[Length(min=0, max=500)])
-    submit = SubmitField('Save')
-
-class AddStudentForm(FlaskForm):
+class StudentForm(FlaskForm):
     student_name = StringField('Student name', render_kw={"placeholder": "Student name"}, \
         validators=[InputRequired()])
     student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \

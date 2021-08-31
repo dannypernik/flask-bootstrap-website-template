@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory
 from app import app, db
-from app.forms import InquiryForm, EmailForm, SignupForm, LoginForm, EditProfileForm, AddStudentForm
+from app.forms import InquiryForm, EmailForm, SignupForm, LoginForm, StudentForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student
 from werkzeug.urls import url_parse
@@ -63,7 +63,7 @@ def login():
 @app.route('/students', methods=['GET', 'POST'])
 @login_required
 def students():
-    form = AddStudentForm()
+    form = StudentForm()
     students = Student.query.order_by(Student.student_name).all()
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, student_email=form.student_email.data, \
@@ -81,6 +81,41 @@ def students():
         flash("Student added")
         return redirect(url_for('students'))
     return render_template('students.html', title="Students", form=form, students=students)
+
+@app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
+def edit_student(id):
+    form = StudentForm()
+    student = Student.query.get_or_404(id)
+    if form.validate_on_submit():
+        student.student_name=form.student_name.data
+        student.student_email=form.student_email.data
+        student.parent_name=form.parent_name.data
+        student.parent_email=form.parent_email.data
+        student.timezone=form.timezone.data
+        student.location=form.location.data
+        student.active=form.active.data
+        try:
+            db.session.add(student)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('Student name already exists', 'error')
+            return redirect(url_for('students'))
+        finally:
+            db.session.close()
+        flash("Student updated")
+        return redirect(url_for('students'))
+    elif request.method == "GET":
+        form.student_name.data=student.student_name
+        form.student_email.data=student.student_email
+        form.parent_name.data=student.parent_name
+        form.parent_email.data=student.parent_email
+        form.timezone.data=student.timezone
+        form.location.data=student.location
+        form.active.data=student.active
+    return render_template('edit-student.html', title='Edit Student',
+                           form=form, student=student)
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -116,30 +151,6 @@ def profile(username):
         {'author': user, 'body': 'Test post #2'}
     ]
     return render_template('profile.html', user=user, posts=posts)
-
-@app.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    form = EditProfileForm()
-    if form.validate_on_submit():
-        username = User.query.filter_by(username=form.username.data).first()
-        if username.id is not current_user.id and not None:
-            flash("The username " + form.username.data + " is already taken", 'error')
-            flash(username.id)
-            form.username.data = current_user.username
-            current_user.about_me = form.about_me.data
-            db.session.commit()
-            return render_template('edit_profile.html', title='Edit Profile', form=form)
-        current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
-        db.session.commit()
-        flash('Your changes have been saved')
-        return redirect(url_for('edit_profile'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile',
-                           form=form)
 
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
