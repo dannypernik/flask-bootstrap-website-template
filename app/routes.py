@@ -97,13 +97,13 @@ def edit_student(id):
         try:
             db.session.add(student)
             db.session.commit()
+            flash("Student updated")
         except:
             db.session.rollback()
             flash('Student name already exists', 'error')
             return redirect(url_for('students'))
         finally:
             db.session.close()
-        flash("Student updated")
         return redirect(url_for('students'))
     elif request.method == "GET":
         form.student_name.data=student.student_name
