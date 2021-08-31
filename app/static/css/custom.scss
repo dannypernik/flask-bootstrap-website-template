@@ -18,11 +18,17 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 @import "menu.css";
 
 // Sitewide stylings //
+html {
+  height: 100%;
+}
 
 body {
+  height: 100%;
   font-family: $body-font;
   color: $primary-color;
   font-size: 1.6rem;
+  display: flex;
+  flex-direction:  column;
 }
 
 p {
@@ -84,6 +90,7 @@ input, textarea {
   border-bottom: 1px solid #999;
   width: 100%;
   outline: none;
+  color: $primary-color;
 }
 
 input:focus, textarea:focus {
@@ -97,6 +104,22 @@ input[type="submit"] {
   border: 2px solid $primary-color;
   font-size: 1.9rem;
   transition: 0.3s;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  border-radius: 99px;
+  border: 2px solid $primary-color;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  position: relative;
+  top: 5px;
+}
+
+input[type=checkbox]:checked {
+    background: white url(../img/checked.svg) center center no-repeat;
+    background-size: 111%;
 }
 
 a {
@@ -195,7 +218,7 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   white-space: nowrap;
 }
 
-.page-start {
+.section-margin {
   padding-top: calc(2rem + 3vw);
 }
 
@@ -213,12 +236,13 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 }
 
 .footer {
+  flex-shrink: 0;
   width: 100%;
   bottom: 0;
   padding: 20px;
   background-color: $primary-color;
   color: white;
-  margin-top: 15rem;
+  margin-top: 11rem;
 }
 
 // Nav //
@@ -276,7 +300,7 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
 }
 
 .nav-gap {
-  height: 60px;
+  height: calc(8rem + 3vw);
   width: 100%;
 }
 
