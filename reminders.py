@@ -78,11 +78,7 @@ def main():
                 reminder_list.append(student.student_name)
                 send_reminder_email(event, student, quote)
 
-    if len(reminder_list) > 0:
-        print("Reminders sent to:\r")
-        for name in reminder_list:
-            print(name + "\r")
-    else:
+    if len(reminder_list) is 0:
         print("No reminders sent.")
 
 
@@ -95,6 +91,7 @@ def main():
     week_events_list = []
     session_count = 0
     tutoring_hours = 0
+    active_students = []
     unscheduled_students = []
 
     if day_of_week == "Friday":
@@ -111,15 +108,15 @@ def main():
                     hours = int(h) + int(m) / 60 + int(s) / 3600
                     tutoring_hours += hours
 
-        #Get number of sessions and list of unscheduled students
+        #Get number of sessions and lists of active and unscheduled students
         for s in students:
-            count = sum(" " + s.student_name + " " in e for e in week_events_list)
-            session_count += count
-            print(count)
-            if count is 0:
-                unscheduled_students.append(s.student_name)
-        print("Weekly report email sent")
-        weekly_report_email(str(session_count), str(tutoring_hours), str(len(students)), unscheduled_students, today)
+            if s.active:
+                active_students.append(s.student_name)
+                count = sum(" " + s.student_name + " " in e for e in week_events_list)
+                session_count += count
+                if count is 0:
+                    unscheduled_students.append(s.student_name)
+        weekly_report_email(str(session_count), str(tutoring_hours), str(len(active_students)), unscheduled_students, today, quote)
 
 
 if __name__ == '__main__':

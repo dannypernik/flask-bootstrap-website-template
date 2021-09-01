@@ -36,6 +36,19 @@ def send_contact_email(user, message):
     print(result.json())
 
 
+def verify_quote(quote):
+    # Use fallback quote if request fails
+    if quote is not None:
+        message = quote.json()['contents']['quotes'][0]['quote']
+        author = quote.json()['contents']['quotes'][0]['author']
+        quote_header = "<strong>Random inspirational quote of the day:</strong><br/>"
+    else:
+        message = "We don't have to do all of it alone. We were never meant to."
+        author = "Brene Brown"
+        quote_header = ""
+    return message, author, quote_header
+
+
 def send_reminder_email(event, student, quote):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
@@ -53,15 +66,7 @@ def send_reminder_email(event, student, quote):
     start_display = dt.strftime(start_offset, "%-I:%M") + dt.strftime(start_offset, "%p").lower()
     end_display = dt.strftime(end_offset, "%-I:%M") + dt.strftime(end_offset, "%p").lower()
 
-    # Use fallback quote if request fails
-    if quote is not None:
-        message = quote.json()['contents']['quotes'][0]['quote']
-        author = quote.json()['contents']['quotes'][0]['author']
-        quote_header = "<strong>Random inspirational quote of the day:</strong><br/>"
-    else:
-        quote_header = ""
-        message = "We don't have to do all of it alone. We were never meant to."
-        author = "Brene Brown"
+    message, author, quote_header = verify_quote(quote)
 
     if student.timezone is -2:
         timezone = "Pacific"
@@ -111,11 +116,10 @@ def send_reminder_email(event, student, quote):
     }
 
     result = mailjet.send.create(data=data)
-    print(result.status_code)
-    print(result.json())
+    print(student.student_name, result.status_code)
 
 
-def weekly_report_email(sessions, hours, students, unscheduled, now):
+def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, unscheduled, now, quote):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -126,6 +130,8 @@ def weekly_report_email(sessions, hours, students, unscheduled, now):
     end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
     end_date = dt.strftime(parse(end), format="%b %-d")
     unscheduled_students = ', '.join(unscheduled)
+
+    message, author, quote_header = verify_quote(quote)
 
     data = {
         'Messages': [
@@ -146,14 +152,18 @@ def weekly_report_email(sessions, hours, students, unscheduled, now):
                     }
                 ],
                 "Subject": "Tutoring schedule summary for " + start_date + " to " + end_date,
-                "HTMLPart": "Scheduled sessions: " + sessions + "<br/>" + \
-                    "Scheduled hours: " + hours + \
-                    "<br/>Active students: " + students + \
-                    "<br/>Unscheduled students: " + unscheduled_students
+                "HTMLPart": "Scheduled sessions: " + scheduled_sessions + "<br/>" + \
+                    "Scheduled hours: " + scheduled_hours + \
+                    "<br/>Active students: " + active_students + \
+                    "<br/>Unscheduled students: " + unscheduled_students + \
+                    "<br/><br/><br/>" + quote_header + '"' + message + '"' + "<br/>&mdash; " + author
             }
         ]
     }
 
     result = mailjet.send.create(data=data)
-    print(result.status_code)
+    if result.status_code is 200:
+        print("\nWeekly report email sent.\n")
+    else:
+        print("\nWeekly report email error:", result.status_code, "\n")
     print(result.json())
