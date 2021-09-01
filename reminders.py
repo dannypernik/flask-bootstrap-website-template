@@ -58,7 +58,7 @@ def main():
     today = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     upcoming_start = (today + datetime.timedelta(hours=44)).isoformat() + 'Z'
     upcoming_end = (today + datetime.timedelta(hours=68)).isoformat() + 'Z'
-    print('Getting upcoming events with attendees from ' + upcoming_start + ' to ' + upcoming_end)
+    print("Session reminders for " + datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d") + ":")
     events_result = service.events().list(calendarId='primary', timeMin=upcoming_start,
                                         timeMax=upcoming_end, singleEvents=True,
                                         orderBy='startTime').execute()
