@@ -5808,7 +5808,8 @@ button.clr {
   border-radius: 99px;
 }
 
-.row:hover > div > a > .btn.edit {
+.row:hover > div > a > .btn.edit,
+.row:focus > div > a > .btn.edit {
   display: block;
 }
 
