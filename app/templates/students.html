@@ -43,9 +43,11 @@
               </ul>
             </div>
 
-            <div class="col-3 col-md-2">
-              <a class="edit btn sec" href="{{ url_for('edit_student', id=s.id) }}">
-                Edit
+            <div class="col-3 col-md-2 text-end">
+              <a href="{{ url_for('edit_student', id=s.id) }}">
+                <button class="edit btn sec">
+                  Edit
+                </button>
               </a>
             </div>
           </div>
@@ -61,9 +63,11 @@
               <h2 class="my-1">{{ s.student_name }}</h2>
             </div>
 
-            <div class="col-3 col-md-2">
-              <a class="edit btn sec" href="{{ url_for('edit_student', id=s.id) }}">
-                Edit
+            <div class="col-3 col-md-2 text-end">
+              <a href="{{ url_for('edit_student', id=s.id) }}">
+                <button class="edit btn sec">
+                  Edit
+                </button>
               </a>
             </div>
           </div>
