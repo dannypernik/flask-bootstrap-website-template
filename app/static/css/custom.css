@@ -5803,13 +5803,16 @@ button.clr {
 }
 
 .btn.edit {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
   margin: 0;
   border-radius: 99px;
+  transition: opacity 0.4s ease-in-out;
 }
 
 .row:hover > div > a > .btn.edit {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
