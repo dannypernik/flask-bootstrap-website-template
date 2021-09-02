@@ -8,3 +8,4 @@ __pycache__
 app.db
 token.json
 credentials.json
+app/static/img/favicons/favicon.svg
