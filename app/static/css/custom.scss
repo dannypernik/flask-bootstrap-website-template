@@ -14,6 +14,8 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 @import "../scss/bootstrap-utilities.scss";
 @import "../scss/_type.scss";
 @import "../scss/_buttons.scss";
+@import "../scss/_modal.scss";
+@import "../scss/_close.scss";
 
 @import "menu.css";
 
@@ -174,17 +176,29 @@ button.clr {
   color: $primary-color;
   border-color: $primary-color;
   background-color: transparent;
+  margin: 0;
   padding: 0.5rem 2rem;
 }
 
 .btn.edit {
   display: none;
-  margin: 0;
   border-radius: 99px;
 }
 
 .row:hover > div > .btn.edit {
   display: block;
+}
+
+.btn.alert {
+  color: #d61212;
+  border-color: #d61212;
+  background-color: transparent;
+}
+
+.btn.alert:hover {
+  background-color: #d61212;
+  border-color: #d61212;
+  color: white;
 }
 
 button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
@@ -207,7 +221,7 @@ button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
   width: 100%;
 }
 
-.alert {
+div.alert {
   padding: 0.5rem 0;
   text-align: center;
   font-size: 1.5rem;

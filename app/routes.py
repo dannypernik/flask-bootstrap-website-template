@@ -87,23 +87,30 @@ def edit_student(id):
     form = StudentForm()
     student = Student.query.get_or_404(id)
     if form.validate_on_submit():
-        student.student_name=form.student_name.data
-        student.student_email=form.student_email.data
-        student.parent_name=form.parent_name.data
-        student.parent_email=form.parent_email.data
-        student.timezone=form.timezone.data
-        student.location=form.location.data
-        student.active=form.active.data
-        try:
-            db.session.add(student)
+        if 'save' in request.form:
+            student.student_name=form.student_name.data
+            student.student_email=form.student_email.data
+            student.parent_name=form.parent_name.data
+            student.parent_email=form.parent_email.data
+            student.timezone=form.timezone.data
+            student.location=form.location.data
+            student.active=form.active.data
+            try:
+                db.session.add(student)
+                db.session.commit()
+                flash("Student updated")
+            except:
+                db.session.rollback()
+                flash('Student name already exists', 'error')
+                return redirect(url_for('students'))
+            finally:
+                db.session.close()
+        elif 'delete' in request.form:
+            db.session.delete(student)
             db.session.commit()
-            flash("Student updated")
-        except:
-            db.session.rollback()
-            flash('Student name already exists', 'error')
-            return redirect(url_for('students'))
-        finally:
-            db.session.close()
+            flash("Deleted " + student.student_name)
+        else:
+            flash('Code error in POST request', 'error')
         return redirect(url_for('students'))
     elif request.method == "GET":
         form.student_name.data=student.student_name

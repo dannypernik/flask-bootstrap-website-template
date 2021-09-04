@@ -12,15 +12,44 @@
         {{ form.parent_email }}
         {{ form.timezone }}
         {{ form.location }}
-        <label for="active" class="m-2">
-          Active?
-          {{ form.active(class_="ms-2") }}
-        </label>
-        <div class="mt-2">
-          {{ form.submit }}
+        <div class="row">
+          <div class="col-6">
+            <label for="active" class="mx-1 my-3">
+              Active?
+              {{ form.active(class_="ms-2") }}
+            </label>
+          </div>
+
+          <div class="col-6 text-end">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#delete-modal" data-text="delete">
+              <button type="button" class="btn sec alert mt-3">Delete</button>
+            </a>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <input type="submit" name="save" value="Save">
+        </div>
+
+        <div id="delete-modal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="modal-header mt-2">
+                    <h1 class="modal-title">Are you sure?</h1>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <button class="btn alert d-inline me-2" type="submit" name="delete">Delete {{ student.student_name }}</button>
+                  <button class="btn d-inline" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
-      
+
       <div class="text-center">
         <a href="{{ url_for('students') }}">
           <button class="btn sec">
@@ -31,3 +60,7 @@
     </div>
   </div>
 {% endblock content %}
+
+{% block end_scripts %}
+  <script src="{{ url_for('static', filename="js/bootstrap.js") }}"></script>
+{% endblock end_scripts %}
