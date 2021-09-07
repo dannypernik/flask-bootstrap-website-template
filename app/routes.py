@@ -19,6 +19,10 @@ def dir_last_updated(folder):
                    for root_path, dirs, files in os.walk(folder)
                    for f in files))
 
+@app.route('/manifest.webmanifest')
+def webmanifest():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicons/manifest.webmanifest')
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
