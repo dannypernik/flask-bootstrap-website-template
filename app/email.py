@@ -94,11 +94,6 @@ def send_reminder_email(event, student, quote):
                     "Email": student.parent_email
                     }
                 ],
-                "Bcc": [
-                    {
-                    "Email": app.config['MAIL_USERNAME']
-                    }
-                ],
                 "Subject": "Reminder for " + event.get('summary') + " + a quote from " + author,
                 "HTMLPart": "Hi " + student.student_name + " and " + student.parent_name + \
                     ", this is an automated reminder that " + student.student_name + \
