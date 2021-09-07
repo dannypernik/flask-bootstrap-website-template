@@ -19,8 +19,8 @@ def dir_last_updated(folder):
                    for root_path, dirs, files in os.walk(folder)
                    for f in files))
 
-@app.route('/manifest.webmanifest')
-def webmanifest():
+@app.route('/favicon.ico')
+def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicons/favicon.ico')
 
 @app.route('/manifest.webmanifest')
