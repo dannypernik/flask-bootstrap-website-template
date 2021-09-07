@@ -1,6 +1,11 @@
 {
+  "name": "Open Path Tutoring",
+  "short_name": "Open Path",
   "icons": [
     { "src": "./icon-192.png", "type": "image/png", "sizes": "192x192" },
     { "src": "./icon-512.png", "type": "image/png", "sizes": "512x512" }
-  ]
+  ],
+  "theme_color": "#1C4D65",
+  "background_color": "#1C4D65",
+  "display": "standalone"
 }
