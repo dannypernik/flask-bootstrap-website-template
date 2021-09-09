@@ -1,0 +1,8 @@
+Hi {{ user.first_name }}, thank you for contacting Open Path Tutoring. We have received your message and will get back to you soon. You are welcome to reply to this email with further details that you wish to add.
+
+Your message:
+{{ message }}
+
+
+"We don't have to do all of it alone. We were never meant to."
+- Brene Brown

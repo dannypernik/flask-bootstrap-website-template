@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email import send_contact_email
+from app.email import send_contact_email, send_confirmation_email
 
 @app.before_request
 def before_request():
@@ -37,7 +37,7 @@ def index():
         db.session.add(user)
         db.session.commit()
         send_contact_email(user, message)
-        print(app.config['ADMINS'])
+        send_confirmation_email(user, message)
         flash("Thank you for your message. We will be in touch!")
         return redirect(url_for('index', _anchor="home"))
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))

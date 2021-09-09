@@ -6,6 +6,20 @@ import re
 import datetime
 from dateutil.parser import parse
 
+
+def verify_quote(quote):
+    # Use fallback quote if request fails
+    if quote is not None:
+        message = quote.json()['contents']['quotes'][0]['quote']
+        author = quote.json()['contents']['quotes'][0]['author']
+        quote_header = "<strong>Random inspirational quote of the day:</strong><br/>"
+    else:
+        message = "We don't have to do all of it alone. We were never meant to."
+        author = "Brene Brown"
+        quote_header = ""
+    return message, author, quote_header
+
+
 def send_contact_email(user, message):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
@@ -25,7 +39,9 @@ def send_contact_email(user, message):
             ],
             "Subject": "Open Path Tutoring: Message from " + user.first_name,
             "ReplyTo": { "Email": user.email },
-            "HTMLPart": render_template('email/inquiry-form.txt',
+            "TextPart": render_template('email/inquiry-form.txt',
+                                     user=user, message=message),
+            "HTMLPart": render_template('email/inquiry-form.html',
                                      user=user, message=message)
             }
         ]
@@ -36,17 +52,35 @@ def send_contact_email(user, message):
     print(result.json())
 
 
-def verify_quote(quote):
-    # Use fallback quote if request fails
-    if quote is not None:
-        message = quote.json()['contents']['quotes'][0]['quote']
-        author = quote.json()['contents']['quotes'][0]['author']
-        quote_header = "<strong>Random inspirational quote of the day:</strong><br/>"
-    else:
-        message = "We don't have to do all of it alone. We were never meant to."
-        author = "Brene Brown"
-        quote_header = ""
-    return message, author, quote_header
+def send_confirmation_email(user, message):
+    api_key = app.config['MAILJET_KEY']
+    api_secret = app.config['MAILJET_SECRET']
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+    data = {
+        'Messages': [
+            {
+            "From": {
+                "Email": app.config['MAIL_USERNAME'],
+                "Name": "Open Path Tutoring"
+            },
+            "To": [
+                {
+                "Email": user.email
+                }
+            ],
+            "Subject": "Message receipt confirmation + a quote from Brene Brown",
+            "TextPart": render_template('email/confirmation.txt',
+                                     user=user, message=message),
+            "HTMLPart": render_template('email/confirmation.html',
+                                     user=user, message=message)
+            }
+        ]
+    }
+
+    result = mailjet.send.create(data=data)
+    print(result.status_code)
+    print(result.json())
 
 
 def send_reminder_email(event, student, quote):
@@ -84,7 +118,7 @@ def send_reminder_email(event, student, quote):
             {
                 "From": {
                     "Email": app.config['MAIL_USERNAME'],
-                    "Name": "Danny Pernik"
+                    "Name": "Open Path Tutoring"
                 },
                 "To": [
                     {
@@ -105,7 +139,7 @@ def send_reminder_email(event, student, quote):
                     "in order to avoid losing the session. Note that you will not receive a " + \
                     "reminder email for sessions scheduled less than 2 days in advance.<br/><br/>" + \
                     "Thank you,<br/>Danny <br/><br/><br/>" + \
-                    quote_header + '"' + message + '"' + "<br/>&mdash; " + author
+                    quote_header + '"' + message + '"' + "<br/>&ndash; " + author
             }
         ]
     }
@@ -133,7 +167,7 @@ def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, un
             {
                 "From": {
                     "Email": app.config['MAIL_USERNAME'],
-                    "Name": "Danny Pernik"
+                    "Name": "Open Path Tutoring"
                 },
                 "To": [
                     {
@@ -151,7 +185,7 @@ def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, un
                     "Scheduled hours: " + scheduled_hours + \
                     "<br/>Active students: " + active_students + \
                     "<br/>Unscheduled students: " + unscheduled_students + \
-                    "<br/><br/><br/>" + quote_header + '"' + message + '"' + "<br/>&mdash; " + author
+                    "<br/><br/><br/>" + quote_header + '"' + message + '"' + "<br/>&ndash; " + author
             }
         ]
     }
