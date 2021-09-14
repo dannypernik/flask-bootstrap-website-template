@@ -48,7 +48,12 @@ def send_contact_email(user, message):
     }
 
     result = mailjet.send.create(data=data)
-    print(result.status_code)
+
+    if result.status_code is 200:
+        send_confirmation_email(user, message)
+        print("Confirmation email sent to " + user.email)
+    else:
+        print("Contact email failed with code " + result.status_code)    
     print(result.json())
 
 
@@ -69,7 +74,7 @@ def send_confirmation_email(user, message):
                 "Email": user.email
                 }
             ],
-            "Subject": "Message receipt confirmation + a quote from Brene Brown",
+            "Subject": "Email confirmation + a quote from Brene Brown",
             "TextPart": render_template('email/confirmation.txt',
                                      user=user, message=message),
             "HTMLPart": render_template('email/confirmation.html',

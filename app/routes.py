@@ -37,7 +37,6 @@ def index():
         db.session.add(user)
         db.session.commit()
         send_contact_email(user, message)
-        send_confirmation_email(user, message)
         flash("Thank you for your message. We will be in touch!")
         return redirect(url_for('index', _anchor="home"))
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
