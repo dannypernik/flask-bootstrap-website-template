@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-11 col-sm-10 col-lg-8">
+      <h1>The Best Next Step towards College</h1>
+      <form>
+        {{ form.hidden_tag() }}
+        <div class="row g-0">
+          <div class="col-5 col-sm-4 pe-1">
+            {{ form.first_name }}
+          </div>
+          <div class="col-7 col-sm-8 ps-1">
+            {{ form.email }}
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col text-center">
+            <div class="radio-set-label">
+              Test preference:
+            </div>
+            <br class="d-md-none"/>
+            <div class="radio-wrapper">
+              <input type="radio" class="ms-1" name="test" id="sat" value="sat">
+              <label for="sat">SAT</label>
+            </div>
+            <div class="radio-wrapper">
+              <input type="radio" name="test" id="act" value="act">
+              <label for="act">ACT</label>
+            </div>
+            <div class="radio-wrapper">
+              <input type="radio" name="test" id="unsure" value="unsure">
+              <label for="unsure">Not sure</label>
+            </div>
+
+            <div>
+              <div class="radio-set-label">
+                I am a:
+              </div>
+              <br class="d-md-none"/>
+              <div class="radio-wrapper">
+                <input type="radio" class="ms-1" name="relation" id="parent" value="parent">
+                <label for="parent">Parent</label>
+              </div>
+              <div class="radio-wrapper">
+                <input type="radio" name="relation" id="student" value="student">
+                <label for="student">Student</label>
+              </div>
+            </div>
+
+            {{ form.submit(class_="") }}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
