@@ -6271,7 +6271,6 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
 }
 
 #home-alert {
-  position: absolute;
   width: 100%;
 }
 
@@ -6453,7 +6452,7 @@ div.alert {
   color: white;
   font-size: 2rem;
   text-decoration: none;
-  padding: calc(4rem + 1vw) 0;
+  padding: calc(3rem + 2vw) 0;
   text-transform: capitalize;
 }
 
