@@ -117,6 +117,7 @@ input[type='checkbox'] {
     display: block;
     position: relative;
     padding-left: 3rem;
+    cursor: pointer;
 
     &::before {
       content: '';
