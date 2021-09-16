@@ -95,15 +95,16 @@ def send_reminder_email(event, student, quote):
 
     dt = datetime.datetime
 
-    start_date = dt.strftime(parse(event['start'].get('dateTime')), format="%A, %b %-d, %Y")
     start_time = event['start'].get('dateTime')
+    start_date = dt.strftime(parse(start_time), format="%A, %b %-d, %Y")
     start_time_formatted = re.sub(r'([-+]\d{2}):(\d{2})(?:(\d{2}))?$', r'\1\2\3', start_time)
     start_offset = dt.strptime(start_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
     end_time = event['end'].get('dateTime')
     end_time_formatted = re.sub(r'([-+]\d{2}):(\d{2})(?:(\d{2}))?$', r'\1\2\3', end_time)
     end_offset = dt.strptime(end_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
-    start_display = dt.strftime(start_offset, "%-I:%M") + dt.strftime(start_offset, "%p").lower()
-    end_display = dt.strftime(end_offset, "%-I:%M") + dt.strftime(end_offset, "%p").lower()
+    start_display = dt.strftime(start_offset, "%-I:%M%p").lower()
+    end_display = dt.strftime(end_offset, "%-I:%M%p").lower()
+    start_central = dt.strftime(parse(start_time), "%-I:%M%p").lower()
 
     message, author, quote_header = verify_quote(quote)
 
@@ -150,7 +151,11 @@ def send_reminder_email(event, student, quote):
     }
 
     result = mailjet.send.create(data=data)
-    print(student.student_name, result.status_code)
+
+    if result.status_code is 200:
+        print(student.student_name, start_central)
+    else:
+        print("Error for " + student.student_name + "with code " + result.status_code, result.reason)
 
 
 def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, unscheduled, now, quote):
@@ -199,5 +204,5 @@ def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, un
     if result.status_code is 200:
         print("\nWeekly report email sent.\n")
     else:
-        print("\nWeekly report email error:", result.status_code, "\n")
+        print("\nWeekly report email error:", result.status_code, result.reason, "\n")
     print(result.json())
