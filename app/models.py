@@ -28,13 +28,14 @@ class User(UserMixin, db.Model):
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    student_name = db.Column(db.String(64), unique=True)
-    student_email = db.Column(db.String(64))
+    student_name = db.Column(db.String(64), unique=True, index=True)
+    student_email = db.Column(db.String(64), index=True)
     parent_name = db.Column(db.String(64))
     parent_email = db.Column(db.String(64))
     timezone = db.Column(db.Integer)
     location = db.Column(db.String(128))
     active = db.Column(db.Boolean, default = True)
+    status = db.Column(db.String(32))
 
 
 @login.user_loader
