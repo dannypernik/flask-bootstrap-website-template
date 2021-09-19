@@ -10,8 +10,8 @@ from dateutil.parser import parse
 def verify_quote(quote):
     # Use fallback quote if request fails
     if quote is not None:
-        message = quote.json()['contents']['quotes'][0]['quote']
-        author = quote.json()['contents']['quotes'][0]['author']
+        message = quote.json()[0]['q']
+        author = quote.json()[0]['a']
         quote_header = "<strong>Random inspirational quote of the day:</strong><br/>"
     else:
         message = "We don't have to do all of it alone. We were never meant to."

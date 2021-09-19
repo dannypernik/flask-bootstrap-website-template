@@ -68,9 +68,7 @@ def main():
 
     # Use fallback quote if request fails
     quote = None
-    quote = requests.get("https://quotes.rest/qod?category=inspire&language=en")
-    if quote.status_code is not 200:
-        quote = None
+    quote = requests.get("https://zenquotes.io/api/today")
 
     for event in events:
         for student in students:
