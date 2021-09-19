@@ -21,3 +21,4 @@ class Config(object):
     MOM_EMAIL = os.environ.get('MOM_EMAIL')
     DAD_EMAIL = os.environ.get('DAD_EMAIL')
     ADMINS = [os.environ.get('ADMINS')]
+    GMAIL_USERNAME = os.environ.get('GMAIL_USERNAME')
