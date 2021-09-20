@@ -6147,7 +6147,7 @@ input[type=radio]:focus + label::before {
 
 .radio-set-label {
   display: inline-block;
-  margin: 1rem 0.5rem 0;
+  margin: 1rem 0.5rem 0.5rem;
   font-weight: 600;
 }
 
@@ -6302,7 +6302,7 @@ div.alert {
 
 .page-title {
   font-family: "Montserrat Alternates", "Helvetica", sans-serif;
-  font-size: calc(1.75rem + 2vw);
+  font-size: calc(2.25rem + 1vw);
 }
 
 .content {
@@ -6467,6 +6467,10 @@ div.alert {
   padding-top: calc(4rem + 3vw);
 }
 
+.home-section.end {
+  min-height: calc(100vh - 30rem);
+}
+
 button.cta {
   margin-top: calc(3rem + 1vw);
   font-size: calc(1.5rem + 0.7vw) !important;
@@ -6519,6 +6523,12 @@ button.cta {
 .review-img {
   width: 100px;
   margin-bottom: 2rem;
+}
+
+#parent-info {
+  height: 0;
+  transition: height 0.2s ease-out;
+  overflow: hidden;
 }
 
 /*# sourceMappingURL=custom.css.map */
