@@ -4,17 +4,17 @@
   <div class="row justify-content-center">
     <div class="col-11 col-sm-10 col-lg-8">
       <h1>The Best Next Step towards College</h1>
-      <form>
+      <form method="post">
         {{ form.hidden_tag() }}
-        <div class="row g-0">
-          <div class="col-5 col-sm-4 pe-1">
+        <div class="row">
+          <div class="col-12 col-sm-4">
             {{ form.first_name }}
           </div>
-          <div class="col-7 col-sm-8 ps-1">
+          <div class="col-12 col-sm-8">
             {{ form.email }}
           </div>
         </div>
-        <div class="row mt-2">
+        <div class="row my-2">
           <div class="col text-center">
             <div class="radio-set-label">
               Test preference:
@@ -38,20 +38,49 @@
                 I am a:
               </div>
               <br class="d-md-none"/>
-              <div class="radio-wrapper">
+              <div id="parent-wrapper" class="radio-wrapper">
                 <input type="radio" class="ms-1" name="relation" id="parent" value="parent">
                 <label for="parent">Parent</label>
               </div>
-              <div class="radio-wrapper">
+              <div id="student-wrapper" class="radio-wrapper">
                 <input type="radio" name="relation" id="student" value="student">
                 <label for="student">Student</label>
               </div>
             </div>
-
-            {{ form.submit(class_="") }}
           </div>
+        </div>
+
+        <div id="parent-info" class="row">
+          <div id="parent-name" class="col-12 col-sm-4">
+            {{ form.parent_name }}
+          </div>
+          <div id="parent-email" class="col-12 col-sm-8">
+            {{ form.parent_email }}
+          </div>
+        </div>
+
+        <div class="row">
+          {{ form.submit }}
         </div>
       </form>
     </div>
   </div>
 {% endblock content %}
+
+{% block end_scripts %}
+  <script>
+    const slideDown = element => element.style.height = `${element.scrollHeight}px`;
+
+    document.getElementById("student-wrapper").addEventListener("click", function () {
+      slideDown(document.getElementById("parent-info"));
+      document.getElementById("parent_name").setAttribute('required','')
+      document.getElementById("parent_email").setAttribute('required','')
+    });
+
+    document.getElementById("parent-wrapper").addEventListener("click", function () {
+      document.getElementById("parent-info").style.height = "0px";
+      document.getElementById("parent_name").removeAttribute('required','')
+      document.getElementById("parent_email").removeAttribute('required','')
+    });
+  </script>
+{% endblock end_scripts %}

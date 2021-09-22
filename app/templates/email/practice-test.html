@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+    <p>
+      Hi {{ user.parent_name.title() }},
+      {% if user.student_name == None %}
+        thank you for requesting a practice {% if test == 'test' %}SAT or ACT{% else %}{{ test }}{% endif %}.
+      {% else %}
+        we are writing to let you know that {{ user.student_name }} expressed interest in
+        receiving a practice {% if test == 'test' %}SAT or ACT{% else %}{{ test }}{% endif %}
+        from Open Path Tutoring and wanted to make sure
+        we have your permission to communicate with {{ user.student_name }} directly.
+      {% endif %}
+
+      {% if test == 'test' %}
+        <p>
+          Several factors influence which test will be a better fit, so it will be helpful
+          to learn more about {% if user.student_name %}{{ user.student_name.title() }}{% else %}your child{% endif %}'s
+          strengths and learning styles. Would you have time for a brief phone call over the
+          next few days? {% if user.student_name %}{{ user.student_name.title() }} is welcome to join too!{% endif %}
+        </p>
+      {% else %}
+        <p>
+        {% if user.student_name %}
+          {{ user.student_name }}, the
+        {% else %}
+          The
+        {% endif %}
+          practice test can be downloaded at the link below.
+          Here are the next steps on the path to a great score:
+        </p>
+        <p>
+        <ul>
+          <li><strong>Print the test and included scantron sheet.</strong>
+            The closer you can mimic the official test, the more useful preparation will be.
+            Speaking of which...
+          </li>
+          <li><strong>Take the test in one sitting if possible.</strong> It's okay if you need
+            to split it up, though.
+          </li>
+          <li><strong>Time yourself.</strong> Be sure to stop work on each section when
+            time is up. (You're welcome to try the remaining problems, but make note of
+            which questions you answered after time expired.)
+          </li>
+          <li><strong>Get in touch.</strong> Reply to this email before taking the test
+            if you need clarification or afterwards to get your score assessment.
+          </li>
+        </ul>
+        <p>
+          <a href="{{ link }}" style="background-color: #1C4D65; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 14px 20px; color: #ffffff; display: inline-block; mso-padding-alt: 0;">
+            <!--[if mso]>
+            <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 30pt;">&nbsp;</i>
+            <![endif]-->
+            <span style="mso-text-raise: 15pt;">Download practice {{ test }}</span>
+            <!--[if mso]>
+            <i style="letter-spacing: 25px; mso-font-width: -100%;">&nbsp;</i>
+            <![endif]-->
+          </a>
+        </p>
+      {% endif %}
+    </p>
+
+
+
+
+
+    <p>
+      <br/>
+      "We don't have to do all of it alone. We were never meant to."<br/>
+      &ndash; Brene Brown
+    </p>
+  </body>
+</html>

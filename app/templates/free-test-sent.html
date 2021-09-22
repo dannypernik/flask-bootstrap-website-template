@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-10 col-md-8">
+      <h1>Congrats!</h1>
+      <p>
+        You are on the path towards a great test
+          {% if relation == 'parent' %}
+            score for your child.
+          {% else %}
+            score.
+          {% endif %}
+        Here are your next steps:
+      </p>
+      <ul class="list-unstyled">
+        {% if test == 'unsure' %}
+          <li>
+            <p>
+              <strong>Let's connect.</strong> There are several aspects to consider
+              when deciding between the SAT and ACT. It will be helpful to learn
+              a bit more about
+                {% if relation == 'parent' %}
+                  your child
+                {% else %}
+                  you
+                {% endif %}
+              to determine which test is best.
+            </p>
+            <p>
+              You are welcome to call or text Danny at <a href="tel:+17173222292" class="semibold">(717) 322-2292</a>.
+              Alternatively, you can reply to the confirmation email that was sent to {{ email }}.
+            </p>
+          </li>
+        {% else %}
+          <li>
+            <strong>Check your email.</strong> Your practice {{ test.upper() }} is linked
+            in the email we just sent to <a class="text-decoration-underline">{{ email }}</a>.
+            If it doesn't arrive to your inbox or spam folder within 5 minutes, please email
+            <a href="mailto:hello@openpathtutoring.com?subject=Practice%20test%20inquiry" class="text-decoration-underline" target="_blank">
+              hello@openpathtutoring.com</a>.
+          </li>
+          <li>
+            <strong>Take the test.</strong> To get the most accurate starting score,
+              do the following:
+              <ol>
+                <li>Print the test.</li>
+                <li>Use the included scantron sheets to mark answers.</li>
+                <li>Time yourself, stopping work on each section when time is up.</li>
+                <li>Take the test in one sitting if possible.</li>
+              </ol>
+          </li>
+          <li><strong>Get in touch.</strong> Reply to the email before or after taking the test
+            to get clarification or get your test score.
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+{% endblock content %}

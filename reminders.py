@@ -78,6 +78,7 @@ def main():
 
     if len(reminder_list) is 0:
         print("No reminders sent.")
+    print("\n\n" + quote.json()[0]['q'] + " - " + quote.json()[0]['a'] + "\n\n")
 
 
     day_of_week = datetime.datetime.strftime(parse(now), format="%A")

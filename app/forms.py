@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, IntegerField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, IntegerField, RadioField
 from wtforms.validators import ValidationError, InputRequired, Email, EqualTo, Length
 from app.models import User, Student
 
@@ -13,10 +13,18 @@ class InquiryForm(FlaskForm):
         validators=[InputRequired()])
     submit = SubmitField('Submit')
 
-class EmailForm(FlaskForm):
+class FreeTestForm(FlaskForm):
+    first_name = StringField('Your first name', render_kw={"placeholder": "Your first name"}, \
+        validators=[InputRequired()])
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
-    submit = SubmitField('Join the movement')
+    test = RadioField('Test preference:', choices=[('sat', 'SAT'),('act','ACT'),('unsure','Not sure')], \
+        validators=[InputRequired()])
+    relation = RadioField('I am a:', choices=[('parent','Parent'),('student','Student')], \
+        validators=[InputRequired()])
+    parent_name = StringField('Parent\'s name', render_kw={"placeholder": "Parent\'s name"})
+    parent_email = StringField('Parent\'s email', render_kw={"placeholder": "Parent\'s email"})
+    submit = SubmitField('Send me the test')
 
 class SignupForm(FlaskForm):
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
