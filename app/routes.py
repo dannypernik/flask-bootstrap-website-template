@@ -42,34 +42,35 @@ def index():
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
 
 
-@app.route('/free_test', methods=['GET', 'POST'])
+@app.route('/practice_test', methods=['GET', 'POST'])
 def free_test():
     form = FreeTestForm()
     if form.validate_on_submit():
         relation = form.relation.data
         if relation == 'student':
-            user = Student(student_email=form.email.data, \
-                parent_name=form.parent_name.data, parent_email=form.parent_email.data)
+            user = Student(student_email=form.email.data, parent_name=form.parent_name.data, \
+            parent_email=form.parent_email.data)
+            student = form.first_name.data
         elif relation == 'parent':
             user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
+            student = form.student_name.data
         test = form.test.data
         db.session.add(user)
         db.session.commit()
-        send_practice_test_email(user, test, relation)
-        return render_template('free-test-sent.html', test=test, email=form.email.data, relation=relation)
-    return render_template('free-test.html', form=form)
+        send_practice_test_email(user, test, relation, student)
+        return render_template('practice-test-sent.html', test=test, email=form.email.data, relation=relation)
+    return render_template('practice-test.html', form=form)
 
 
 @app.route("/download/<filename>")
 def download_file (filename):
-    flash("Congrats! You're on the path to a great test score. An email has been sent with next steps.")
     path = os.path.join(app.root_path, 'static/files/')
     return send_from_directory(path, filename, as_attachment=True)
 
 
-@app.route('/free_test_sent')
+@app.route('/practice_test_sent')
 def free_test_sent():
-    return render_template('free-test-sent.html')
+    return render_template('practice-test-sent.html')
 
 @app.route('/about')
 def about():

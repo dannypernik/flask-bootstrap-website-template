@@ -35,6 +35,7 @@ class Student(db.Model):
     timezone = db.Column(db.Integer)
     location = db.Column(db.String(128))
     active = db.Column(db.Boolean, default = True, index=True)
+    pronouns = db.Column(db.String(32))
 
 
 @login.user_loader

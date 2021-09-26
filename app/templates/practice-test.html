@@ -14,26 +14,36 @@
             {{ form.email }}
           </div>
         </div>
-        <div class="row my-2">
+        <div class="row">
           <div class="col text-center">
-            <div class="radio-set-label">
-              Test preference:
-            </div>
-            <br class="d-md-none"/>
-            <div class="radio-wrapper">
-              <input type="radio" class="ms-1" name="test" id="sat" value="sat">
-              <label for="sat">SAT</label>
-            </div>
-            <div class="radio-wrapper">
-              <input type="radio" name="test" id="act" value="act">
-              <label for="act">ACT</label>
-            </div>
-            <div class="radio-wrapper">
-              <input type="radio" name="test" id="unsure" value="unsure">
-              <label for="unsure">Not sure</label>
+            <div class="mt-2">
+              <div class="radio-set-label">
+                Test preference:
+              </div>
+              <br class="d-md-none"/>
+
+              {% for subfield in form.test %}
+                <div class="radio-wrapper">
+                  {{ subfield }}
+                  {{ subfield.label }}
+                </div>
+              {% endfor %}
+
+              <!--<div class="radio-wrapper">
+                <input type="radio" name="test" id="sat" value="sat">
+                <label for="sat">SAT</label>
+              </div>
+              <div class="radio-wrapper">
+                <input type="radio" name="test" id="act" value="act">
+                <label for="act">ACT</label>
+              </div>
+              <div class="radio-wrapper">
+                <input type="radio" name="test" id="unsure" value="unsure">
+                <label for="unsure">Not sure</label>
+              </div>-->
             </div>
 
-            <div>
+            <div class="mb-2">
               <div class="radio-set-label">
                 I am a:
               </div>
@@ -47,6 +57,12 @@
                 <label for="student">Student</label>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div id="student-info" class="row justify-content-center">
+          <div id="student-name" class="col-12 col-sm-6">
+            {{ form.student_name }}
           </div>
         </div>
 
@@ -72,15 +88,19 @@
     const slideDown = element => element.style.height = `${element.scrollHeight}px`;
 
     document.getElementById("student-wrapper").addEventListener("click", function () {
+      document.getElementById("student-info").style.height = "0px";
+      document.getElementById("student_name").removeAttribute('required','');
       slideDown(document.getElementById("parent-info"));
-      document.getElementById("parent_name").setAttribute('required','')
-      document.getElementById("parent_email").setAttribute('required','')
+      document.getElementById("parent_name").setAttribute('required','');
+      document.getElementById("parent_email").setAttribute('required','');
     });
 
     document.getElementById("parent-wrapper").addEventListener("click", function () {
       document.getElementById("parent-info").style.height = "0px";
-      document.getElementById("parent_name").removeAttribute('required','')
-      document.getElementById("parent_email").removeAttribute('required','')
+      document.getElementById("parent_name").removeAttribute('required','');
+      document.getElementById("parent_email").removeAttribute('required','');
+      slideDown(document.getElementById("student-info"));
+      document.getElementById("student_name").setAttribute('required','');
     });
   </script>
 {% endblock end_scripts %}

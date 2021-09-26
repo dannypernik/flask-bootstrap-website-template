@@ -6142,12 +6142,12 @@ input[type=radio]:focus + label::before {
 .radio-wrapper {
   display: inline-block;
   padding-left: 1.5rem;
-  margin-right: 1rem;
+  margin: 0.25rem 1rem 0.25rem 0;
 }
 
 .radio-set-label {
   display: inline-block;
-  margin: 1rem 0.5rem 0.5rem;
+  margin: 1rem 1rem 0.5rem;
   font-weight: 600;
 }
 
@@ -6525,7 +6525,7 @@ button.cta {
   margin-bottom: 2rem;
 }
 
-#parent-info {
+#parent-info, #student-info, #student-pronouns {
   height: 0;
   transition: height 0.2s ease-out;
   overflow: hidden;

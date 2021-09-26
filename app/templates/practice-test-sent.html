@@ -11,11 +11,11 @@
           {% else %}
             score.
           {% endif %}
-        Here are your next steps:
+        Here are the next steps:
       </p>
       <ul class="list-unstyled">
         {% if test == 'unsure' %}
-          <li>
+          <li class="mb-2">
             <p>
               <strong>Let's connect.</strong> There are several aspects to consider
               when deciding between the SAT and ACT. It will be helpful to learn
@@ -33,25 +33,32 @@
             </p>
           </li>
         {% else %}
-          <li>
+          <li class="mb-2">
             <strong>Check your email.</strong> Your practice {{ test.upper() }} is linked
             in the email we just sent to <a class="text-decoration-underline">{{ email }}</a>.
             If it doesn't arrive to your inbox or spam folder within 5 minutes, please email
             <a href="mailto:hello@openpathtutoring.com?subject=Practice%20test%20inquiry" class="text-decoration-underline" target="_blank">
               hello@openpathtutoring.com</a>.
           </li>
-          <li>
+          <li class="mb-2">
             <strong>Take the test.</strong> To get the most accurate starting score,
               do the following:
-              <ol>
-                <li>Print the test.</li>
-                <li>Use the included scantron sheets to mark answers.</li>
-                <li>Time yourself, stopping work on each section when time is up.</li>
-                <li>Take the test in one sitting if possible.</li>
-              </ol>
+              <ul>
+                <li>Print the test and included scantron sheet.
+                  The closer you can mimic the official test, the more useful preparation will be.
+                  Speaking of which...
+                </li>
+                <li>Finish each section in one sitting. If you can finish all 4 sections at once,
+                  great, but it's okay if you need to split them up.
+                </li>
+                <li>Time yourself. Be sure to stop work on each section when
+                  time is up. (You're welcome to try the remaining problems, but make note of
+                  which questions you answered after time expired.)
+                </li>
+              </ul>
           </li>
-          <li><strong>Get in touch.</strong> Reply to the email before or after taking the test
-            to get clarification or get your test score.
+          <li><strong>Get in touch.</strong> Reply to the confirmation email before taking the
+            test if you need clarification or afterwards to get your score assessment.
           </li>
         {% endif %}
       </ul>

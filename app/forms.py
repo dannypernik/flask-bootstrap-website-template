@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, IntegerField, RadioField
-from wtforms.validators import ValidationError, InputRequired, Email, EqualTo, Length
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, IntegerField, RadioField, SelectField
+from wtforms.validators import ValidationError, InputRequired, DataRequired, Email, EqualTo, Length
 from app.models import User, Student
 
 class InquiryForm(FlaskForm):
@@ -24,6 +24,9 @@ class FreeTestForm(FlaskForm):
         validators=[InputRequired()])
     parent_name = StringField('Parent\'s name', render_kw={"placeholder": "Parent\'s name"})
     parent_email = StringField('Parent\'s email', render_kw={"placeholder": "Parent\'s email"})
+    student_name = StringField('Student\'s name', render_kw={"placeholder": "Student\'s name"})
+    #pronouns = RadioField('Student\'s preferred pronouns:', choices=[("he","He/him"),("she","She/her"),("they","They/them")], \
+    #    validators=[InputRequired()])
     submit = SubmitField('Send me the test')
 
 class SignupForm(FlaskForm):
