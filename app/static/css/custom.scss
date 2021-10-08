@@ -1,5 +1,5 @@
 $font-size-root: 10px;
-$lead-font-size: calc(1.5rem + 0.7vw) !important;
+$lead-font-size: calc(2rem + 0.1vw);
 $lead-font-weight: inherit;
 $spacer: 2rem;
 $enable-smooth-scroll: false;
@@ -285,6 +285,10 @@ button, .btn {
   font-size: 1.7rem;
 }
 
+a.btn {
+  display: inline-block;
+}
+
 .white {
   color: white;
 }
@@ -554,7 +558,7 @@ div.alert {
   min-height: calc(100vh - 30rem);
 }
 
-button.cta {
+.btn.cta {
   margin-top: calc(3rem + 1vw);
   font-size: $lead-font-size;
 }

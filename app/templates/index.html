@@ -42,9 +42,10 @@
           src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
         <h1 id="home-title">Open Path Tutoring</h1>
         <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
-        <button class="cta" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
-          Schedule a free trial session
-        </button>
+        <a href="{{ url_for('practice_test') }}" class="cta btn">
+            Get your free practice test<br class="d-md-none">
+            & score assessment
+        </a>
 
         <div class="home-next">
           <a href="#benefits">
@@ -111,10 +112,8 @@
               I think this is going to be so great for him. Thank you again!"
             </p>
             <p><strong>&#8211; Parent of Study Skills student</strong></p>
-            <a href="{{ url_for('reviews') }}">
-              <button class="btn sec mt-0">
-                See more reviews
-              </button>
+            <a href="{{ url_for('reviews') }}" class="btn sec mt-0">
+              See more reviews
             </a>
           </div>
         </div>
@@ -150,7 +149,7 @@
           The only way to know is to try. That's why we offer a
           <b>free tutoring session</b> with no purchase necessary.
         </h1>
-        <button class="cta clr" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+        <button class="cta btn clr" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
           Schedule a free trial session
         </button>
         <div class="home-next">
