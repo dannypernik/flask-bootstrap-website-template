@@ -3,7 +3,7 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-10 col-md-8">
-      <h1>Congrats!</h1>
+      <h1>Good choice!</h1>
       <p>
         You are on the path towards a great test
           {% if relation == 'parent' %}
@@ -41,27 +41,25 @@
               hello@openpathtutoring.com</a>.
           </li>
           <li class="mb-2">
-            <strong>Take the test.</strong> To get the most accurate starting score,
-              do the following:
-              <ul>
-                <li>Print the test and included scantron sheet.
-                  The closer you can mimic the official test, the more useful preparation will be.
-                  Speaking of which...
-                </li>
-                <li>Finish each section in one sitting. If you can finish all 4 sections at once,
-                  great, but it's okay if you need to split them up.
-                </li>
-                <li>Time yourself. Be sure to stop work on each section when
-                  time is up. (You're welcome to try the remaining problems, but make note of
-                  which questions you answered after time expired.)
-                </li>
-              </ul>
+            <strong>Take the test.</strong> The email will include instructions
+            for making the most of the practice {{ test.upper() }}.
           </li>
           <li><strong>Get in touch.</strong> Reply to the confirmation email before taking the
             test if you need clarification or afterwards to get your score assessment.
           </li>
         {% endif %}
       </ul>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <div class="col">
+      <button class="btn cta" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+        Schedule a free trial session
+      </button>
+      <a href="{{ url_for('index', _anchor='contact') }}" class="sec btn mt-0">
+        Get in touch
+      </a>
     </div>
   </div>
 {% endblock content %}

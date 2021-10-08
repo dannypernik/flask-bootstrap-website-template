@@ -32,7 +32,12 @@
       </p>
     {% else %}
       <p>
-        {{ student }}, here are your next steps on the path to a great score:
+        {% if relation == 'parent' %}
+          Here are the
+        {% else %}
+          {{ student }}, here are your
+        {% endif %}
+        next steps on the path to a great score:
       </p>
 
       <ul>
