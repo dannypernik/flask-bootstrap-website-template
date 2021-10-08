@@ -33,21 +33,19 @@
     {% else %}
       <p>
         {% if relation == 'parent' %}
-          Here are the
+          Here are the next steps for {{ student }}:
         {% else %}
-          {{ student }}, here are your
+          {{ student }}, here are your next steps on the path to a great score:
         {% endif %}
-        next steps on the path to a great score:
       </p>
 
       <ul>
         <li><strong>Print the test and included scantron sheet.</strong>
           By completing the test on paper instead of the computer, the practice test
           will more closely resemble the real thing, making preparation more useful.
-          Speaking of which...
         </li>
-        <li><strong>Take the test in one sitting if possible.</strong> It's okay if you need
-          to split it up, though.
+        <li><strong>Finish each section in one sitting.</strong> If you can finish
+          all 4 sections at once, great, but it's okay if you need to split them up.
         </li>
         <li><strong>Time yourself.</strong> Be sure to stop work on each section when
           time is up. (You're welcome to try the remaining problems, but make note of
