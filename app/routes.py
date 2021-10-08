@@ -65,7 +65,7 @@ def practice_test():
 @app.route("/download/<filename>")
 def download_file (filename):
     path = os.path.join(app.root_path, 'static/files/')
-    return send_from_directory(path, filename, as_attachment=True)
+    return send_from_directory(path, filename, as_attachment=False)
 
 
 @app.route('/practice_test_sent')
