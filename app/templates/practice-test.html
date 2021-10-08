@@ -3,7 +3,18 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-11 col-sm-10 col-lg-8">
-      <h1>The Best Next Step towards College</h1>
+      <h1>The Best Next Step towards a College You Love</h1>
+      <p>
+        Taking a practice SAT or ACT may not be the most exciting way to start
+        your weekend, but it provides critical information and experience that moves
+        you closer to attending the university of your choice.
+        By learning which opportunity areas will most significantly impact your score,
+        you can spend less time on test prep overall.
+      </p>
+      <p>
+        Fill out the form below, and we'll email you an offical test with next steps
+        to receive your free score assessment.
+      </p>
       <form method="post">
         {{ form.hidden_tag() }}
         <div class="row">
@@ -28,19 +39,6 @@
                   {{ subfield.label }}
                 </div>
               {% endfor %}
-
-              <!--<div class="radio-wrapper">
-                <input type="radio" name="test" id="sat" value="sat">
-                <label for="sat">SAT</label>
-              </div>
-              <div class="radio-wrapper">
-                <input type="radio" name="test" id="act" value="act">
-                <label for="act">ACT</label>
-              </div>
-              <div class="radio-wrapper">
-                <input type="radio" name="test" id="unsure" value="unsure">
-                <label for="unsure">Not sure</label>
-              </div>-->
             </div>
 
             <div class="mb-2">

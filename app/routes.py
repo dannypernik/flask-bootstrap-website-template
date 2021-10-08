@@ -43,7 +43,7 @@ def index():
 
 
 @app.route('/practice_test', methods=['GET', 'POST'])
-def free_test():
+def practice_test():
     form = FreeTestForm()
     if form.validate_on_submit():
         relation = form.relation.data
