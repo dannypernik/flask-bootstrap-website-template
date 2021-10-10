@@ -55,8 +55,6 @@ def practice_test():
             user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
             student = form.student_name.data
         test = form.test.data
-        db.session.add(user)
-        db.session.commit()
         send_practice_test_email(user, test, relation, student)
         return render_template('practice-test-sent.html', test=test, email=form.email.data, relation=relation)
     return render_template('practice-test.html', form=form)
