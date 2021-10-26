@@ -37,7 +37,7 @@ def index():
         db.session.add(user)
         db.session.commit()
         send_contact_email(user, message)
-        flash("Please check " + user.email + " for a confirmation email. Thank you for reaching out!")
+        flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
         return redirect(url_for('index', _anchor="home"))
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
 
@@ -102,19 +102,19 @@ def students():
     form = StudentForm()
     students = Student.query.order_by(Student.student_name).all()
     if form.validate_on_submit():
-        student = Student(student_name=form.student_name.data, student_email=form.student_email.data, \
-        parent_name=form.parent_name.data, parent_email=form.parent_email.data, \
-        timezone=form.timezone.data, location=form.location.data)
+        student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
+        student_email=form.student_email.data, parent_name=form.parent_name.data, \
+        parent_email=form.parent_email.data, timezone=form.timezone.data, location=form.location.data)
         try:
             db.session.add(student)
             db.session.commit()
         except:
             db.session.rollback()
-            flash('Student name already exists', 'error')
+            flash(student.student_name + ' could not be added', 'error')
             return redirect(url_for('students'))
         finally:
             db.session.close()
-        flash("Student added")
+        flash(student.student_name + ' added')
         return redirect(url_for('students'))
     return render_template('students.html', title="Students", form=form, students=students)
 
@@ -125,6 +125,7 @@ def edit_student(id):
     if form.validate_on_submit():
         if 'save' in request.form:
             student.student_name=form.student_name.data
+            student.last_name=form.last_name.data
             student.student_email=form.student_email.data
             student.parent_name=form.parent_name.data
             student.parent_email=form.parent_email.data
@@ -134,22 +135,23 @@ def edit_student(id):
             try:
                 db.session.add(student)
                 db.session.commit()
-                flash("Student updated")
+                flash(student.student_name + ' updated')
             except:
                 db.session.rollback()
-                flash('Student name already exists', 'error')
+                flash(student.student_name + ' could not be updated', 'error')
                 return redirect(url_for('students'))
             finally:
                 db.session.close()
         elif 'delete' in request.form:
             db.session.delete(student)
             db.session.commit()
-            flash("Deleted " + student.student_name)
+            flash('Deleted ' + student.student_name)
         else:
             flash('Code error in POST request', 'error')
         return redirect(url_for('students'))
     elif request.method == "GET":
         form.student_name.data=student.student_name
+        form.last_name.data=student.last_name
         form.student_email.data=student.student_email
         form.parent_name.data=student.parent_name
         form.parent_email.data=student.parent_email
@@ -178,7 +180,7 @@ def signup():
         db.session.commit()
         flash("You are now registered. We're glad you're here!")
         return redirect(url_for('index'))
-    return render_template('ignup.html', title='Sign up', form=form)
+    return render_template('signup.html', title='Sign up', form=form)
 
 @app.route('/logout')
 def logout():

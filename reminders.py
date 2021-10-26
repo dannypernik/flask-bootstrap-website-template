@@ -63,7 +63,7 @@ def main():
                                         timeMax=upcoming_end, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-    students = Student.query.order_by(-Student.id).all()
+    students = Student.query.filter_by(active=True)
     reminder_list = []
 
     # Use fallback quote if request fails
@@ -72,7 +72,12 @@ def main():
 
     for event in events:
         for student in students:
-            if " " + student.student_name + " " in event.get('summary'):
+            if student.last_name == "":
+                name = student.student_name
+            else:
+                name = student.student_name + " " + student.last_name
+
+            if " " + name + " and" in event.get('summary'):
                 reminder_list.append(student.student_name)
                 send_reminder_email(event, student, quote)
 

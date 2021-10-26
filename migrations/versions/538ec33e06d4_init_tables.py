@@ -1,7 +1,7 @@
 """init tables
 
 Revision ID: 538ec33e06d4
-Revises: 
+Revises:
 Create Date: 2021-08-18 06:48:26.249946
 
 """
@@ -26,7 +26,6 @@ def upgrade():
     sa.Column('parent_email', sa.String(length=64), nullable=True),
     sa.Column('timezone', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('student_name')
     )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
