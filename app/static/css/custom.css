@@ -6242,10 +6242,11 @@ button.clr {
 .btn.edit {
   display: none;
   border-radius: 99px;
+  padding: 0.25rem 2rem;
 }
 
 .row:hover > div > .btn.edit {
-  display: block;
+  display: inline-block;
 }
 
 .btn.alert {
