@@ -112,8 +112,6 @@ def students():
             db.session.rollback()
             flash(student.student_name + ' could not be added', 'error')
             return redirect(url_for('students'))
-        finally:
-            db.session.close()
         flash(student.student_name + ' added')
         return redirect(url_for('students'))
     return render_template('students.html', title="Students", form=form, students=students)
