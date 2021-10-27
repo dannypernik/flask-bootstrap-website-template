@@ -69,5 +69,5 @@ class StudentForm(FlaskForm):
         validators=[InputRequired()])
     location = StringField('Location', render_kw={"placeholder": "Location"}, \
         validators=[InputRequired()])
-    active = BooleanField('Active?')
+    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
     submit = SubmitField('Save')

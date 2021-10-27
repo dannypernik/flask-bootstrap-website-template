@@ -101,6 +101,7 @@ def login():
 def students():
     form = StudentForm()
     students = Student.query.order_by(Student.student_name).all()
+    statuses = Student.query.with_entities(Student.status).distinct()
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
         student_email=form.student_email.data, parent_name=form.parent_name.data, \
@@ -114,7 +115,7 @@ def students():
             return redirect(url_for('students'))
         flash(student.student_name + ' added')
         return redirect(url_for('students'))
-    return render_template('students.html', title="Students", form=form, students=students)
+    return render_template('students.html', title="Students", form=form, students=students, statuses=statuses)
 
 @app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
@@ -129,7 +130,7 @@ def edit_student(id):
             student.parent_email=form.parent_email.data
             student.timezone=form.timezone.data
             student.location=form.location.data
-            student.active=form.active.data
+            student.status=form.status.data
             try:
                 db.session.add(student)
                 db.session.commit()
@@ -155,7 +156,7 @@ def edit_student(id):
         form.parent_email.data=student.parent_email
         form.timezone.data=student.timezone
         form.location.data=student.location
-        form.active.data=student.active
+        form.status.data=student.status
     return render_template('edit-student.html', title='Edit Student',
                            form=form, student=student)
 
