@@ -110,7 +110,7 @@ def main():
     session_count = 0
 
 
-    if day_of_week == "Thursday":
+    if day_of_week == "Friday":
         for e in week_events:
             week_events_list.append(e.get('summary'))
 
