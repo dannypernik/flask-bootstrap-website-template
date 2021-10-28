@@ -13,9 +13,8 @@
         {{ form.parent_email }}
         {{ form.timezone }}
         {{ form.location }}
-        <div class="mt-2">
-          {{ form.submit }}
-        </div>
+        {{ form.status(class="my-2") }}
+        {{ form.submit }}
       </form>
       {% for status in statuses %}
           <h1 class="mt-3">{{ status[0].title() }} students</h1>

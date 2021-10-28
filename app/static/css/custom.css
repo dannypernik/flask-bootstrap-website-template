@@ -6151,30 +6151,13 @@ input[type=radio]:focus + label::before {
   font-weight: 600;
 }
 
-/*input[type="checkbox"], input[type="radio"] {
-  appearance: none;
-  border-radius: 99px;
-  border: 2px solid $primary-color;
-  width: 17px;
-  height: 17px;
-  cursor: pointer;
-  position: relative;
-  top: 5px;
+select {
+  color: #1C4D65;
+  border: 2px solid #1C4D65;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
 }
 
-input[type="checkbox"] {
-  border-radius: 3px;
-}
-
-input[type=checkbox]:checked {
-    background: white url(../img/checked.svg) center center no-repeat;
-    background-size: 100%;
-}
-
-input[type=radio]:checked {
-  background: white url(../img/checked.svg) center center no-repeat;
-  background-size: 100%;
-}*/
 .semibold {
   font-weight: 600;
 }
