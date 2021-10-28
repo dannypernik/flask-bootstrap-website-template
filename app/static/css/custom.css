@@ -6513,7 +6513,7 @@ div.alert {
   margin-bottom: 2rem;
 }
 
-#parent-info, #student-info, #student-pronouns {
+#parent-info, #student-info, #add-student-form {
   height: 0;
   transition: height 0.2s ease-out;
   overflow: hidden;
