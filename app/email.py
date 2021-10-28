@@ -189,10 +189,10 @@ def send_reminder_email(event, student, quote):
                     ", this is an automated reminder that " + student.student_name + \
                     " is scheduled for a tutoring session on " + start_date + " from  " + \
                     start_display + " to " + end_display + " " + timezone + " time. <br/><br/>" + \
-                    "Location: " + student.location + "<br/><br/>" + \
+                    "Location: " + event.get('location') + "<br/><br/>" + \
                     "You are welcome to reply to this email with any questions. " + \
                     "Please provide at least 24 hours notice when cancelling or rescheduling " + \
-                    "in order to avoid losing the session. Note that you will not receive a " + \
+                    "in order to avoid being charged for the session. Note that you will not receive a " + \
                     "reminder email for sessions scheduled less than 2 days in advance.<br/><br/>" + \
                     "Thank you,<br/>Danny <br/><br/><br/>" + \
                     quote_header + '"' + message + '"' + "<br/>&ndash; " + author
@@ -203,12 +203,12 @@ def send_reminder_email(event, student, quote):
     result = mailjet.send.create(data=data)
 
     if result.status_code is 200:
-        print(student.student_name, start_central)
+        print(student.student_name, student.last_name, start_central)
     else:
         print("Error for " + student.student_name + "with code " + str(result.status_code), result.reason)
 
 
-def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, unscheduled, now, quote):
+def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, unscheduled, paused, now, quote):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -219,6 +219,7 @@ def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, un
     end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
     end_date = dt.strftime(parse(end), format="%b %-d")
     unscheduled_students = ', '.join(unscheduled)
+    paused_students = ', '.join(paused)
 
     message, author, quote_header = verify_quote(quote)
 
@@ -244,7 +245,8 @@ def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, un
                 "HTMLPart": "Scheduled sessions: " + scheduled_sessions + "<br/>" + \
                     "Scheduled hours: " + scheduled_hours + \
                     "<br/>Active students: " + active_students + \
-                    "<br/>Unscheduled students: " + unscheduled_students + \
+                    "<br/><br/>Unscheduled students: " + unscheduled_students + \
+                    "<br/>Paused students: " + paused_students + \
                     "<br/><br/><br/>" + quote_header + '"' + message + '"' + "<br/>&ndash; " + author
             }
         ]

@@ -58,27 +58,35 @@ def main():
     today = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     upcoming_start = (today + datetime.timedelta(hours=44)).isoformat() + 'Z'
     upcoming_end = (today + datetime.timedelta(hours=68)).isoformat() + 'Z'
-    print("Session reminders for " + datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d") + ":")
+    upcoming_start_formatted = datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d")
     events_result = service.events().list(calendarId='primary', timeMin=upcoming_start,
                                         timeMax=upcoming_end, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-    students = Student.query.filter_by(active=True)
     reminder_list = []
+
+    active_students = Student.query.filter_by(status='active')
+    paused_students = Student.query.filter_by(status='paused')
 
     # Use fallback quote if request fails
     quote = None
     quote = requests.get("https://zenquotes.io/api/today")
 
-    for event in events:
-        for student in students:
-            if student.last_name == "":
-                name = student.student_name
-            else:
-                name = student.student_name + " " + student.last_name
+    def full_name(student):
+        if student.last_name == "":
+            name = student.student_name
+        else:
+            name = student.student_name + " " + student.last_name
+        return name
 
+    print("Session reminders for " + upcoming_start_formatted + ":")
+
+    # Send reminder email to students ~2 days in advance
+    for event in events:
+        for student in active_students:
+            name = full_name(student)
             if " " + name + " and" in event.get('summary'):
-                reminder_list.append(student.student_name)
+                reminder_list.append(name)
                 send_reminder_email(event, student, quote)
 
     if len(reminder_list) is 0:
@@ -92,19 +100,24 @@ def main():
                                         timeMax=week_end, singleEvents=True,
                                         orderBy='startTime').execute()
     week_events = week_events_result.get('items', [])
-    week_events_list = []
-    session_count = 0
-    tutoring_hours = 0
-    active_students = []
-    unscheduled_students = []
 
-    if day_of_week == "Friday":
+    week_events_list = []
+    unscheduled_list = []
+    paused_list = []
+
+    tutoring_hours = 0
+    active_count = 0
+    session_count = 0
+
+
+    if day_of_week == "Thursday":
         for e in week_events:
             week_events_list.append(e.get('summary'))
 
             # Get total duration of week's tutoring
-            for s in students:
-                if " " + s.student_name + " " in e.get('summary'):
+            for student in active_students:
+                name = full_name(student)
+                if " " + name + " and" in e.get('summary'):
                     start = isoparse(e['start'].get('dateTime'))
                     end = isoparse(e['end'].get('dateTime'))
                     duration = str(end - start)
@@ -112,15 +125,20 @@ def main():
                     hours = int(h) + int(m) / 60 + int(s) / 3600
                     tutoring_hours += hours
 
-        #Get number of sessions and lists of active and unscheduled students
-        for s in students:
-            if s.active:
-                active_students.append(s.student_name)
-                count = sum(" " + s.student_name + " " in e for e in week_events_list)
-                session_count += count
-                if count is 0:
-                    unscheduled_students.append(s.student_name)
-        weekly_report_email(str(session_count), str(tutoring_hours), str(len(active_students)), unscheduled_students, today, quote)
+        #Get number of active students, number of sessions, and list of unscheduled students
+        for student in active_students:
+            active_count += 1
+            name = full_name(student)
+            count = sum(" " + name + " and" in e for e in week_events_list)
+            session_count += count
+            if count is 0:
+                unscheduled_list.append(name)
+
+        for student in paused_students:
+            name = full_name(student)
+            paused_list.append(name)
+
+        weekly_report_email(str(session_count), str(tutoring_hours), str(active_count), unscheduled_list, paused_list, today, quote)
 
 
 if __name__ == '__main__':
