@@ -6460,7 +6460,7 @@ div.alert {
 }
 
 .btn.cta {
-  margin-top: calc(3rem + 1vw);
+  margin-top: calc(2rem + 1vw);
   font-size: calc(2rem + 0.1vw);
 }
 
