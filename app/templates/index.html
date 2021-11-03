@@ -42,10 +42,13 @@
           src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
         <h1 id="home-title">Open Path Tutoring</h1>
         <h1 id="home-tagline">Access your full potential on the SAT, ACT, and beyond</h1>
-        <a href="{{ url_for('practice_test') }}" class="cta btn">
+        <button class="cta btn" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
+          Schedule a free trial session
+        </button>
+        <!--<a href="{{ url_for('practice_test') }}" class="cta btn">
             Get your free practice test<br class="d-md-none">
             & score assessment
-        </a>
+        </a>-->
 
         <div class="home-next">
           <a href="#benefits">
