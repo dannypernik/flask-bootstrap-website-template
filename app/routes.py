@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
-from app import app, db
+from app import app, db, hcaptcha
 from app.forms import InquiryForm, FreeTestForm, SignupForm, LoginForm, StudentForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student
@@ -32,6 +32,11 @@ def webmanifest():
 def index():
     form = InquiryForm()
     if form.validate_on_submit():
+        if hcaptcha.verify():
+            pass
+        else:
+            flash('Please verify that you are human.', 'error')
+            return redirect(url_for('index', _anchor="home"))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         db.session.add(user)
