@@ -5,7 +5,6 @@
   <meta property="og:title" content="Open Path Tutoring" />
   <meta property="og:description" content="Schedule your free SAT or ACT prep session" />
   <meta property="og:image" content="{{ url_for('static', filename='img/og-image.jpg') }}" />
-  <script async defer src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock head %}
 
 {% block navbar %}{% endblock navbar %}
@@ -182,7 +181,7 @@
           <p class="mb-3">{{ form.phone }}</p>
           <p class="mb-3">{{ form.subject }}</p>
           <p class="mb-3">{{ form.message(rows='4') }}</p>
-          {{ hcaptcha }}
+          <!--{{ hcaptcha }}-->
           {{ form.submit }}
           <!--<input type="submit" value="Submit" class='g-recaptcha', data-sitekey='6Lc3IBcaAAAAANQvPMR7J9MhHZyykxuamsKb4561', data-callback='onSubmit', data-action='submit' />-->
         </form>

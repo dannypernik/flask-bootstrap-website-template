@@ -32,11 +32,10 @@ def webmanifest():
 def index():
     form = InquiryForm()
     if form.validate_on_submit():
-        if hcaptcha.verify():
-            pass
-        else:
-            flash('Please verify that you are human.', 'error')
-            return redirect(url_for('index', _anchor="home"))
+        #if hcaptcha.verify():
+        #    pass
+        #else:
+        #flash('Please verify that you are human.', 'error')
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         db.session.add(user)
