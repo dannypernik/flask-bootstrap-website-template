@@ -18,10 +18,10 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+            #, 'https://www.googleapis.com/auth/spreadsheets.readonly']
 
 def main():
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
+    """
     """
     flow = Flow.from_client_secrets_file(
                 os.path.join(basedir, 'credentials.json'), SCOPES)
@@ -51,9 +51,9 @@ def main():
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
 
+    # Call the Calendar API
     service = build('calendar', 'v3', credentials=creds)
 
-    # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     today = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     upcoming_start = (today + datetime.timedelta(hours=44)).isoformat() + 'Z'
@@ -63,8 +63,8 @@ def main():
                                         timeMax=upcoming_end, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-    reminder_list = []
 
+    reminder_list = []
     active_students = Student.query.filter_by(status='active')
     paused_students = Student.query.filter_by(status='paused')
 
@@ -140,6 +140,22 @@ def main():
 
         weekly_report_email(str(session_count), str(tutoring_hours), str(active_count), unscheduled_list, paused_list, today, quote)
 
+
+        # Call the Sheets API
+        #OPT_SS_ID = '1M6Xs6zLR_QdPpOJYO0zaZOwJZ6dxdXsURD2PkpP2Vis'
+        #STUDENT_SUMMARY_RANGE = 'Student summary!A1:Q'
+        #sheets_service = build('sheets', 'v4', credentials=creds)
+
+        #sheet = sheets_service.spreadsheets()
+        #result = sheet.values().get(spreadsheetId=OPT_SS_ID,
+        #                            range=STUDENT_SUMMARY_RANGE).execute()
+        #values = result.get('values', [])
+
+        #if not values:
+        #    print('No data found.')
+        #else:
+        #    for row in values:
+        #        print('%s, %s' % (row[0],row[1]))
 
 if __name__ == '__main__':
     main()
