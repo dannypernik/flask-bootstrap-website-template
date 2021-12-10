@@ -90,6 +90,46 @@ def send_confirmation_email(user, message):
         print("Confirmation email failed to send with code " + result.status_code, result.reason)
 
 
+def send_test_strategies_email(user, relation, student):
+    api_key = app.config['MAILJET_KEY']
+    api_secret = app.config['MAILJET_SECRET']
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+    filename = 'SAT-ACT-strategies.pdf'
+
+    to_email = []
+    sender_name = user.parent_name.title()
+    student = student.title()
+
+    if relation == 'student':
+        sender_name = student
+        to_email.append({ "Email": user.student_email })
+    to_email.append({ "Email": user.parent_email })
+
+    link = "https://www.openpathtutoring.com/download/" + filename
+
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": app.config['MAIL_USERNAME'],
+                    "Name": "Open Path Tutoring"
+                },
+                "To": to_email,
+                "Bcc": [{"Email": app.config['MAIL_USERNAME']}],
+                "Subject": "10 Strategies to Master the SAT & ACT",
+                "HTMLPart": render_template('email/test-strategies.html', user=user, relation=relation, sender_name=sender_name, student=student, link=link)
+            }
+        ]
+    }
+
+    result = mailjet.send.create(data=data)
+    if result.status_code is 200:
+        print(result.json())
+    else:
+        print("Top 10 email failed to send with code " + str(result.status_code), result.reason)
+
+
 def send_practice_test_email(user, test, relation, student):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']

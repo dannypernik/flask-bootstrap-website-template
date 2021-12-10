@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body style="color: #1C4D65;">
+
+    <p>
+      Hi {{ sender_name }}, thank you for requesting <i>10 Strategies
+      to Master the SAT & ACT</i>. Please click the button below to download the PDF.
+      Let me know if you
+      {% if relation == 'parent' %}and {{ student }}{% endif %}
+      find it useful!
+    </p>
+
+    {% if relation == 'student' %}
+      <p>
+        {{ user.parent_name }}, I also wanted to let you know that {{ sender_name }}
+        expressed interest in this resource. If you have any questions, you can reply
+        to this email. Feel free to include your phone number and a convenient time
+        that I may call you.
+      </p>
+    {% endif %}
+
+    <p>
+      All the best,<br>
+      Danny Pernik, Owner &amp; Lead Tutor<br>
+      Open Path Tutoring
+    </p>
+
+    <p>
+      <a href="{{ link }}" style="background-color: #1C4D65; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; text-decoration: none; margin: 10px 0; padding: 10px 15px; color: #ffffff; display: inline-block; mso-padding-alt: 0;">
+        <!--[if mso]>
+        <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 30pt;">&nbsp;</i>
+        <![endif]-->
+        <span style="mso-text-raise: 15pt;">Download Strategies PDF</span>
+        <!--[if mso]>
+        <i style="letter-spacing: 25px; mso-font-width: -100%;">&nbsp;</i>
+        <![endif]-->
+      </a>
+    </p>
+
+    <p>
+      "We don't have to do all of it alone. We were never meant to."<br/>
+      &ndash; Brene Brown
+    </p>
+  </body>
+</html>

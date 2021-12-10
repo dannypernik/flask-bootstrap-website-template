@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-11 col-sm-10 col-lg-8">
+      <h1>The Best Next Step towards Greater Education</h1>
+      <p>
+        Well done for taking the initiative to seek test prep support for
+        you or your student. It's not always easy to ask for help! The SAT and ACT
+        can be daunting endeavors, but we're here to make the process feel less
+        stressful and more manageable.
+      </p>
+      <p>
+        By filling out the form below,  you'll get free access to 10 of the testing
+        strategies that are shared during paid private tutoring sessions.
+      </p>
+      <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="row">
+          <div class="col-12 col-sm-4">
+            {{ form.first_name }}
+          </div>
+          <div class="col-12 col-sm-8">
+            {{ form.email }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-center">
+
+            <div class="m-2">
+              <div class="radio-set-label">
+                I am a:
+              </div>
+              <br class="d-md-none"/>
+              <div id="parent-wrapper" class="radio-wrapper">
+                <input type="radio" class="ms-1" name="relation" id="parent" value="parent">
+                <label for="parent">Parent</label>
+              </div>
+              <div id="student-wrapper" class="radio-wrapper">
+                <input type="radio" name="relation" id="student" value="student">
+                <label for="student">Student</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="student-info" class="row justify-content-center">
+          <div id="student-name" class="col-12 col-sm-6">
+            {{ form.student_name }}
+          </div>
+        </div>
+
+        <div id="parent-info" class="row">
+          <div id="parent-name" class="col-12 col-sm-4">
+            {{ form.parent_name }}
+          </div>
+          <div id="parent-email" class="col-12 col-sm-8">
+            {{ form.parent_email }}
+          </div>
+        </div>
+
+        <div class="row">
+          {{ form.submit }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block end_scripts %}
+  <script>
+    const slideDown = element => element.style.height = `${element.scrollHeight}px`;
+
+    document.getElementById("student-wrapper").addEventListener("click", function () {
+      document.getElementById("student-info").style.height = "0px";
+      document.getElementById("student_name").removeAttribute('required','');
+      slideDown(document.getElementById("parent-info"));
+      document.getElementById("parent_name").setAttribute('required','');
+      document.getElementById("parent_email").setAttribute('required','');
+    });
+
+    document.getElementById("parent-wrapper").addEventListener("click", function () {
+      document.getElementById("parent-info").style.height = "0px";
+      document.getElementById("parent_name").removeAttribute('required','');
+      document.getElementById("parent_email").removeAttribute('required','');
+      slideDown(document.getElementById("student-info"));
+      document.getElementById("student_name").setAttribute('required','');
+    });
+  </script>
+{% endblock end_scripts %}
