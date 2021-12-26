@@ -6466,7 +6466,7 @@ div.alert {
   min-height: 100vh;
   overflow: auto;
   margin-top: -60px;
-  padding-top: calc(8rem + 3vw);
+  padding-top: calc(7rem + 3vw);
 }
 
 .home-section.end {
