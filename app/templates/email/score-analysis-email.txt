@@ -1,0 +1,7 @@
+Hi {{ student.parent_name }}, thank you for requesting your student's practice test score analysis. You should receive the analysis within 48 hours. Feel free to reply to this address with any questions in the meantime.
+
+Student name: {{ student.student_name }} {{ student.last_name }}
+
+
+"We don't have to do all of it alone. We were never meant to."
+- Brene Brown

@@ -1,12 +1,12 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
 from app import app, db, hcaptcha
-from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm
+from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email import send_contact_email, send_confirmation_email, send_test_strategies_email
+from app.email import send_contact_email, send_confirmation_email, send_test_strategies_email, send_score_analysis_email
 
 @app.before_request
 def before_request():
@@ -98,6 +98,17 @@ def about():
 @app.route('/reviews')
 def reviews():
     return render_template('reviews.html', title="Reviews")
+
+@app.route('/griffin', methods=['GET', 'POST'])
+def griffin():
+    form = ScoreAnalysisForm()
+    if form.validate_on_submit():
+        student = Student(student_name=form.student_first_name.data, \
+        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
+        parent_email=form.parent_email.data)
+        send_score_analysis_email(student)
+        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+    return render_template('griffin.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
