@@ -5981,6 +5981,11 @@ body {
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 p {
