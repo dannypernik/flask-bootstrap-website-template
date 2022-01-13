@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-9">
       <button id="add-student" class="m-0">+ Add student</button>
 
       <form id="add-student-form" action="" method="post">
@@ -59,8 +57,6 @@
           {% endif %}
         {% endfor %}
       {% endfor %}
-    </div>
-  </div>
 {% endblock content %}
 
 {% block end_scripts %}

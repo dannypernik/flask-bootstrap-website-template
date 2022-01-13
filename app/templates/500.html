@@ -1,18 +1,14 @@
 {% extends "404.html" %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-10 col-md-8">
-      <h1>It's not you, it's us... something went wrong.</h1>
-      <div class="">
-        Apologies for the inconvenience. If you would be so kind as to let us know
-        how you arrived here, it would be very helpful.
-      </div>
-      <div class="mt-3">
-        <a href="{{ url_for('index', _anchor='contact') }}" class="btn">
-          Contact us
-        </a>
-      </div>
-    </div>
+  <h1>It's not you, it's us... something went wrong.</h1>
+  <div class="">
+    Apologies for the inconvenience. If you would be so kind as to let us know
+    how you arrived here, it would be very helpful.
+  </div>
+  <div class="mt-3">
+    <a href="{{ url_for('index', _anchor='contact') }}" class="btn">
+      Contact us
+    </a>
   </div>
 {% endblock content %}

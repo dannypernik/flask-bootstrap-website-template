@@ -9,7 +9,7 @@
 
 {% block navbar %}{% endblock navbar %}
 
-{% block content %}
+{% block container %}
   <div id="home" class="inverse text-center">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -278,7 +278,7 @@
     </footer>-->
   </div>
 
-{% endblock content %}
+{% endblock container %}
 
 {% block end_scripts %}
   <script src="{{ url_for('static', filename='js/zenscroll-min.js') }}"></script>

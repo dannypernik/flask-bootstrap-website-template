@@ -132,7 +132,15 @@
       </section>
     {% endblock navbar %}
 
-    {% block content %}{% endblock content %}
+    {% block container %}
+      <div class="row justify-content-center">
+        <div class="col-11 col-sm-10 col-lg-8">
+
+          {% block content %}{% endblock content %}
+
+        </div>
+      </div>
+    {% endblock container %}
   </div>
 
     {% block footer %}

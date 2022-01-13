@@ -1,35 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-10 col-md-8">
-      <h1>Success</h1>
-      <p>
-        <i>10 Strategies to Master the SAT & ACT</i> is on its way to
-        <span class="semibold">{{ email }}</span>. You are on the path towards a great test
-          {% if relation == 'parent' %}
-            score for your child.
-          {% else %}
-            score.
-          {% endif %}
-      </p>
-      <p>
-        Open Path Tutoring offers 1 free trial session to get started with these strategies
-        and ensure a strong fit between tutor and student. You are welcome to
-        schedule the trial session now or later. If you'd like
-        {% if relation == 'parent' %}your child{% endif %}
-        to try a recently-administered official SAT or ACT prior to the session,
-        reply to the email and we'll send you one. If the email doesn't arrive to
-        your inbox, promotions, or spam folder within 5 minutes, please email
-        <a href="mailto:hello@openpathtutoring.com?subject=Test%20Prep%20Strategies" class="text-decoration-underline" target="_blank">
-          hello@openpathtutoring.com
-        </a>.
-      </p>
-      <p>
-        Thank you!
-      </p>
-    </div>
-  </div>
+  <h1>Success</h1>
+  <p>
+    <i>10 Strategies to Master the SAT & ACT</i> is on its way to
+    <span class="semibold">{{ email }}</span>. You are on the path towards a great test
+      {% if relation == 'parent' %}
+        score for your child.
+      {% else %}
+        score.
+      {% endif %}
+  </p>
+  <p>
+    Open Path Tutoring offers 1 free trial session to get started with these strategies
+    and ensure a strong fit between tutor and student. You are welcome to
+    schedule the trial session now or later. If you'd like
+    {% if relation == 'parent' %}your child{% endif %}
+    to try a recently-administered official SAT or ACT prior to the session,
+    reply to the email and we'll send you one. If the email doesn't arrive to
+    your inbox, promotions, or spam folder within 5 minutes, please email
+    <a href="mailto:hello@openpathtutoring.com?subject=Test%20Prep%20Strategies" class="text-decoration-underline" target="_blank">
+      hello@openpathtutoring.com
+    </a>.
+  </p>
+  <p>
+    Thank you!
+  </p>
 
   <div class="row text-center">
     <div class="col">

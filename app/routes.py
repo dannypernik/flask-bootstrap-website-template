@@ -1,12 +1,12 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
 from app import app, db, hcaptcha
-from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm
+from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email import send_contact_email, send_confirmation_email, send_test_strategies_email, send_score_analysis_email
+from app.email import send_contact_email, send_confirmation_email, send_test_strategies_email, send_score_analysis_email, send_practice_test_email
 
 @app.before_request
 def before_request():
@@ -49,7 +49,7 @@ def index():
 
 @app.route('/practice_test', methods=['GET', 'POST'])
 def practice_test():
-    form = TestStrategiesForm()
+    form = PracticeTestForm()
     if form.validate_on_submit():
         relation = form.relation.data
         if relation == 'student':
