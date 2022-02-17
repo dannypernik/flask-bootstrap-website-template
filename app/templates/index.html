@@ -59,7 +59,7 @@
         <div class="home-next">
           <a href="#free-trial">
             <h2>
-              Schedule a free trial session
+              Request a free trial session
             </h2>
             <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi
                 bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -140,9 +140,12 @@
           The only way to know is to try. That's why we offer a
           <b>free tutoring session</b> with no purchase necessary.
         </h1>
-        <button class="cta btn" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">
-          Schedule a free trial session
-        </button>
+        <div class="text-center">
+          <a id="request-trial" class="cta btn mb-2" href="#contact">
+            <!--<button class="cta btn" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/openpathtutoring/intro?hide_event_type_details=1&primary_color=8c90ed'});return false;">-->
+              Request a free trial session
+          </a>
+        </div>
         <div class="home-next">
           <a href="#benefits">
             <h2>
@@ -238,7 +241,7 @@
           <p class="mb-3">{{ form.first_name }}</p>
           <p class="mb-3">{{ form.email }}</p>
           <p class="mb-3">{{ form.phone }}</p>
-          <p class="mb-3">{{ form.subject }}</p>
+          <p class="mb-3">{{ form.subject(class='d-none') }}</p>
           <p class="mb-3">{{ form.message(rows='4') }}</p>
           {{ hcaptcha }}
           {{ form.submit }}
@@ -287,6 +290,11 @@
   </script>
 
   <script>
+    document.getElementById("request-trial").addEventListener("click", function () {
+      document.getElementById("subject").classList.remove('d-none');
+      document.getElementById("subject").setAttribute('value', 'Trial session request');
+    });
+
     function onSubmit(token) {
      document.getElementById("inquiry-form").submit();
     }

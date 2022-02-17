@@ -20,7 +20,7 @@ def verify_quote(quote):
     return message, author, quote_header
 
 
-def send_contact_email(user, message):
+def send_contact_email(user, message, subject):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -37,7 +37,7 @@ def send_contact_email(user, message):
                     "Email": app.config['MAIL_USERNAME']
                     }
                 ],
-                "Subject": "Open Path Tutoring: Message from " + user.first_name,
+                "Subject": "Open Path Tutoring: " + subject + " from " + user.first_name,
                 "ReplyTo": { "Email": user.email },
                 "TextPart": render_template('email/inquiry-form.txt',
                                          user=user, message=message),

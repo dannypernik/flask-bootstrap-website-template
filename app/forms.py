@@ -9,6 +9,7 @@ class InquiryForm(FlaskForm):
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone number (optional)', render_kw={"placeholder": "Phone number (optional)"})
+    subject = StringField('Subject', render_kw={'placeholder': 'Subject'}, default='Message')
     message = TextAreaField('Message', render_kw={"placeholder": "Message"}, \
         validators=[InputRequired()])
     submit = SubmitField('Submit')

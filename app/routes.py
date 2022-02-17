@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email import send_contact_email, send_confirmation_email, send_test_strategies_email, send_score_analysis_email, send_practice_test_email
+from app.email import send_contact_email, send_test_strategies_email, send_score_analysis_email, send_practice_test_email
 
 @app.before_request
 def before_request():
@@ -39,9 +39,10 @@ def index():
             return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
+        subject = form.subject.data
         db.session.add(user)
         db.session.commit()
-        send_contact_email(user, message)
+        send_contact_email(user, message, subject)
         flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
         return redirect(url_for('index', _anchor="home"))
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
