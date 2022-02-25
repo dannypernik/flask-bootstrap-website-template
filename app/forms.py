@@ -51,6 +51,8 @@ class ScoreAnalysisForm(FlaskForm):
         validators=[InputRequired()])
     student_last_name = StringField('Student\'s last name', render_kw={'placeholder': 'Student\'s last name'}, \
         validators=[InputRequired()])
+    school = StringField('School', render_kw={'placeholder': 'Student\'s school'}, \
+        validators=[InputRequired()])
     parent_first_name = StringField('Parent\'s first name', render_kw={'placeholder': 'Parent\'s first name'}, \
         validators=[InputRequired()])
     parent_email = StringField('Parent\'s email address', render_kw={'placeholder': 'Parent\'s email address'}, \

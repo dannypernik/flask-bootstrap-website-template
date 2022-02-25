@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Get your free practice {{ test }} score analysis</h1>
+  <p>
+    If your student took the practice {{ test }} offered by {{ school }}
+    in partnership with Open Path Tutoring, please submit the information
+    below to receive your free score analysis.
+  </p>
+
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        {{ form.student_first_name }}
+      </div>
+      <div class="col-12 col-sm-6">
+        {{ form.student_last_name }}
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col">
+        {{ form.parent_first_name }}
+        {{ form.parent_email }}
+        {{ form.school(value=school, class="d-none") }}
+        <p class="mt-2">
+          {{ form.submit }}
+        </p>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <div class="col">
+      <img class="img-fluid" src="{{ url_for('static', filename='img/sample-score-analysis.jpg') }}">
+    </div>
+  </div>
+{% endblock content %}

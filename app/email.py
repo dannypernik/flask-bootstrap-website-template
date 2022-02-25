@@ -130,7 +130,7 @@ def send_test_strategies_email(user, relation, student):
         print("Top 10 email failed to send with code " + str(result.status_code), result.reason)
 
 
-def send_score_analysis_email(student):
+def send_score_analysis_email(student, school):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -150,9 +150,9 @@ def send_score_analysis_email(student):
                 "Bcc": [{"Email": app.config['MAIL_USERNAME']}],
                 "Subject": "Email confirmation + a quote from Brene Brown",
                 "TextPart": render_template('email/score-analysis-email.txt',
-                                         student=student),
+                                         student=student, school=school),
                 "HTMLPart": render_template('email/score-analysis-email.html',
-                                         student=student)
+                                         student=student, school=school)
             }
         ]
     }
@@ -161,7 +161,7 @@ def send_score_analysis_email(student):
     if result.status_code is 200:
         print(result.json())
     else:
-        print("Confirmation email failed to send with code " + result.status_code, result.reason)
+        print("Score analysis confirmation email failed to send with code " + result.status_code, result.reason)
 
 
 

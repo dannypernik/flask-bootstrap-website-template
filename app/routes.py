@@ -103,13 +103,28 @@ def reviews():
 @app.route('/griffin', methods=['GET', 'POST'])
 def griffin():
     form = ScoreAnalysisForm()
+    school='Griffin School'
+    test='ACT'
     if form.validate_on_submit():
         student = Student(student_name=form.student_first_name.data, \
         last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
         parent_email=form.parent_email.data)
-        send_score_analysis_email(student)
+        send_score_analysis_email(student, school)
         return render_template('score-analysis-requested.html', email=form.parent_email.data)
-    return render_template('griffin.html', form=form)
+    return render_template('griffin.html', form=form, school=school, test=test)
+
+@app.route('/skybridge', methods=['GET', 'POST'])
+def skybridge():
+    form = ScoreAnalysisForm()
+    school='Skybridge Academy'
+    test='SAT'
+    if form.validate_on_submit():
+        student = Student(student_name=form.student_first_name.data, \
+        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
+        parent_email=form.parent_email.data)
+        send_score_analysis_email(student, school)
+        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+    return render_template('skybridge.html', form=form, school=school, test=test)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
