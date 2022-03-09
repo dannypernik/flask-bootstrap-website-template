@@ -268,8 +268,8 @@ def send_reminder_email(event, student, quote):
                     "You are welcome to reply to this email with any questions. " + \
                     "Please provide at least 24 hours notice when cancelling or rescheduling " + \
                     "in order to avoid being charged for the session. Note that you will not receive a " + \
-                    "reminder email for sessions scheduled less than 2 days in advance.<br/><br/>" + \
-                    "Thank you,<br/>Danny <br/><br/><br/>" + \
+                    "reminder email for sessions scheduled less than 2 days in advance. Thank you!" + \
+                    "<br/><br/><br/>" + \
                     quote_header + '"' + message + '"' + "<br/>&ndash; " + author
             }
         ]

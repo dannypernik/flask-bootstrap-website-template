@@ -59,10 +59,18 @@ def main():
     upcoming_start = (today + datetime.timedelta(hours=44)).isoformat() + 'Z'
     upcoming_end = (today + datetime.timedelta(hours=68)).isoformat() + 'Z'
     upcoming_start_formatted = datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d")
-    events_result = service.events().list(calendarId='primary', timeMin=upcoming_start,
-                                        timeMax=upcoming_end, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
+    calendars = ['primary', "n6dbnktn1mha2t4st36h6ljocg@group.calendar.google.com"]
+
+    events = []
+
+    for id in calendars:
+        cal_events = service.events().list(calendarId=id,
+            timeMin=upcoming_start, timeMax=upcoming_end,
+            singleEvents=True, orderBy='startTime').execute()
+        events_result = cal_events.get('items', [])
+
+        for e in range(len(events_result)):
+            events.append(events_result[e])
 
     reminder_list = []
     active_students = Student.query.filter_by(status='active')
@@ -82,11 +90,13 @@ def main():
     print("Session reminders for " + upcoming_start_formatted + ":")
 
     # Send reminder email to students ~2 days in advance
+    x = 0
     for event in events:
         for student in active_students:
             name = full_name(student)
             if " " + name + " and" in event.get('summary'):
                 reminder_list.append(name)
+                print(name)
                 send_reminder_email(event, student, quote)
 
     if len(reminder_list) is 0:
