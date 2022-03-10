@@ -244,6 +244,10 @@ def send_reminder_email(event, student, quote):
     else:
         timezone = "your"
 
+    location = event.get('location')
+    if location is None:
+        location = student.location
+
     data = {
         'Messages': [
             {
@@ -264,7 +268,7 @@ def send_reminder_email(event, student, quote):
                     ", this is an automated reminder that " + student.student_name + \
                     " is scheduled for a tutoring session on " + start_date + " from  " + \
                     start_display + " to " + end_display + " " + timezone + " time. <br/><br/>" + \
-                    "Location: " + event.get('location') + "<br/><br/>" + \
+                    "Location: " + location + "<br/><br/>" + \
                     "You are welcome to reply to this email with any questions. " + \
                     "Please provide at least 24 hours notice when cancelling or rescheduling " + \
                     "in order to avoid being charged for the session. Note that you will not receive a " + \

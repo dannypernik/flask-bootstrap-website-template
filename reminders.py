@@ -90,13 +90,11 @@ def main():
     print("Session reminders for " + upcoming_start_formatted + ":")
 
     # Send reminder email to students ~2 days in advance
-    x = 0
     for event in events:
         for student in active_students:
             name = full_name(student)
             if " " + name + " and" in event.get('summary'):
                 reminder_list.append(name)
-                print(name)
                 send_reminder_email(event, student, quote)
 
     if len(reminder_list) is 0:
