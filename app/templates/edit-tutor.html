@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block container %}
+  <div class="row justify-content-center">
+    <div class="col-11 col-sm-9 col-lg-6">
+      <h1>Edit tutor</h1>
+      <form class="" action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.first_name }}
+        {{ form.last_name }}
+        {{ form.email }}
+        {{ form.timezone }}
+        <div class="row mt-3 g-0">
+          <div class="col-6">
+            {{ form.status }}
+          </div>
+
+          <div class="col-6 text-end">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#delete-modal" data-text="delete">
+              <button type="button" class="btn sec alert">Delete</button>
+            </a>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <input type="submit" name="save" value="Save">
+        </div>
+
+        <div id="delete-modal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="modal-header mt-2">
+                    <h1 class="modal-title">Are you sure?</h1>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <button class="btn alert d-inline me-2" type="submit" name="delete">Delete {{ tutor.first_name }}</button>
+                  <button class="btn d-inline" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="text-center">
+        <a href="{{ url_for('tutors') }}">
+          <button class="btn sec">
+            Tutor list
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock container %}
+
+{% block end_scripts %}
+  <script src="{{ url_for('static', filename="js/bootstrap.js") }}"></script>
+{% endblock end_scripts %}

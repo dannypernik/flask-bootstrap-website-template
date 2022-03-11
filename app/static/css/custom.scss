@@ -620,7 +620,7 @@ div.alert {
 
 // Hidden fields to be revealed //
 
-#parent-info, #student-info, #add-student-form {
+#parent-info, #student-info, #add-student-form, #add-tutor-form {
   height: 0;
   transition: height 0.2s ease-out;
   overflow: hidden;

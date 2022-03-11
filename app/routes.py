@@ -1,9 +1,9 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
 from app import app, db, hcaptcha
-from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm
+from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Student
+from app.models import User, Student, Tutor
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_contact_email, send_test_strategies_email, send_score_analysis_email, send_practice_test_email
@@ -207,6 +207,64 @@ def edit_student(id):
         form.status.data=student.status
     return render_template('edit-student.html', title='Edit Student',
                            form=form, student=student)
+
+
+@app.route('/tutors', methods=['GET', 'POST'])
+@login_required
+def tutors():
+    form = TutorForm()
+    tutors = Tutor.query.order_by(Tutor.first_name).all()
+    statuses = Tutor.query.with_entities(Tutor.status).distinct()
+    if form.validate_on_submit():
+        tutor = Tutor(first_name=form.first_name.data, last_name=form.last_name.data, \
+        email=form.email.data, timezone=form.timezone.data)
+        try:
+            db.session.add(tutor)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash(tutor.first_name + ' could not be added', 'error')
+            return redirect(url_for('tutors'))
+        flash(tutor.first_name + ' added')
+        return redirect(url_for('tutors'))
+    return render_template('tutors.html', title="Tutors", form=form, tutors=tutors, statuses=statuses)
+
+@app.route('/edit_tutor/<int:id>', methods=['GET', 'POST'])
+def edit_tutor(id):
+    form = TutorForm()
+    tutor = Tutor.query.get_or_404(id)
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            tutor.first_name=form.first_name.data
+            tutor.last_name=form.last_name.data
+            tutor.email=form.email.data
+            tutor.timezone=form.timezone.data
+            tutor.status=form.status.data
+            try:
+                db.session.add(tutor)
+                db.session.commit()
+                flash(tutor.first_name + ' updated')
+            except:
+                db.session.rollback()
+                flash(tutor.first_name + ' could not be updated', 'error')
+                return redirect(url_for('tutors'))
+            finally:
+                db.session.close()
+        elif 'delete' in request.form:
+            db.session.delete(tutor)
+            db.session.commit()
+            flash('Deleted ' + tutor.first_name)
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('tutors'))
+    elif request.method == "GET":
+        form.first_name.data=tutor.first_name
+        form.last_name.data=tutor.last_name
+        form.email.data=tutor.email
+        form.timezone.data=tutor.timezone
+        form.status.data=tutor.status
+    return render_template('edit-tutor.html', title='Edit Tutor',
+                           form=form, tutor=tutor)
 
 
 @app.route('/signup', methods=['GET', 'POST'])

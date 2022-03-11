@@ -100,4 +100,17 @@ class StudentForm(FlaskForm):
     location = StringField('Location', render_kw={"placeholder": "Location"}, \
         validators=[InputRequired()])
     status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
+#    tutor_id = tutor
+    submit = SubmitField('Save')
+
+class TutorForm(FlaskForm):
+    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
+        validators=[InputRequired()])
+    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
+        validators=[InputRequired()])
+    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
+        validators=[InputRequired()])
+    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
     submit = SubmitField('Save')

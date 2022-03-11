@@ -37,6 +37,23 @@ class Student(db.Model):
     location = db.Column(db.String(128))
     status = db.Column(db.String(24), default = "active", index=True)
     pronouns = db.Column(db.String(32))
+    tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
+
+    def __repr__(self):
+        return '<Student {}>'.format(self.student_name + " " + self.last_name)
+
+
+class Tutor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(64), index=True)
+    last_name = db.Column(db.String(64))
+    email = db.Column(db.String(64), index=True)
+    timezone = db.Column(db.Integer)
+    status = db.Column(db.String(24), default = "active", index=True)
+    students = db.relationship('Student', backref='tutor', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Tutor {}>'.format(self.first_name + " " + self.last_name)
 
 
 @login.user_loader
