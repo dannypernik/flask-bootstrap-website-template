@@ -1,71 +1,84 @@
 {% extends "base.html" %}
 
 {% block content %}
-      <button id="add-student" class="m-0">+ Add student</button>
+  <div>
+    <button id="add-student" class="my-0 me-2 btn d-inline-block">+ Add student</button>
+    <a id="" href="{{ url_for('tutors') }}" class="m-0 btn py-2 sec">Tutors</a>
+  </div>
 
-      <form id="add-student-form" action="" method="post">
-        <h1 class="mb-3">Add student</h1>
 
-        {{ form.hidden_tag() }}
-        {{ form.student_name }}
-        {{ form.last_name }}
-        {{ form.student_email }}
-        {{ form.parent_name }}
-        {{ form.parent_email }}
-        {{ form.timezone }}
-        {{ form.location }}
-        {{ form.status(class="my-2") }}
-        {{ form.submit(class="mb-3") }}
-      </form>
-      {% for status in statuses %}
-          <h1 class="mt-3">{{ status[0].title() }} students</h1>
+  <form id="add-student-form" action="" method="post">
+    <h1 class="mb-3 d-inline-block">Add student</h1>
+    <a id="hide-form" href="#">Hide</a>
 
-          {% for s in students %}
-            {% if s.status == status[0] %}
-              <div class="row justify-content-centered">
-                <div class="col-9 col-md-10">
-                  <h2 class="my-1">{{ s.student_name }} {{ s.last_name }}</h2>
+    {{ form.hidden_tag() }}
+    {{ form.student_name }}
+    {{ form.last_name }}
+    {{ form.student_email }}
+    {{ form.parent_name }}
+    {{ form.parent_email }}
+    {{ form.timezone }}
+    {{ form.location }}
+    {{ form.status(class="my-2") }}
+    {{ form.tutor_id }}
+    {{ form.submit(class="mb-3") }}
+  </form>
+  {% for status in statuses %}
+      <h1 class="mt-3">{{ status[0].title() }} students</h1>
 
-                  {% if status[0] == 'active' %}
-                      <ul class="mb-3">
-                        <li>{{ s.student_email }}</li>
-                        <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
-                        <li>Timezone:
-                          {% if s.timezone == -2 %}
-                              Pacific
-                            {% elif s.timezone == -1 %}
-                                Mountain
-                            {% elif s.timezone == 0 %}
-                                Central
-                            {% elif s.timezone == 1 %}
-                                Eastern
-                            {% else %}
-                                {{ s.timezone }}
-                          {% endif %}
-                        </li>
-                        <li>Location: {{ s.location }}</li>
-                      </ul>
-                  {% endif %}
-                </div>
+      {% for s in students %}
+        {% if s.status == status[0] %}
+          <div class="row justify-content-centered">
+            <div class="col-9 col-md-10">
+              <h2 class="my-1">{{ s.student_name }} {{ s.last_name }}</h2>
 
-                <div class="col-3 col-md-2 text-end">
-                  <a class="edit btn sec" href="{{ url_for('edit_student', id=s.id) }}">
-                    Edit
-                  </a>
-                </div>
+              {% if status[0] == 'active' %}
+                  <ul class="mb-3">
+                    <li>{{ s.student_email }}</li>
+                    <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
+                    <li>Tutor: {{ s.tutor.first_name }} {{ s.tutor.last_name }}</li>
+                    <li>Timezone:
+                      {% if s.timezone == -2 %}
+                          Pacific
+                        {% elif s.timezone == -1 %}
+                            Mountain
+                        {% elif s.timezone == 0 %}
+                            Central
+                        {% elif s.timezone == 1 %}
+                            Eastern
+                        {% else %}
+                            {{ s.timezone }}
+                      {% endif %}
+                    </li>
+                    <li>Location: {{ s.location }}</li>
+                  </ul>
+              {% endif %}
             </div>
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
+
+            <div class="col-3 col-md-2 text-end">
+              <a class="edit btn sec" href="{{ url_for('edit_student', id=s.id) }}">
+                Edit
+              </a>
+            </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
 {% endblock content %}
 
 {% block end_scripts %}
   <script>
     const slideDown = element => element.style.height = `${element.scrollHeight}px`;
+    const slideUp = element => element.style.height = '0px';
 
     document.getElementById("add-student").addEventListener("click", function () {
-      this.style.display = "none";
+      this.parentElement.style.display = "none";
       slideDown(document.getElementById("add-student-form"));
+    });
+
+    document.getElementById("hide-form").addEventListener("click", function () {
+      slideUp(this.parentElement);
+      document.getElementById("add-student").parentElement.style.display = "block";
     });
   </script>
 {% endblock end_scripts %}

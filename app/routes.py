@@ -153,7 +153,8 @@ def students():
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
         student_email=form.student_email.data, parent_name=form.parent_name.data, \
-        parent_email=form.parent_email.data, timezone=form.timezone.data, location=form.location.data)
+        parent_email=form.parent_email.data, timezone=form.timezone.data, \
+        location=form.location.data, tutor_id=form.tutor_id.data)
         try:
             db.session.add(student)
             db.session.commit()
@@ -166,6 +167,7 @@ def students():
     return render_template('students.html', title="Students", form=form, students=students, statuses=statuses)
 
 @app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_student(id):
     form = StudentForm()
     student = Student.query.get_or_404(id)
@@ -179,6 +181,7 @@ def edit_student(id):
             student.timezone=form.timezone.data
             student.location=form.location.data
             student.status=form.status.data
+            student.tutor=form.tutor_id.data
             try:
                 db.session.add(student)
                 db.session.commit()
@@ -205,6 +208,7 @@ def edit_student(id):
         form.timezone.data=student.timezone
         form.location.data=student.location
         form.status.data=student.status
+        form.tutor_id.data=student.tutor
     return render_template('edit-student.html', title='Edit Student',
                            form=form, student=student)
 
@@ -230,6 +234,7 @@ def tutors():
     return render_template('tutors.html', title="Tutors", form=form, tutors=tutors, statuses=statuses)
 
 @app.route('/edit_tutor/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_tutor(id):
     form = TutorForm()
     tutor = Tutor.query.get_or_404(id)
@@ -263,8 +268,7 @@ def edit_tutor(id):
         form.email.data=tutor.email
         form.timezone.data=tutor.timezone
         form.status.data=tutor.status
-    return render_template('edit-tutor.html', title='Edit Tutor',
-                           form=form, tutor=tutor)
+    return render_template('edit-tutor.html', title='Edit Tutor', form=form, tutor=tutor)
 
 
 @app.route('/signup', methods=['GET', 'POST'])

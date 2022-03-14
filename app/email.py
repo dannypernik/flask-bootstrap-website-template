@@ -213,7 +213,7 @@ def send_practice_test_email(user, test, relation, student):
 
 
 
-def send_reminder_email(event, student, quote):
+def send_reminder_email(event, student, tutor, quote):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -223,13 +223,15 @@ def send_reminder_email(event, student, quote):
     start_time = event['start'].get('dateTime')
     start_date = dt.strftime(parse(start_time), format="%A, %b %-d, %Y")
     start_time_formatted = re.sub(r'([-+]\d{2}):(\d{2})(?:(\d{2}))?$', r'\1\2\3', start_time)
-    start_offset = dt.strptime(start_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
+
+    tz_difference = student.timezone - tutor.timezone
+
+    start_offset = dt.strptime(start_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = tz_difference)
     end_time = event['end'].get('dateTime')
     end_time_formatted = re.sub(r'([-+]\d{2}):(\d{2})(?:(\d{2}))?$', r'\1\2\3', end_time)
-    end_offset = dt.strptime(end_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = student.timezone)
+    end_offset = dt.strptime(end_time_formatted, "%Y-%m-%dT%H:%M:%S%z") + datetime.timedelta(hours = tz_difference)
     start_display = dt.strftime(start_offset, "%-I:%M%p").lower()
     end_display = dt.strftime(end_offset, "%-I:%M%p").lower()
-    start_central = dt.strftime(parse(start_time), "%-I:%M%p").lower()
 
     message, author, quote_header = verify_quote(quote)
 
@@ -248,6 +250,10 @@ def send_reminder_email(event, student, quote):
     if location is None:
         location = student.location
 
+    cc_email = [{ "Email": student.parent_email }]
+    if tutor.email is not None:
+        cc_email.append({ "Email": tutor.email })
+
     data = {
         'Messages': [
             {
@@ -263,11 +269,13 @@ def send_reminder_email(event, student, quote):
                     "Email": student.parent_email
                     }
                 ],
+                "Cc": cc_email,
                 "Subject": "Reminder for " + event.get('summary') + " + a quote from " + author,
                 "HTMLPart": "Hi " + student.student_name + " and " + student.parent_name + \
                     ", this is an automated reminder that " + student.student_name + \
-                    " is scheduled for a tutoring session on " + start_date + " from  " + \
-                    start_display + " to " + end_display + " " + timezone + " time. <br/><br/>" + \
+                    " is scheduled for a tutoring session with " + tutor.first_name + " " + tutor.last_name + \
+                    " on " + start_date + " from  " + start_display + " to " + end_display + " " + \
+                    timezone + " time. <br/><br/>" + \
                     "Location: " + location + "<br/><br/>" + \
                     "You are welcome to reply to this email with any questions. " + \
                     "Please provide at least 24 hours notice when cancelling or rescheduling " + \
@@ -282,9 +290,9 @@ def send_reminder_email(event, student, quote):
     result = mailjet.send.create(data=data)
 
     if result.status_code is 200:
-        print(student.student_name, student.last_name, start_central)
+        print(student.student_name, student.last_name, start_display, timezone)
     else:
-        print("Error for " + student.student_name + "with code " + str(result.status_code), result.reason)
+        print("Error for " + student.student_name + " with code " + str(result.status_code), result.reason)
 
 
 def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, unscheduled, paused, now, quote):

@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from app import app
 from dotenv import load_dotenv
-from app.models import Student
+from app.models import Student, Tutor
 from app.email import send_reminder_email, weekly_report_email
 import requests
 
@@ -93,9 +93,11 @@ def main():
     for event in events:
         for student in active_students:
             name = full_name(student)
+            print(type(student.tutor_id))
+            tutor = Tutor.query.get_or_404(student.tutor_id)
             if " " + name + " and" in event.get('summary'):
                 reminder_list.append(name)
-                send_reminder_email(event, student, quote)
+                send_reminder_email(event, student, tutor, quote)
 
     if len(reminder_list) is 0:
         print("No reminders sent.")
