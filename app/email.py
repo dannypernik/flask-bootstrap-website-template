@@ -251,6 +251,8 @@ def send_reminder_email(event, student, tutor, quote):
         location = student.location
 
     cc_email = [{ "Email": student.parent_email }]
+    if student.secondary_email is not None:
+        cc_email.append({ "Email": student.secondary_email })
     if tutor.email is not None:
         cc_email.append({ "Email": tutor.email })
 
@@ -271,16 +273,14 @@ def send_reminder_email(event, student, tutor, quote):
                 ],
                 "Cc": cc_email,
                 "Subject": "Reminder for " + event.get('summary') + " + a quote from " + author,
-                "HTMLPart": "Hi " + student.student_name + " and " + student.parent_name + \
-                    ", this is an automated reminder that " + student.student_name + \
-                    " is scheduled for a tutoring session with " + tutor.first_name + " " + tutor.last_name + \
-                    " on " + start_date + " from  " + start_display + " to " + end_display + " " + \
-                    timezone + " time. <br/><br/>" + \
-                    "Location: " + location + "<br/><br/>" + \
-                    "You are welcome to reply to this email with any questions. " + \
+                "HTMLPart": "Hi " + student.student_name + ", this is an automated reminder " + \
+                    " that you are scheduled for a tutoring session with " + tutor.first_name + " " + \
+                    tutor.last_name + " on " + start_date + " from  " + start_display + " to " + \
+                    end_display + " " + timezone + " time. <br/><br/>" + "Location: " + location + \
+                    "<br/><br/>" + "You are welcome to reply to this email with any questions. " + \
                     "Please provide at least 24 hours notice when cancelling or rescheduling " + \
-                    "in order to avoid being charged for the session. Note that you will not receive a " + \
-                    "reminder email for sessions scheduled less than 2 days in advance. Thank you!" + \
+                    "in order to avoid being charged for the session. Note that you will not receive " + \
+                    "a reminder email for sessions scheduled less than 2 days in advance. Thank you!" + \
                     "<br/><br/><br/>" + \
                     quote_header + '"' + message + '"' + "<br/>&ndash; " + author
             }

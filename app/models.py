@@ -33,6 +33,7 @@ class Student(db.Model):
     student_email = db.Column(db.String(64), index=True)
     parent_name = db.Column(db.String(64))
     parent_email = db.Column(db.String(64))
+    secondary_email = db.Column(db.String(64))
     timezone = db.Column(db.Integer)
     location = db.Column(db.String(128))
     status = db.Column(db.String(24), default = "active", index=True)

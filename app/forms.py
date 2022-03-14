@@ -103,6 +103,7 @@ class StudentForm(FlaskForm):
         validators=[InputRequired()])
     parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    secondary_email = StringField('Secondary Email (optional)', render_kw={"placeholder": "Secondary Email (optional)"})
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
         validators=[InputRequired()])
     location = StringField('Location', render_kw={"placeholder": "Location"}, \
