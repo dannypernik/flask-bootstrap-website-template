@@ -36,6 +36,9 @@
                   <ul class="mb-3">
                     <li>{{ s.student_email }}</li>
                     <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
+                    {% if s.secondary_email %}
+                      <li>Email 2: {{ s.secondary_email }}</li>
+                    {% endif %}
                     <li>Tutor: {{ s.tutor.first_name }} {{ s.tutor.last_name }}</li>
                     <li>Timezone:
                       {% if s.timezone == -2 %}
