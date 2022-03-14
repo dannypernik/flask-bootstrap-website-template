@@ -37,7 +37,7 @@ def upgrade():
         batch_op.alter_column('tutor_id',
                existing_type=mysql.INTEGER(display_width=11),
                nullable=True)
-        batch_op.create_foreign_key(None, 'tutor', ['tutor_id'], ['id'])
+        batch_op.create_foreign_key('fk_student_tutor_id_user', 'tutor', ['tutor_id'], ['id'])
 
     # ### end Alembic commands ###
 
