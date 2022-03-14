@@ -22,6 +22,7 @@ def upgrade():
         #batch_op.drop_index('ix_student_last_name')
         #batch_op.add_column(sa.Column('tutor_id', sa.Integer(), nullable=False))
         #batch_op.drop_constraint('fk_student_tutor_id_user', type_='foreignkey')
+        batch_op.create_index(batch_op.f('ix_student_tutor_id'), ['tutor_id'], unique=False)
         batch_op.create_foreign_key(batch_op.f('fk_student_tutor_id_user'), 'tutor', ['tutor_id'], ['id'])
 
     with op.batch_alter_table('user', schema=None) as batch_op:
