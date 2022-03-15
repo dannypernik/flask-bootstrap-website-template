@@ -154,7 +154,8 @@ def students():
         student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
         student_email=form.student_email.data, parent_name=form.parent_name.data, \
         parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
-        timezone=form.timezone.data, location=form.location.data, tutor_id=form.tutor_id.data)
+        timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
+        tutor=form.tutor_id.data)
         try:
             db.session.add(student)
             db.session.commit()
