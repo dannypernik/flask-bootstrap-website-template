@@ -93,7 +93,6 @@ def main():
     for event in events:
         for student in active_students:
             name = full_name(student)
-            print(type(student.tutor_id))
             tutor = Tutor.query.get_or_404(student.tutor_id)
             if " " + name + " and" in event.get('summary'):
                 reminder_list.append(name)
