@@ -153,8 +153,8 @@ def students():
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
         student_email=form.student_email.data, parent_name=form.parent_name.data, \
-        parent_email=form.parent_email.data, timezone=form.timezone.data, \
-        location=form.location.data, tutor_id=form.tutor_id.data)
+        parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
+        timezone=form.timezone.data, location=form.location.data, tutor_id=form.tutor_id.data)
         try:
             db.session.add(student)
             db.session.commit()
@@ -178,6 +178,7 @@ def edit_student(id):
             student.student_email=form.student_email.data
             student.parent_name=form.parent_name.data
             student.parent_email=form.parent_email.data
+            student.secondary_email=form.secondary_email.data
             student.timezone=form.timezone.data
             student.location=form.location.data
             student.status=form.status.data
@@ -205,6 +206,7 @@ def edit_student(id):
         form.student_email.data=student.student_email
         form.parent_name.data=student.parent_name
         form.parent_email.data=student.parent_email
+        form.secondary_email.data=student.secondary_email
         form.timezone.data=student.timezone
         form.location.data=student.location
         form.status.data=student.status
