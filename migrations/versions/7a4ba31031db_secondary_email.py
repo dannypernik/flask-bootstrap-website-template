@@ -1,7 +1,7 @@
 """secondary email
 
 Revision ID: 7a4ba31031db
-Revises: ebad7a91d4eb
+Revises: 590907060c6a
 Create Date: 2022-03-14 01:30:47.316413
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '7a4ba31031db'
-down_revision = 'ebad7a91d4eb'
+down_revision = '590907060c6a'
 branch_labels = None
 depends_on = None
 
