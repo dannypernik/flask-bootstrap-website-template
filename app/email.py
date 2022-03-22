@@ -251,9 +251,9 @@ def send_reminder_email(event, student, tutor, quote):
         location = student.location
 
     cc_email = [{ "Email": student.parent_email }]
-    if student.secondary_email is not None:
+    if student.secondary_email:
         cc_email.append({ "Email": student.secondary_email })
-    if tutor.email is not None:
+    if tutor.email:
         cc_email.append({ "Email": tutor.email })
 
     data = {
@@ -266,9 +266,6 @@ def send_reminder_email(event, student, tutor, quote):
                 "To": [
                     {
                     "Email": student.student_email
-                    },
-                    {
-                    "Email": student.parent_email
                     }
                 ],
                 "Cc": cc_email,
