@@ -112,42 +112,62 @@ def main():
 
     week_events_list = []
     unscheduled_list = []
+    outsourced_unscheduled_list = []
     paused_list = []
+    scheduled_students = set()
+    outsourced_scheduled_students = set()
 
     tutoring_hours = 0
-    active_count = 0
     session_count = 0
+    outsourced_hours = 0
+    outsourced_session_count = 0
 
 
     if day_of_week == "Friday":
         for e in week_events:
-            week_events_list.append(e.get('summary'))
-
-            # Get total duration of week's tutoring
-            for student in active_students:
-                name = full_name(student)
-                if " " + name + " and" in e.get('summary'):
-                    start = isoparse(e['start'].get('dateTime'))
-                    end = isoparse(e['end'].get('dateTime'))
-                    duration = str(end - start)
-                    (h, m, s) = duration.split(':')
-                    hours = int(h) + int(m) / 60 + int(s) / 3600
-                    tutoring_hours += hours
+            start = isoparse(e['start'].get('dateTime'))
+            end = isoparse(e['end'].get('dateTime'))
+            duration = str(end - start)
+            (h, m, s) = duration.split(':')
+            hours = int(h) + int(m) / 60 + int(s) / 3600
+            event_details = [e.get('summary'), hours]
+            week_events_list.append(event_details)
 
         #Get number of active students, number of sessions, and list of unscheduled students
         for student in active_students:
-            active_count += 1
             name = full_name(student)
-            count = sum(" " + name + " and" in e for e in week_events_list)
-            session_count += count
-            if count is 0:
+            name_check = " " + name + " and"
+            if any(name_check in nest[0] for nest in week_events_list):
+                print(name + " present")
+                for x in week_events_list:
+                    count = 0
+                    hours = 0
+                    if name_check in x[0]:
+                        count += 1
+                        hours += x[1]
+                        if student.tutor_id == 1:
+                            scheduled_students.add(name)
+                            session_count += count
+                            tutoring_hours += hours
+                        else:
+                            outsourced_scheduled_students.add(name)
+                            outsourced_session_count += count
+                            outsourced_hours += hours
+            elif student.tutor_id == 1:
                 unscheduled_list.append(name)
+                print(name + " unscheduled for Danny")
+            else:
+                outsourced_unscheduled_list.append(name)
+                print(name + " unscheduled for other")
 
         for student in paused_students:
             name = full_name(student)
             paused_list.append(name)
 
-        weekly_report_email(str(session_count), str(tutoring_hours), str(active_count), unscheduled_list, paused_list, today, quote)
+        weekly_report_email(str(session_count), str(tutoring_hours), str(len(scheduled_students)), \
+            unscheduled_list, str(outsourced_session_count), str(outsourced_hours), \
+            str(len(outsourced_scheduled_students)), outsourced_unscheduled_list, \
+            paused_list, today, quote)
 
 
         # Call the Sheets API

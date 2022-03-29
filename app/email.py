@@ -292,7 +292,11 @@ def send_reminder_email(event, student, tutor, quote):
         print("Error for " + student.student_name + " with code " + str(result.status_code), result.reason)
 
 
-def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, unscheduled, paused, now, quote):
+def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_student_count, \
+    unscheduled_list, outsourced_session_count, outsourced_hours, \
+    outsourced_scheduled_student_count, outsourced_unscheduled_list, \
+    paused, now, quote):
+
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -302,8 +306,15 @@ def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, un
     start_date = dt.strftime(parse(start), format="%b %-d")
     end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
     end_date = dt.strftime(parse(end), format="%b %-d")
-    unscheduled_students = ', '.join(unscheduled)
+    unscheduled_students = ', '.join(unscheduled_list)
+    if unscheduled_students == '':
+        unscheduled_students = "None"
+    outsourced_unscheduled_students = ', '.join(outsourced_unscheduled_list)
+    if outsourced_unscheduled_students == '':
+        outsourced_unscheduled_students = "None"
     paused_students = ', '.join(paused)
+    if paused_students == '':
+        paused_students = "None"
 
     message, author, quote_header = verify_quote(quote)
 
@@ -326,10 +337,12 @@ def weekly_report_email(scheduled_sessions, scheduled_hours, active_students, un
                     }
                 ],
                 "Subject": "Tutoring schedule summary for " + start_date + " to " + end_date,
-                "HTMLPart": "Scheduled sessions: " + scheduled_sessions + "<br/>" + \
-                    "Scheduled hours: " + scheduled_hours + \
-                    "<br/>Active students: " + active_students + \
-                    "<br/><br/>Unscheduled students: " + unscheduled_students + \
+                "HTMLPart": "A total of " + scheduled_hours + " hours (" + scheduled_session_count + " sessions) " + \
+                    "are scheduled with Danny for " + scheduled_student_count + " students next week. <br/><br/>" + \
+                    "An additional " + outsourced_hours + " hours (" + outsourced_session_count + " sessions) " + \
+                    "are scheduled with other tutors for " + outsourced_scheduled_student_count + " students. " + \
+                    "<br/><br/>Unscheduled active students for Danny: " + unscheduled_students + \
+                    "<br/>Unscheduled active students for other tutors: " + outsourced_unscheduled_students + \
                     "<br/>Paused students: " + paused_students + \
                     "<br/><br/><br/>" + quote_header + '"' + message + '"' + "<br/>&ndash; " + author
             }
