@@ -336,7 +336,7 @@ def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_stud
                     "Email": app.config['DAD_EMAIL']
                     }
                 ],
-                "Subject": "Tutoring schedule summary for " + start_date + " to " + end_date,
+                "Subject": "Weekly tutoring report for " + start_date + " to " + end_date,
                 "HTMLPart": "A total of " + scheduled_hours + " hours (" + scheduled_session_count + " sessions) " + \
                     "are scheduled with Danny for " + scheduled_student_count + " students next week. <br/><br/>" + \
                     "An additional " + outsourced_hours + " hours (" + outsourced_session_count + " sessions) " + \
