@@ -96,7 +96,7 @@ def main():
             tutor = Tutor.query.get_or_404(student.tutor_id)
             if " " + name + " and" in event.get('summary'):
                 reminder_list.append(name)
-                send_reminder_email(event, student, tutor, quote)
+                #send_reminder_email(event, student, tutor, quote)
 
     if len(reminder_list) is 0:
         print("No reminders sent.")
@@ -122,16 +122,16 @@ def main():
     outsourced_hours = 0
     outsourced_session_count = 0
 
-
-    if day_of_week == "Friday":
+    if day_of_week == "Wednesday":
         for e in week_events:
-            start = isoparse(e['start'].get('dateTime'))
-            end = isoparse(e['end'].get('dateTime'))
-            duration = str(end - start)
-            (h, m, s) = duration.split(':')
-            hours = int(h) + int(m) / 60 + int(s) / 3600
-            event_details = [e.get('summary'), hours]
-            week_events_list.append(event_details)
+            if e['start'].get('dateTime'):
+                start = isoparse(e['start'].get('dateTime'))
+                end = isoparse(e['end'].get('dateTime'))
+                duration = str(end - start)
+                (h, m, s) = duration.split(':')
+                hours = int(h) + int(m) / 60 + int(s) / 3600
+                event_details = [e.get('summary'), hours]
+                week_events_list.append(event_details)
 
         #Get number of active students, number of sessions, and list of unscheduled students
         for student in active_students:
