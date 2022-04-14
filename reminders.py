@@ -122,7 +122,7 @@ def main():
     outsourced_hours = 0
     outsourced_session_count = 0
 
-    if day_of_week == "Wednesday":
+    if day_of_week == "Friday":
         for e in week_events:
             if e['start'].get('dateTime'):
                 start = isoparse(e['start'].get('dateTime'))
