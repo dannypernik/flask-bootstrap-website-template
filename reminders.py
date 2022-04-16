@@ -96,7 +96,7 @@ def main():
             tutor = Tutor.query.get_or_404(student.tutor_id)
             if " " + name + " and" in event.get('summary'):
                 reminder_list.append(name)
-                #send_reminder_email(event, student, tutor, quote)
+                send_reminder_email(event, student, tutor, quote)
 
     if len(reminder_list) is 0:
         print("No reminders sent.")
