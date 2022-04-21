@@ -105,10 +105,15 @@ def main():
 
     day_of_week = datetime.datetime.strftime(parse(now), format="%A")
     week_end = (today + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
-    week_events_result = service.events().list(calendarId='primary', timeMin=upcoming_start,
-                                        timeMax=week_end, singleEvents=True,
-                                        orderBy='startTime').execute()
-    week_events = week_events_result.get('items', [])
+    week_events = []
+
+    for id in calendars:
+        cal_week_events = service.events().list(calendarId=id, timeMin=upcoming_start,
+            timeMax=week_end, singleEvents=True, orderBy='startTime').execute()
+        week_events_result = cal_week_events.get('items', [])
+
+        for e in range(len(week_events_result)):
+            week_events.append(week_events_result[e])
 
     week_events_list = []
     unscheduled_list = []
