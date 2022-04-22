@@ -143,7 +143,7 @@ def main():
             name = full_name(student)
             name_check = " " + name + " and"
             if any(name_check in nest[0] for nest in week_events_list):
-                print(name + " present")
+                print(name + " scheduled with " + student.tutor.first_name)
                 for x in week_events_list:
                     count = 0
                     hours = 0
@@ -163,7 +163,7 @@ def main():
                 print(name + " unscheduled for Danny")
             else:
                 outsourced_unscheduled_list.append(name)
-                print(name + " unscheduled for other")
+                print(name + " unscheduled for " + student.tutor.first_name)
 
         for student in paused_students:
             name = full_name(student)
