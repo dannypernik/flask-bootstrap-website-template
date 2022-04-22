@@ -160,10 +160,10 @@ def main():
                             outsourced_hours += hours
             elif student.tutor_id == 1:
                 unscheduled_list.append(name)
-                print(name + " unscheduled for Danny")
+                print(name + " unscheduled with Danny")
             else:
                 outsourced_unscheduled_list.append(name)
-                print(name + " unscheduled for " + student.tutor.first_name)
+                print(name + " unscheduled with " + student.tutor.first_name)
 
         for student in paused_students:
             name = full_name(student)
