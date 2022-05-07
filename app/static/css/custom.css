@@ -6533,7 +6533,7 @@ div.alert {
   margin-bottom: 2rem;
 }
 
-#parent-info, #student-info, #add-student-form, #add-tutor-form {
+.hidden-form, #parent-info, #student-info {
   height: 0;
   transition: height 0.2s ease-out;
   overflow: hidden;

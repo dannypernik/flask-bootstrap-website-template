@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, IntegerField, RadioField, SelectField
+from wtforms.fields.html5 import DateField
 from wtforms.validators import ValidationError, InputRequired, DataRequired, Email, EqualTo, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from app.models import User, Student, Tutor
+from app.models import User, Student, Tutor, TestDate
 
 class InquiryForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
@@ -123,4 +124,14 @@ class TutorForm(FlaskForm):
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
         validators=[InputRequired()])
     status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
+    submit = SubmitField('Save')
+
+
+class TestDateForm(FlaskForm):
+    test = SelectField('Test', render_kw={'placeholder': 'Test'}, choices=[('sat','SAT'),('act','ACT')], \
+        validators=[InputRequired()])
+    date = DateField('Test date', format='%Y-%m-%d', validators=[InputRequired()])
+    reg_date = DateField('Registration deadline', format='%Y-%m-%d')
+    late_date = DateField('Late deadline', format='%Y-%m-%d')
+    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('cancelled','Cancelled')])
     submit = SubmitField('Save')

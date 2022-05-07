@@ -1,9 +1,9 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
 from app import app, db, hcaptcha
-from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm
+from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm, TestDateForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Student, Tutor
+from app.models import User, Student, Tutor, TestDate
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_contact_email, send_test_strategies_email, send_score_analysis_email, send_practice_test_email
@@ -228,11 +228,11 @@ def tutors():
         try:
             db.session.add(tutor)
             db.session.commit()
+            flash(tutor.first_name + ' added')
         except:
             db.session.rollback()
             flash(tutor.first_name + ' could not be added', 'error')
             return redirect(url_for('tutors'))
-        flash(tutor.first_name + ' added')
         return redirect(url_for('tutors'))
     return render_template('tutors.html', title="Tutors", form=form, tutors=tutors, statuses=statuses)
 
@@ -272,6 +272,66 @@ def edit_tutor(id):
         form.timezone.data=tutor.timezone
         form.status.data=tutor.status
     return render_template('edit-tutor.html', title='Edit Tutor', form=form, tutor=tutor)
+
+
+@app.route('/test_dates', methods=['GET', 'POST'])
+@login_required
+def test_dates():
+    form = TestDateForm()
+    tests = TestDate.query.with_entities(TestDate.test).distinct()
+    dates = TestDate.query.order_by(TestDate.date).all()
+    if form.validate_on_submit():
+        print(form.test.data, form.date.data)
+        date = TestDate(test=form.test.data, date=form.date.data, \
+        reg_date=form.reg_date.data, late_date=form.late_date.data, status=form.status.data)
+        try:
+            db.session.add(date)
+            db.session.commit()
+            flash(date.date.strftime('%b %-d') + ' added')
+        except:
+            db.session.rollback()
+            flash(date.date.strftime('%b %-d') + ' could not be added', 'error')
+            return redirect(url_for('test_dates'))
+        return redirect(url_for('test_dates'))
+    return render_template('test-dates.html', title="Test dates", form=form, dates=dates, tests=tests)
+
+
+@app.route('/edit_date/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_date(id):
+    form = TestDateForm()
+    date = TestDate.query.get_or_404(id)
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            date.test=form.test.data
+            date.date=form.date.data
+            date.reg_date=form.reg_date.data
+            date.late_date=form.late_date.data
+            date.status=form.status.data
+            try:
+                db.session.add(date)
+                db.session.commit()
+                flash(date.date.strftime('%b %-d') + ' updated')
+            except:
+                db.session.rollback()
+                flash(date.date.strftime('%b %-d') + ' could not be updated', 'error')
+                return redirect(url_for('test_dates'))
+            finally:
+                db.session.close()
+        elif 'delete' in request.form:
+            db.session.delete(date)
+            db.session.commit()
+            flash('Deleted ' + date.date.strftime('%b %-d'))
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('test_dates'))
+    elif request.method == "GET":
+        form.test.data=date.test
+        form.date.data=date.date
+        form.reg_date.data=date.reg_date
+        form.late_date.data=date.late_date
+        form.status.data=date.status
+    return render_template('edit-date.html', title='Edit date', form=form, date=date)
 
 
 @app.route('/signup', methods=['GET', 'POST'])

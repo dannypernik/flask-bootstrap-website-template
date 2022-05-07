@@ -57,6 +57,18 @@ class Tutor(db.Model):
         return '<Tutor {}>'.format(self.first_name + " " + self.last_name)
 
 
+class TestDate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date)
+    test = db.Column(db.String(24))
+    status = db.Column(db.String(24), default = "confirmed")
+    reg_date = db.Column(db.Date)
+    late_date = db.Column(db.Date)
+
+    def __repr__(self):
+        return '<TestDate {}>'.format(self.date)
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
