@@ -9,6 +9,7 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 from flask_bootstrap import Bootstrap
 from flask_hcaptcha import hCaptcha
+from functools import wraps
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -21,6 +22,19 @@ hcaptcha = hCaptcha(app)
 
 from app import routes, models, errors
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+def login_required(role="ANY"):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            if not current_user.is_authenticated():
+              return login.unauthorized()
+            if ((current_user.role != role) and (role != "ANY")):
+                return login.unauthorized()
+            return fn(*args, **kwargs)
+        return decorated_view
+    return wrapper
+
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
