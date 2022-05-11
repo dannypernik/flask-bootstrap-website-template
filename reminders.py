@@ -62,59 +62,9 @@ def main():
     calendars = ['primary', "n6dbnktn1mha2t4st36h6ljocg@group.calendar.google.com"]
 
     events = []
-
-    for id in calendars:
-        cal_events = service.events().list(calendarId=id,
-            timeMin=upcoming_start, timeMax=upcoming_end,
-            singleEvents=True, orderBy='startTime').execute()
-        events_result = cal_events.get('items', [])
-
-        for e in range(len(events_result)):
-            events.append(events_result[e])
-
-    reminder_list = []
-    active_students = Student.query.filter_by(status='active')
-    paused_students = Student.query.filter_by(status='paused')
-
-    # Use fallback quote if request fails
-    quote = None
-    quote = requests.get("https://zenquotes.io/api/today")
-
-    def full_name(student):
-        if student.last_name == "":
-            name = student.student_name
-        else:
-            name = student.student_name + " " + student.last_name
-        return name
-
-    print("Session reminders for " + upcoming_start_formatted + ":")
-
-    # Send reminder email to students ~2 days in advance
-    for event in events:
-        for student in active_students:
-            name = full_name(student)
-            tutor = Tutor.query.get_or_404(student.tutor_id)
-            if " " + name + " and" in event.get('summary'):
-                reminder_list.append(name)
-                send_reminder_email(event, student, tutor, quote)
-
-    if len(reminder_list) is 0:
-        print("No reminders sent.")
-    print("\n\n" + quote.json()[0]['q'] + " - " + quote.json()[0]['a'] + "\n\n")
-
-
     day_of_week = datetime.datetime.strftime(parse(now), format="%A")
     week_end = (today + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
     week_events = []
-
-    for id in calendars:
-        cal_week_events = service.events().list(calendarId=id, timeMin=upcoming_start,
-            timeMax=week_end, singleEvents=True, orderBy='startTime').execute()
-        week_events_result = cal_week_events.get('items', [])
-
-        for e in range(len(week_events_result)):
-            week_events.append(week_events_result[e])
-
     week_events_list = []
     unscheduled_list = []
     outsourced_unscheduled_list = []
@@ -127,17 +77,76 @@ def main():
     outsourced_hours = 0
     outsourced_session_count = 0
 
-    if day_of_week == "Friday":
-        for e in week_events:
-            if e['start'].get('dateTime'):
-                start = isoparse(e['start'].get('dateTime'))
-                end = isoparse(e['end'].get('dateTime'))
-                duration = str(end - start)
-                (h, m, s) = duration.split(':')
-                hours = int(h) + int(m) / 60 + int(s) / 3600
-                event_details = [e.get('summary'), hours]
-                week_events_list.append(event_details)
+    reminder_list = []
+    active_students = Student.query.filter_by(status='active')
+    paused_students = Student.query.filter_by(status='paused')
+    students = Student.query.all()
 
+    # Use fallback quote if request fails
+    quote = None
+    quote = requests.get("https://zenquotes.io/api/today")
+
+
+    def full_name(student):
+        if student.last_name == "":
+            name = student.student_name
+        else:
+            name = student.student_name + " " + student.last_name
+        return name
+
+
+    for id in calendars:
+        cal_events = service.events().list(calendarId=id,
+            timeMin=upcoming_start, timeMax=upcoming_end,
+            singleEvents=True, orderBy='startTime').execute()
+        events_result = cal_events.get('items', [])
+
+        for e in range(len(events_result)):
+            events.append(events_result[e])
+
+        cal_week_events = service.events().list(calendarId=id, timeMin=upcoming_start,
+            timeMax=week_end, singleEvents=True, orderBy='startTime').execute()
+        week_events_result = cal_week_events.get('items', [])
+
+        for e in range(len(week_events_result)):
+            week_events.append(week_events_result[e])
+
+
+    print("Session reminders for " + upcoming_start_formatted + ":")
+
+    # Send reminder email to students ~2 days in advance
+    for event in events:
+        for student in active_students:
+            name = full_name(student)
+            tutor = Tutor.query.get_or_404(student.tutor_id)
+            if " " + name + " and" in event.get('summary'):
+                reminder_list.append(name)
+                send_reminder_email(event, student, tutor, quote)
+
+
+    for e in week_events:
+        if e['start'].get('dateTime'):
+            start = isoparse(e['start'].get('dateTime'))
+            end = isoparse(e['end'].get('dateTime'))
+            duration = str(end - start)
+            (h, m, s) = duration.split(':')
+            hours = int(h) + int(m) / 60 + int(s) / 3600
+            event_details = [e.get('summary'), hours]
+            week_events_list.append(event_details)
+
+    for student in students:
+        name = full_name(student)
+        name_check = " " + name + " and"
+
+        if student.status != 'active' and any(name_check in nest[0] for nest in week_events_list):
+            print(name + ' is listed as ' + student.status + ' and is on the schedule.')
+
+    if len(reminder_list) == 0:
+        print("No reminders sent.")
+    print("\n\n" + quote.json()[0]['q'] + " - " + quote.json()[0]['a'] + "\n\n")
+
+
+    if day_of_week == "Friday":
         #Get number of active students, number of sessions, and list of unscheduled students
         for student in active_students:
             name = full_name(student)
