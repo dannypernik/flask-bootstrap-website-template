@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     about_me = db.Column(db.String(500))
     last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
+    is_admin = db.Column(db.Boolean)
 
     def __repr__(self):
         return '<User {}>'.format(self.email)

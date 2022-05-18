@@ -4,7 +4,7 @@ from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 from flask_bootstrap import Bootstrap
@@ -22,19 +22,6 @@ hcaptcha = hCaptcha(app)
 
 from app import routes, models, errors
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-
-def login_required(role="ANY"):
-    def wrapper(fn):
-        @wraps(fn)
-        def decorated_view(*args, **kwargs):
-            if not current_user.is_authenticated():
-              return login.unauthorized()
-            if ((current_user.role != role) and (role != "ANY")):
-                return login.unauthorized()
-            return fn(*args, **kwargs)
-        return decorated_view
-    return wrapper
-
 
 if not app.debug:
     if app.config['MAIL_SERVER']:

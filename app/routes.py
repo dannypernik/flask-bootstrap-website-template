@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
-from app import app, db, hcaptcha
+from app import app, db, login, hcaptcha
 from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm, TestDateForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Student, Tutor, TestDate
@@ -19,13 +19,6 @@ def dir_last_updated(folder):
                    for root_path, dirs, files in os.walk(folder)
                    for f in files))
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicons/favicon.ico')
-
-@app.route('/manifest.webmanifest')
-def webmanifest():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicons/manifest.webmanifest')
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -48,50 +41,6 @@ def index():
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
 
 
-@app.route('/practice_test', methods=['GET', 'POST'])
-def practice_test():
-    form = PracticeTestForm()
-    if form.validate_on_submit():
-        relation = form.relation.data
-        if relation == 'student':
-            user = Student(student_email=form.email.data, parent_name=form.parent_name.data, \
-            parent_email=form.parent_email.data)
-            student = form.first_name.data
-        elif relation == 'parent':
-            user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
-            student = form.student_name.data
-        test = form.test.data
-        send_practice_test_email(user, test, relation, student)
-        return render_template('practice-test-sent.html', test=test, email=form.email.data, relation=relation)
-    return render_template('practice-test.html', form=form)
-
-@app.route('/test_strategies', methods=['GET', 'POST'])
-def test_strategies():
-    form = TestStrategiesForm()
-    if form.validate_on_submit():
-        relation = form.relation.data
-        if relation == 'student':
-            user = Student(student_email=form.email.data, parent_name=form.parent_name.data, \
-            parent_email=form.parent_email.data)
-            student = form.first_name.data
-        elif relation == 'parent':
-            user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
-            student = form.student_name.data
-        send_test_strategies_email(user, relation, student)
-        return render_template('test-strategies-sent.html', email=form.email.data, relation=relation)
-    return render_template('test-strategies.html', form=form)
-
-
-@app.route("/download/<filename>")
-def download_file (filename):
-    path = os.path.join(app.root_path, 'static/files/')
-    return send_from_directory(path, filename, as_attachment=False)
-
-
-@app.route('/practice_test_sent')
-def free_test_sent():
-    return render_template('practice-test-sent.html')
-
 @app.route('/about')
 def about():
     return render_template('about.html', title="About")
@@ -100,31 +49,27 @@ def about():
 def reviews():
     return render_template('reviews.html', title="Reviews")
 
-@app.route('/griffin', methods=['GET', 'POST'])
-def griffin():
-    form = ScoreAnalysisForm()
-    school='Griffin School'
-    test='ACT'
-    if form.validate_on_submit():
-        student = Student(student_name=form.student_first_name.data, \
-        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
-        parent_email=form.parent_email.data)
-        send_score_analysis_email(student, school)
-        return render_template('score-analysis-requested.html', email=form.parent_email.data)
-    return render_template('griffin.html', form=form, school=school, test=test)
 
-@app.route('/skybridge', methods=['GET', 'POST'])
-def skybridge():
-    form = ScoreAnalysisForm()
-    school='Skybridge Academy'
-    test='SAT'
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if current_user.is_authenticated:
+        flash('You are already signed in')
+        return redirect(url_for('index'))
+    form = SignupForm()
     if form.validate_on_submit():
-        student = Student(student_name=form.student_first_name.data, \
-        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
-        parent_email=form.parent_email.data)
-        send_score_analysis_email(student, school)
-        return render_template('score-analysis-requested.html', email=form.parent_email.data)
-    return render_template('skybridge.html', form=form, school=school, test=test)
+        username_check = User.query.filter_by(username=form.email.data).first()
+        if username_check is not None:
+            flash('User already exists', 'error')
+            return redirect(url_for('signup'))
+        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
+        email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("You are now registered. We're glad you're here!")
+        return redirect(url_for('index'))
+    return render_template('ignup.html', title='Sign up', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -140,9 +85,16 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('students')
+            next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title="Login", form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 @app.route('/students', methods=['GET', 'POST'])
 @login_required
@@ -150,22 +102,27 @@ def students():
     form = StudentForm()
     students = Student.query.order_by(Student.student_name).all()
     statuses = Student.query.with_entities(Student.status).distinct()
-    if form.validate_on_submit():
-        student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
-        student_email=form.student_email.data, parent_name=form.parent_name.data, \
-        parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
-        timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
-        tutor=form.tutor_id.data)
-        try:
-            db.session.add(student)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            flash(student.student_name + ' could not be added', 'error')
+    if current_user.is_admin:
+        if form.validate_on_submit():
+            student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
+            student_email=form.student_email.data, parent_name=form.parent_name.data, \
+            parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
+            timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
+            tutor=form.tutor_id.data)
+            try:
+                db.session.add(student)
+                db.session.commit()
+            except:
+                db.session.rollback()
+                flash(student.student_name + ' could not be added', 'error')
+                return redirect(url_for('students'))
+            flash(student.student_name + ' added')
             return redirect(url_for('students'))
-        flash(student.student_name + ' added')
-        return redirect(url_for('students'))
-    return render_template('students.html', title="Students", form=form, students=students, statuses=statuses)
+        return render_template('students.html', title="Students", form=form, students=students, statuses=statuses)
+    else:
+        flash('You must have administrator privileges to access this page.', 'error')
+        logout_user()
+        return redirect(url_for('login'))
 
 @app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -334,30 +291,77 @@ def edit_date(id):
     return render_template('edit-date.html', title='Edit date', form=form, date=date)
 
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if current_user.is_authenticated:
-        flash('You are already signed in')
-        return redirect(url_for('index'))
-    form = SignupForm()
+@app.route('/griffin', methods=['GET', 'POST'])
+def griffin():
+    form = ScoreAnalysisForm()
+    school='Griffin School'
+    test='ACT'
     if form.validate_on_submit():
-        username_check = User.query.filter_by(username=form.email.data).first()
-        if username_check is not None:
-            flash('User already exists', 'error')
-            return redirect(url_for('signup'))
-        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-        email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("You are now registered. We're glad you're here!")
-        return redirect(url_for('index'))
-    return render_template('signup.html', title='Sign up', form=form)
+        student = Student(student_name=form.student_first_name.data, \
+        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
+        parent_email=form.parent_email.data)
+        send_score_analysis_email(student, school)
+        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+    return render_template('griffin.html', form=form, school=school, test=test)
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
+@app.route('/skybridge', methods=['GET', 'POST'])
+def skybridge():
+    form = ScoreAnalysisForm()
+    school='Skybridge Academy'
+    test='SAT'
+    if form.validate_on_submit():
+        student = Student(student_name=form.student_first_name.data, \
+        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
+        parent_email=form.parent_email.data)
+        send_score_analysis_email(student, school)
+        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+    return render_template('skybridge.html', form=form, school=school, test=test)
+
+
+@app.route('/practice_test', methods=['GET', 'POST'])
+def practice_test():
+    form = PracticeTestForm()
+    if form.validate_on_submit():
+        relation = form.relation.data
+        if relation == 'student':
+            user = Student(student_email=form.email.data, parent_name=form.parent_name.data, \
+            parent_email=form.parent_email.data)
+            student = form.first_name.data
+        elif relation == 'parent':
+            user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
+            student = form.student_name.data
+        test = form.test.data
+        send_practice_test_email(user, test, relation, student)
+        return render_template('practice-test-sent.html', test=test, email=form.email.data, relation=relation)
+    return render_template('practice-test.html', form=form)
+
+
+@app.route('/test_strategies', methods=['GET', 'POST'])
+def test_strategies():
+    form = TestStrategiesForm()
+    if form.validate_on_submit():
+        relation = form.relation.data
+        if relation == 'student':
+            user = Student(student_email=form.email.data, parent_name=form.parent_name.data, \
+            parent_email=form.parent_email.data)
+            student = form.first_name.data
+        elif relation == 'parent':
+            user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
+            student = form.student_name.data
+        send_test_strategies_email(user, relation, student)
+        return render_template('test-strategies-sent.html', email=form.email.data, relation=relation)
+    return render_template('test-strategies.html', form=form)
+
+
+@app.route("/download/<filename>")
+def download_file (filename):
+    path = os.path.join(app.root_path, 'static/files/')
+    return send_from_directory(path, filename, as_attachment=False)
+
+@app.route('/practice_test_sent')
+def free_test_sent():
+    return render_template('practice-test-sent.html')
+
 
 @app.route('/profile/<username>')
 @login_required
@@ -368,6 +372,15 @@ def profile(username):
         {'author': user, 'body': 'Test post #2'}
     ]
     return render_template('profile.html', user=user, posts=posts)
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicons/favicon.ico')
+
+@app.route('/manifest.webmanifest')
+def webmanifest():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicons/manifest.webmanifest')
 
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
