@@ -2,11 +2,12 @@ import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
 from app import app, db, login, hcaptcha
 from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm, TestDateForm
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, Student, Tutor, TestDate
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_contact_email, send_test_strategies_email, send_score_analysis_email, send_practice_test_email
+from functools import wraps
 
 @app.before_request
 def before_request():
@@ -18,6 +19,18 @@ def dir_last_updated(folder):
     return str(max(os.path.getmtime(os.path.join(root_path, f))
                    for root_path, dirs, files in os.walk(folder)
                    for f in files))
+
+def admin_required(f):
+    @login_required
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if current_user.is_admin:
+            return f(*args, **kwargs)
+        else:
+            flash('You must have administrator privileges to access this page.', 'error')
+            logout_user()
+            return redirect(login_url('login', next_url=request.url))
+    return wrap
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -83,10 +96,10 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
+        next = request.args.get('next')
+        if not next or url_parse(next).netloc != '':
+            next = url_for('students')
+        return redirect(next)
     return render_template('login.html', title="Login", form=form)
 
 
@@ -97,35 +110,30 @@ def logout():
 
 
 @app.route('/students', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def students():
     form = StudentForm()
     students = Student.query.order_by(Student.student_name).all()
     statuses = Student.query.with_entities(Student.status).distinct()
-    if current_user.is_admin:
-        if form.validate_on_submit():
-            student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
-            student_email=form.student_email.data, parent_name=form.parent_name.data, \
-            parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
-            timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
-            tutor=form.tutor_id.data)
-            try:
-                db.session.add(student)
-                db.session.commit()
-            except:
-                db.session.rollback()
-                flash(student.student_name + ' could not be added', 'error')
-                return redirect(url_for('students'))
-            flash(student.student_name + ' added')
+    if form.validate_on_submit():
+        student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
+        student_email=form.student_email.data, parent_name=form.parent_name.data, \
+        parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
+        timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
+        tutor=form.tutor_id.data)
+        try:
+            db.session.add(student)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash(student.student_name + ' could not be added', 'error')
             return redirect(url_for('students'))
-        return render_template('students.html', title="Students", form=form, students=students, statuses=statuses)
-    else:
-        flash('You must have administrator privileges to access this page.', 'error')
-        logout_user()
-        return redirect(url_for('login'))
+        flash(student.student_name + ' added')
+        return redirect(url_for('students'))
+    return render_template('students.html', title="Students", form=form, students=students, statuses=statuses)
 
 @app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def edit_student(id):
     form = StudentForm()
     student = Student.query.get_or_404(id)
@@ -174,7 +182,7 @@ def edit_student(id):
 
 
 @app.route('/tutors', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def tutors():
     form = TutorForm()
     tutors = Tutor.query.order_by(Tutor.first_name).all()
@@ -194,7 +202,7 @@ def tutors():
     return render_template('tutors.html', title="Tutors", form=form, tutors=tutors, statuses=statuses)
 
 @app.route('/edit_tutor/<int:id>', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def edit_tutor(id):
     form = TutorForm()
     tutor = Tutor.query.get_or_404(id)
@@ -232,7 +240,7 @@ def edit_tutor(id):
 
 
 @app.route('/test_dates', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def test_dates():
     form = TestDateForm()
     tests = TestDate.query.with_entities(TestDate.test).distinct()
@@ -254,7 +262,7 @@ def test_dates():
 
 
 @app.route('/edit_date/<int:id>', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def edit_date(id):
     form = TestDateForm()
     date = TestDate.query.get_or_404(id)
