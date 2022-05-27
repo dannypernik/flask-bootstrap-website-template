@@ -6540,7 +6540,7 @@ div.alert {
 
 .hidden-form, #parent-info, #student-info, #inactive-students {
   height: 0px;
-  transition: height 0.2s ease-out;
+  transition: height 0.5s ease-out;
   overflow: hidden;
 }
 
