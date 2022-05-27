@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, IntegerField, RadioField, SelectField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, \
+    SubmitField, IntegerField, RadioField, SelectField
 from wtforms.fields.html5 import DateField
-from wtforms.validators import ValidationError, InputRequired, DataRequired, Email, EqualTo, Length
+from wtforms.validators import ValidationError, InputRequired, DataRequired, \
+    Email, EqualTo, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app.models import User, Student, Tutor, TestDate
 
@@ -48,7 +50,15 @@ class LoginForm(FlaskForm):
 class RequestPasswordResetForm(FlaskForm):
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
-    submit = SubmitField('')
+    submit = SubmitField('Request password reset')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', render_kw={"placeholder": "New password"}, \
+        validators=[DataRequired()])
+    password2 = PasswordField('Repeat Password', render_kw={"placeholder": "Verify password"}, \
+        validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset password')
 
 
 def get_tutors():

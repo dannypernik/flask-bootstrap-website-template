@@ -90,6 +90,41 @@ def send_confirmation_email(user, message):
         print("Confirmation email failed to send with code " + result.status_code, result.reason)
 
 
+def send_password_reset_email(user):
+    token = user.get_reset_password_token()
+    api_key = app.config['MAILJET_KEY']
+    api_secret = app.config['MAILJET_SECRET']
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": app.config['MAIL_USERNAME'],
+                    "Name": "Open Path Tutoring"
+                },
+                "To": [
+                    {
+                    "Email": user.email
+                    }
+                ],
+                "Subject": "Reset your password",
+                "ReplyTo": { "Email": user.email },
+                "TextPart": render_template('email/reset-password.txt',
+                                         user=user, token=token),
+                "HTMLPart": render_template('email/reset-password.html',
+                                         user=user, token=token)
+            }
+        ]
+    }
+
+    result = mailjet.send.create(data=data)
+    if result.status_code is 200:
+        print(result.json())
+    else:
+        print("Password reset email failed to send with code " + str(result.status_code), result.reason)
+
+
 def send_test_strategies_email(user, relation, student):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
