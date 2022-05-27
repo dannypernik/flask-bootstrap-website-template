@@ -6533,10 +6533,19 @@ div.alert {
   margin-bottom: 2rem;
 }
 
-.hidden-form, #parent-info, #student-info {
-  height: 0;
+.student-list {
   transition: height 0.2s ease-out;
   overflow: hidden;
+}
+
+.hidden-form, #parent-info, #student-info, #inactive-students {
+  height: 0px;
+  transition: height 0.2s ease-out;
+  overflow: hidden;
+}
+
+.slide-toggle {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=custom.css.map */

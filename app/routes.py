@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, request, send_from_directory, send_file
 from app import app, db, login, hcaptcha
-from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm, TestDateForm
+from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm, TestDateForm, UserForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, Student, Tutor, TestDate
 from werkzeug.urls import url_parse
@@ -81,7 +81,7 @@ def signup():
         db.session.commit()
         flash("You are now registered. We're glad you're here!")
         return redirect(url_for('index'))
-    return render_template('ignup.html', title='Sign up', form=form)
+    return render_template('signup.html', title='Sign up', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -114,7 +114,7 @@ def logout():
 def students():
     form = StudentForm()
     students = Student.query.order_by(Student.student_name).all()
-    statuses = Student.query.with_entities(Student.status).distinct()
+    statuses = ['active', 'paused', 'inactive']
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
         student_email=form.student_email.data, parent_name=form.parent_name.data, \
@@ -237,6 +237,68 @@ def edit_tutor(id):
         form.timezone.data=tutor.timezone
         form.status.data=tutor.status
     return render_template('edit-tutor.html', title='Edit Tutor', form=form, tutor=tutor)
+
+
+@app.route('/users', methods=['GET', 'POST'])
+@admin_required
+def users():
+    form = UserForm()
+    users = User.query.filter_by(is_admin=False).order_by(User.first_name)
+    admins = User.query.filter_by(is_admin=True).order_by(User.first_name)
+    print(admins)
+    if form.validate_on_submit():
+        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
+        email=form.email.data, phone=form.phone.data, about_me=form.about_me.data, \
+        is_admin=form.is_admin.data)
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash(user.first_name + ' added')
+        except:
+            db.session.rollback()
+            flash(user.first_name + ' could not be added', 'error')
+            return redirect(url_for('users'))
+        return redirect(url_for('users'))
+    return render_template('users.html', title="Users", form=form, users=users, admins=admins)
+
+@app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit_user(id):
+    form = UserForm()
+    user = User.query.get_or_404(id)
+    if form.validate_on_submit():
+        if 'save' in request.form:
+            user.first_name=form.first_name.data
+            user.last_name=form.last_name.data
+            user.email=form.email.data
+            user.phone=form.phone.data
+            user.about_me=form.about_me.data
+            user.is_admin=form.is_admin.data
+            try:
+                db.session.add(user)
+                db.session.commit()
+                flash(user.first_name + ' updated')
+            except:
+                db.session.rollback()
+                flash(user.first_name + ' could not be updated', 'error')
+                return redirect(url_for('users'))
+            finally:
+                db.session.close()
+        elif 'delete' in request.form:
+            db.session.delete(user)
+            db.session.commit()
+            flash('Deleted ' + user.first_name)
+        else:
+            flash('Code error in POST request', 'error')
+        return redirect(url_for('users'))
+    elif request.method == "GET":
+        form.first_name.data=user.first_name
+        form.last_name.data=user.last_name
+        form.email.data=user.email
+        form.phone.data=user.phone
+        form.about_me.data=user.about_me
+        form.is_admin.data=user.is_admin
+    return render_template('edit-user.html', title='Edit User', form=form, user=user)
 
 
 @app.route('/test_dates', methods=['GET', 'POST'])

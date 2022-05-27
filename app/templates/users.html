@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="">
+    <button id="add-user" class="btn d-inline-block my-0 me-2">+ Add user</button>
+    <a href="{{ url_for('students') }}" class="btn sec py-2">Students</a>
+  </div>
+
+  <form id="add-user-form" class="hidden-form" action="" method="post">
+    <h1 class="mb-3 me-3 d-inline-block">Add user</h1>
+    <a id="hide-form" href="#">Hide</a>
+
+    {{ form.hidden_tag() }}
+    {{ form.first_name }}
+    {{ form.last_name }}
+    {{ form.email }}
+    {{ form.phone }}
+    {{ form.is_admin }}
+    <label for="is_admin" class="mt-2 ms-2">Admin</label>
+    {{ form.submit(class="mb-3") }}
+  </form>
+
+  <h1 class="mt-3">Admins</h1>
+  {% for a in admins %}
+    <div class="row justify-content-centered">
+      <div class="col-9 col-md-10">
+        <h2 class="my-1">{{ a.first_name }} {{ a.last_name }}</h2>
+        <ul class="mb-3">
+          <li>{{ a.email }}</li>
+          <li>{{ a.phone }}</li>
+        </ul>
+      </div>
+
+      <div class="col-3 col-md-2 text-end">
+        <a class="edit btn sec" href="{{ url_for('edit_user', id=a.id) }}">
+          Edit
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+
+  <h1 class="mt-3">Users</h1>
+
+  {% for u in users %}
+    <div class="row justify-content-centered">
+      <div class="col-9 col-md-10">
+        <h2 class="my-1">{{ u.first_name }} {{ u.last_name }}</h2>
+        <ul class="mb-3">
+          <li>{{ u.email }}</li>
+          <li>{{ u.phone }}</li>
+        </ul>
+      </div>
+
+      <div class="col-3 col-md-2 text-end">
+        <a class="edit btn sec" href="{{ url_for('edit_user', id=u.id) }}">
+          Edit
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock content %}
+
+{% block end_scripts %}
+  <script>
+    const slideDown = element => element.style.height = `${element.scrollHeight}px`;
+    const slideUp = element => element.style.height = '0px';
+
+    document.getElementById("add-user").addEventListener("click", function () {
+      this.parentElement.style.display = "none";
+      slideDown(document.getElementById("add-user-form"));
+    });
+
+    document.getElementById("hide-form").addEventListener("click", function () {
+      slideUp(this.parentElement);
+      document.getElementById("add-user").parentElement.style.display = "block";
+    });
+  </script>
+{% endblock end_scripts %}

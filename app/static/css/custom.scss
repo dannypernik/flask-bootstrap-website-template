@@ -618,10 +618,19 @@ div.alert {
   margin-bottom: 2rem;
 }
 
-// Hidden fields to be revealed //
 
-.hidden-form, #parent-info, #student-info {
-  height: 0;
+.student-list {
   transition: height 0.2s ease-out;
   overflow: hidden;
+}
+// Hidden fields to be revealed //
+
+.hidden-form, #parent-info, #student-info, #inactive-students {
+  height: 0px;
+  transition: height 0.2s ease-out;
+  overflow: hidden;
+}
+
+.slide-toggle {
+  cursor: pointer;
 }
