@@ -11,13 +11,16 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(32), index=True)
     last_name = db.Column(db.String(32), index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    email = db.Column(db.String(64), index=True)
-    phone = db.Column(db.String(32), index=True)
+    email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    about_me = db.Column(db.String(500))
-    last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
+    intro = db.Column(db.String(512))
+    loves = db.Column(db.String(1024))
+    offers = db.Column(db.String(1024))
+    needs = db.Column(db.String(1024))
+    my_ideas = db.relationship('Idea', backref='creator', lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
@@ -43,47 +46,16 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
 
 
-class Student(db.Model):
+class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    student_name = db.Column(db.String(64), index=True)
-    last_name = db.Column(db.String(64))
-    student_email = db.Column(db.String(64), index=True)
-    parent_name = db.Column(db.String(64))
-    parent_email = db.Column(db.String(64))
-    secondary_email = db.Column(db.String(64))
-    timezone = db.Column(db.Integer)
-    location = db.Column(db.String(128))
-    status = db.Column(db.String(24), default = "active", index=True)
-    pronouns = db.Column(db.String(32))
-    tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
+    name = db.Column(db.String(64), index=True)
+    tagline = db.Column(db.String(256))
+    description = db.Column(db.String(1024))
+    status = db.Column(db.String(24), default = "active")
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Student {}>'.format(self.student_name + " " + self.last_name)
-
-
-class Tutor(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(64), index=True)
-    last_name = db.Column(db.String(64))
-    email = db.Column(db.String(64), index=True)
-    timezone = db.Column(db.Integer)
-    status = db.Column(db.String(24), default = "active", index=True)
-    students = db.relationship('Student', backref='tutor', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Tutor {}>'.format(self.first_name + " " + self.last_name)
-
-
-class TestDate(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
-    test = db.Column(db.String(24))
-    status = db.Column(db.String(24), default = "confirmed")
-    reg_date = db.Column(db.Date)
-    late_date = db.Column(db.Date)
-
-    def __repr__(self):
-        return '<TestDate {}>'.format(self.date)
+        return '<Idea {}>'.format(self.name)
 
 
 @login.user_loader
