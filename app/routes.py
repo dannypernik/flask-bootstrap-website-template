@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file
 from app import app, db, login, hcaptcha
-from app.forms import IntroForm, InquiryForm, UserForm, RequestPasswordResetForm, ResetPasswordForm
+from app.forms import IntroForm, InquiryForm, IdeaForm, SignupForm, LoginForm, UserForm, RequestPasswordResetForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, Idea
 from werkzeug.urls import url_parse
@@ -40,6 +40,23 @@ def admin_required(f):
 def index():
     form2 = IntroForm()
     form = InquiryForm()
+    if form2.validate_on_submit():
+        username_check = User.query.filter_by(username=form.email.data).first()
+        print(username_check)
+        if username_check is not None:
+            if username_check.password_hash is None:
+                flash('You need to verify your email before saving more ideas. Please check your inbox.', 'error')
+                return redirect(url_for('login', email=form2.email.data))
+            flash('An account already exists for ' + form2.email.data + '. Please log in.', 'error')
+            return redirect(url_for('login', email=form2.email.data, idea=form2.description.data))
+        user = User(first_name=form2.first_name.data, last_name=form2.last_name.data, \
+            email=form2.email.data, username=form2.email.data)
+        db.session.add(user)
+        db.session.commit()
+        idea = Idea(description=form2.description.data, creator_id=user.id)
+        db.session.add(idea)
+        db.session.commit()
+        return redirect(url_for('idea', id=idea.id))
     if form.validate_on_submit():
         if hcaptcha.verify():
             pass
@@ -49,8 +66,6 @@ def index():
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = form.subject.data
-        db.session.add(user)
-        db.session.commit()
         send_contact_email(user, message, subject)
         flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
         return redirect(url_for('index', _anchor="home"))
@@ -61,9 +76,27 @@ def index():
 def about():
     return render_template('about.html', title="About")
 
-@app.route('/reviews')
-def reviews():
-    return render_template('reviews.html', title="Reviews")
+@app.route('/idea/<int:id>')
+def idea(id):
+    form = IdeaForm()
+    idea = Idea.query.get_or_404(id)
+    if form.validate_on_submit():
+        idea.name = form.name.data
+        idea.tagline = form.tagline.data
+        idea.description = form.description.data
+        try:
+            db.session.add(idea)
+            db.session.commit()
+            flash(idea.name + ' updated')
+        except:
+            db.session.rollback()
+            flash(user.first_name + ' could not be updated', 'error')
+            return redirect(url_for('users'))
+    elif request.method == 'GET':
+        form.name.data = idea.name
+        form.tagline.data = idea.tagline
+        form.description.data = idea.description
+    return render_template('idea.html', form=form)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -75,8 +108,8 @@ def signup():
     if form.validate_on_submit():
         username_check = User.query.filter_by(username=form.email.data).first()
         if username_check is not None:
-            flash('User already exists', 'error')
-            return redirect(url_for('signup'))
+            flash('An account already exists for ' + form.email.data + '. Please log in.', 'error')
+            return redirect(url_for('login', email=form.email.data))
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
         email=form.email.data)
         user.set_password(form.password.data)
@@ -93,16 +126,21 @@ def login():
         flash('You are already signed in')
         return redirect(url_for('index'))
     form = LoginForm()
+    if 'email' in request.args:
+        form.email.data = request.args.get('email')
     if form.validate_on_submit():
+        idea = None
+        if 'idea' in request.args:
+            idea = request.args.get('idea')
         user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
+            flash('Invalid username or password', 'error')
+            return redirect(url_for('login', idea=idea))
         login_user(user, remember=form.remember_me.data)
         next = request.args.get('next')
         if not next or url_parse(next).netloc != '':
-            next = url_for('students')
-        return redirect(next)
+            next = url_for('dashboard', idea=idea)
+        return redirect(next, idea=idea)
     return render_template('login.html', title="Login", form=form)
 
 

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Grow your idea</h2>
+  <form method="post">
+    {{ form.name }}
+    {{ form.tagline }}
+    {{ form.description }}
+    {{ form.submit }}
+  </form>
+{% endblock content %}

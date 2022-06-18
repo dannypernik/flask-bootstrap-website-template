@@ -22,39 +22,53 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
-    <!--<nav class="row justify-content-center g-0">
-      <div class="col-11 col-md-10">
-        <div class="row justify-content-center justify-content-md-end">
-          <div class="home-nav col col-md-7 col-lg-6 col-xl-5">
-            <div class="d-none d-md-block"><a href="#home" data-text="home">home</a></div>
-            <div><a href="{{ url_for('reviews') }}" data-text="reviews">reviews</a></div>
-            <div><a href="{{ url_for('about') }}" data-text="about">about</a></div>
-            <div><a href="#contact" data-text="contact">contact</a></div>
-          </div>
+
+    <div class="row justify-content-center">
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <img class="img-fluid my-5 px-2" src="{{ url_for('static', filename='img/logo-tagline.svg') }}">
+      </div>
+    </div>
+    <form id="intro-form" method="post">
+      <div id="intro-1" class="row justify-content-center">
+        <div class="col-12">
+          <h1 class="home-tagline" class="mt-5">What do you want to create?</h1>
+        </div>
+
+        <div class="col-12 col-sm-8 col-md-6">
+          {{ form2.hidden_tag() }}
+          {{ form2.description(class="text-center mb-2") }}
+          <a id="idea-start-button" class="btn inline-block mx-1">Let's grow this</a>
         </div>
       </div>
-    </nav>-->
 
-    <div class="row justify-content-center">
-      <div class="col-6 col-sm-5 col-md-4 col-lg-3">
-        <img class="img-fluid mt-5 px-3" src="{{ url_for('static', filename='img/logo-tagline.svg') }}">
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-11">
-        <h1 id="home-tagline" class="mt-5">What do you want to create?</h1>
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col col-sm-8 col-md-6">
-        {{ form2.description(class="text-center lead mb-2") }}
-        {{ form2.submit(class="lead") }}
-      </div>
-    </div>
+      <div id="intro-2" class="row justify-content-center">
+        <div class="col-12">
+          <h1 class="home-tagline" class="mt-5">Create an account or
+            <a href="{{ url_for('login') }}">log in</a></h1>
+        </div>
 
+        <div class="col-12 col-sm-8 col-md-6">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              {{ form2.first_name }}
+            </div>
+            <div class="col-12 col-md-6">
+              {{ form2.last_name}}
+            </div>
+            <div class="col-12">
+              {{ form2.email(class="mb-2") }}
+            </div>
+          </div>
+
+          <button id="idea-back-button" class="btn grey inline-block mx-1">Back</button>
+          <input id="submit" type="submit" name="submit" class="btn mx-1" value="Create" />
+        </div>     
+      </div>
+    </form>
+    
     <div class="home-next mt-5">
       <a href="#mission">
-        <p class="lead">
+        <p>
           Learn more
         </p>
         <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
@@ -65,13 +79,12 @@
     </div>
   </div>
 
-
   <div class="row sticky-header justify-content-center">
     <div class="col-10">
       <div class="row">
         <div class="col-9">
           <a href="#contact">
-            <img id="nav-img" src="{{ url_for('static', filename='img/icon-extended.svg') }}" alt="Open Path Tutoring">
+            <img id="nav-img" src="{{ url_for('static', filename='img/logo.svg') }}" alt="Open Path Tutoring">
           </a>
         </div>
         <div class="col-3">
@@ -97,11 +110,6 @@
         <a href="{{ url_for('index') }}">
           <div class="menu-link">
             <p>Home</p>
-          </div>
-        </a>
-        <a href="{{ url_for('reviews') }}">
-          <div class="menu-link">
-            <p>Reviews</p>
           </div>
         </a>
         <a href="{{ url_for('about') }}">
@@ -198,9 +206,24 @@
   </script>
 
   <script>
-    document.getElementById("request-trial").addEventListener("click", function () {
-      document.getElementById("subject").classList.remove('d-none');
-      document.getElementById("subject").setAttribute('value', 'Trial session request');
+    var fadeOutIn = function (e, f) {
+      document.getElementById(e).style.opacity = '0';
+      document.getElementById(f).style.opacity = '0';
+      setTimeout(fadeIn, 300, e, f);
+    }
+
+    var fadeIn = function (e, f) {
+      document.getElementById(e).style.height = '0';
+      document.getElementById(f).style.opacity = '1';
+      document.getElementById(f).style.height = 'auto';
+    };
+
+    document.getElementById("idea-start-button").addEventListener("click", function() {
+      fadeOutIn("intro-1", "intro-2");
+    });
+    
+    document.getElementById("idea-back-button").addEventListener("click", function() {
+      fadeOutIn("intro-2", "intro-1");
     });
 
     function onSubmit(token) {

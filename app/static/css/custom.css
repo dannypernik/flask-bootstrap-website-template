@@ -5978,7 +5978,7 @@ body {
   height: 100%;
   font-family: "Montserrat", "Helvetica", sans-serif;
   color: #2a4776;
-  font-size: 1.6rem;
+  font-size: calc(2rem + 0.1vw);
   display: flex;
   flex-direction: column;
   -ms-overflow-style: none;
@@ -6023,6 +6023,15 @@ h6, .h6 {
   font-size: calc(min(1.5rem + 1vw, 28px));
 }
 
+::placeholder {
+  color: #2a4776;
+}
+
+#home ::placeholder {
+  color: white;
+  opacity: 0.5;
+}
+
 .row {
   margin-left: 0;
   margin-right: 0;
@@ -6031,27 +6040,27 @@ h6, .h6 {
 input, textarea {
   font-size: 1.6rem;
   line-height: 2.5rem;
+  margin-top: 1rem;
   padding: 1rem;
   background-color: transparent;
   border: none;
-  border-bottom: 2px solid white;
+  border-bottom: 1px solid #2a4776;
   border-radius: 7px;
   width: 100%;
   outline: none;
-  color: white;
 }
 
-textarea:focus {
-  border: 1px solid #ffffff99;
+#home textarea, #home input {
+  color: white;
   border-bottom: 2px solid white;
 }
 
-input[type=submit] {
+#home input[type=submit], input[type=submit] {
   margin-top: 1.5rem;
+  width: auto;
   background-color: #30b732;
   color: white;
   border: 2px solid #30b732;
-  font-size: 1.9rem;
   transition: 0.3s;
 }
 
@@ -6186,12 +6195,16 @@ a:before {
   visibility: hidden;
 }
 
+h1 a, .h1 a {
+  text-decoration: underline;
+}
+
 button, .btn {
-  display: block;
   margin: 2rem auto;
   padding: 1rem 2rem;
-  background-color: #2a4776;
-  border: 2px solid #2a4776;
+  background-color: #30b732;
+  border: 2px solid #30b732;
+  border-radius: 99px;
   color: white;
   transition: 0.3s;
   font-size: 1.7rem;
@@ -6216,6 +6229,12 @@ button.clr {
   background-color: transparent;
   margin: 0;
   padding: 0.5rem 2rem;
+}
+
+.btn.grey {
+  background-color: white;
+  border-color: white;
+  color: #2a4776;
 }
 
 .btn.edit {
@@ -6303,8 +6322,8 @@ div.alert {
 }
 
 #nav-img {
-  height: 48px;
-  margin-top: 12px;
+  height: 36px;
+  margin: 12px 0;
   max-width: 100%;
 }
 
@@ -6420,7 +6439,7 @@ div.alert {
   font-weight: 400;
 }
 
-#home-tagline {
+.home-tagline {
   font-weight: 700;
 }
 
@@ -6449,6 +6468,16 @@ div.alert {
 
 .home-nav a:focus, .home-nav a:hover {
   font-weight: 600;
+}
+
+#intro-1, #intro-2 {
+  transition: opacity 0.4s;
+  overflow: hidden;
+}
+
+#intro-2 {
+  opacity: 0;
+  height: 0;
 }
 
 .home-section {
