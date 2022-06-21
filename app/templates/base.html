@@ -7,7 +7,7 @@
           {% if title %}
             {{ title }} -
           {% endif %}
-          Zaplings
+          Open Path Tutoring
         {% endblock title %}
       </title>
 
@@ -74,7 +74,7 @@
             <div class="row">
               <div class="col-9">
                 <a href="{{ url_for('index') }}">
-                  <img id="nav-img" src="{{ url_for('static', filename='img/logo.svg') }}" alt="Open Path Tutoring">
+                  <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
                 </a>
               </div>
               <div class="col-3">
@@ -110,6 +110,11 @@
             <a href="{{ url_for('index') }}">
               <div class="menu-link">
                 <p>Home</p>
+              </div>
+            </a>
+            <a href="{{ url_for('reviews') }}">
+              <div class="menu-link">
+                <p>Reviews</p>
               </div>
             </a>
             <a href="{{ url_for('about') }}">
