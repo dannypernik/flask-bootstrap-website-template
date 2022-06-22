@@ -63,6 +63,9 @@ def main():
 
     events = []
     day_of_week = datetime.datetime.strftime(parse(now), format="%A")
+    bimonth_end = (today + datetime.timedelta(days=60, hours=31)).isoformat() + 'Z'
+    bimonth_events = []
+    bimonth_events_list = []
     week_end = (today + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
     week_events = []
     week_events_list = []
@@ -70,6 +73,7 @@ def main():
     outsourced_unscheduled_list = []
     paused_list = []
     scheduled_students = set()
+    future_schedule = set()
     outsourced_scheduled_students = set()
 
     tutoring_hours = 0
@@ -104,12 +108,16 @@ def main():
         for e in range(len(events_result)):
             events.append(events_result[e])
 
-        cal_week_events = service.events().list(calendarId=id, timeMin=upcoming_start,
-            timeMax=week_end, singleEvents=True, orderBy='startTime').execute()
-        week_events_result = cal_week_events.get('items', [])
+        cal_bimonth_events = service.events().list(calendarId=id, timeMin=upcoming_start,
+            timeMax=bimonth_end, singleEvents=True, orderBy='startTime').execute()
+        bimonth_events_result = cal_bimonth_events.get('items', [])
 
-        for e in range(len(week_events_result)):
-            week_events.append(week_events_result[e])
+        for e in range(len(bimonth_events_result)):
+            bimonth_events.append(bimonth_events_result[e])
+        
+        for e in range(len(bimonth_events)):
+            if bimonth_events[e]['start'].get('dateTime') < week_end:
+                week_events.append(bimonth_events[e])
 
 
     print("Session reminders for " + upcoming_start_formatted + ":")
@@ -123,7 +131,11 @@ def main():
                 reminder_list.append(name)
                 send_reminder_email(event, student, tutor, quote)
 
+    # get list of event names for the bimonth
+    for e in bimonth_events:
+        bimonth_events_list.append(e.get('summary'))
 
+    # get list of event names and durations for the week
     for e in week_events:
         if e['start'].get('dateTime'):
             start = isoparse(e['start'].get('dateTime'))
@@ -134,6 +146,7 @@ def main():
             event_details = [e.get('summary'), hours]
             week_events_list.append(event_details)
 
+    # check for students who should be listed as active
     for student in students:
         name = full_name(student)
         name_check = " " + name + " and"
@@ -145,8 +158,8 @@ def main():
         print("No reminders sent.")
     print("\n\n" + quote.json()[0]['q'] + " - " + quote.json()[0]['a'] + "\n\n")
 
-
-    if day_of_week == "Friday":
+    # send weekly report
+    if day_of_week == "Thursday":
         #Get number of active students, number of sessions, and list of unscheduled students
         for student in active_students:
             name = full_name(student)
@@ -167,6 +180,9 @@ def main():
                             outsourced_scheduled_students.add(name)
                             outsourced_session_count += count
                             outsourced_hours += hours
+            elif any(name_check in nest for nest in bimonth_events_list):
+                future_schedule.add(name)
+                print(name + " eventually scheduled with " + student.tutor.first_name)
             elif student.tutor_id == 1:
                 unscheduled_list.append(name)
                 print(name + " unscheduled with Danny")
@@ -179,9 +195,9 @@ def main():
             paused_list.append(name)
 
         weekly_report_email(str(session_count), str(tutoring_hours), str(len(scheduled_students)), \
-            unscheduled_list, str(outsourced_session_count), str(outsourced_hours), \
-            str(len(outsourced_scheduled_students)), outsourced_unscheduled_list, \
-            paused_list, today, quote)
+            future_schedule, unscheduled_list, str(outsourced_session_count), \
+            str(outsourced_hours), str(len(outsourced_scheduled_students)), \
+            outsourced_unscheduled_list, paused_list, today, quote)
 
 
         # Call the Sheets API

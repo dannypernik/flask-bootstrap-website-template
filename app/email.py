@@ -334,7 +334,7 @@ def send_practice_test_email(user, test, relation, student):
 
 
 def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_student_count, \
-    unscheduled_list, outsourced_session_count, outsourced_hours, \
+    future_list, unscheduled_list, outsourced_session_count, outsourced_hours, \
     outsourced_scheduled_student_count, outsourced_unscheduled_list, \
     paused, now, quote):
 
@@ -347,6 +347,9 @@ def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_stud
     start_date = dt.strftime(parse(start), format="%b %-d")
     end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
     end_date = dt.strftime(parse(end), format="%b %-d")
+    future_students = ', '.join(future_list)
+    if future_students == '':
+        future_students = "None"
     unscheduled_students = ', '.join(unscheduled_list)
     if unscheduled_students == '':
         unscheduled_students = "None"
@@ -384,6 +387,7 @@ def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_stud
                     "are scheduled with other tutors for " + outsourced_scheduled_student_count + " students. " + \
                     "<br/><br/>Unscheduled active students for Danny: " + unscheduled_students + \
                     "<br/>Unscheduled active students for other tutors: " + outsourced_unscheduled_students + \
+                    "<br/>Active students scheduled after next week: " + future_students + \
                     "<br/>Paused students: " + paused_students + \
                     "<br/><br/><br/>" + quote_header + '"' + message + '"' + "<br/>&ndash; " + author
             }
