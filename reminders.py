@@ -56,19 +56,19 @@ def main():
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     today = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
-    upcoming_start = (today + datetime.timedelta(hours=44)).isoformat() + 'Z'
-    upcoming_end = (today + datetime.timedelta(hours=68)).isoformat() + 'Z'
-    upcoming_start_formatted = datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d")
+    day_of_week = datetime.datetime.strftime(parse(now), format="%A")
+    upcoming_start = (today + datetime.timedelta(hours=39)).isoformat() + 'Z'
+    upcoming_end = (today + datetime.timedelta(hours=63)).isoformat() + 'Z'
+    week_end = (today + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
+    bimonth_end = (today + datetime.timedelta(days=60, hours=31)).isoformat() + 'Z'
     calendars = ['primary', "n6dbnktn1mha2t4st36h6ljocg@group.calendar.google.com"]
 
-    events = []
-    day_of_week = datetime.datetime.strftime(parse(now), format="%A")
-    bimonth_end = (today + datetime.timedelta(days=60, hours=31)).isoformat() + 'Z'
-    bimonth_events = []
-    bimonth_events_list = []
-    week_end = (today + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
+    upcoming_events = []
+    upcoming_events_list = []
     week_events = []
     week_events_list = []
+    bimonth_events = []
+    bimonth_events_list = []
     unscheduled_list = []
     outsourced_unscheduled_list = []
     paused_list = []
@@ -100,30 +100,33 @@ def main():
 
 
     for id in calendars:
-        cal_events = service.events().list(calendarId=id,
-            timeMin=upcoming_start, timeMax=upcoming_end,
-            singleEvents=True, orderBy='startTime').execute()
-        events_result = cal_events.get('items', [])
+        # upcoming_cal_events = service.events().list(calendarId=id,
+        #     timeMin=upcoming_start, timeMax=upcoming_end,
+        #     singleEvents=True, orderBy='startTime').execute()
+        # upcoming_cal_events_result = upcoming_cal_events.get('items', [])
 
-        for e in range(len(events_result)):
-            events.append(events_result[e])
+        # for e in range(len(upcoming_cal_events_result)):
+        #     upcoming_events.append(upcoming_cal_events_result[e])
 
-        cal_bimonth_events = service.events().list(calendarId=id, timeMin=upcoming_start,
+        bimonth_cal_events = service.events().list(calendarId=id, timeMin=upcoming_start,
             timeMax=bimonth_end, singleEvents=True, orderBy='startTime').execute()
-        bimonth_events_result = cal_bimonth_events.get('items', [])
+        bimonth_events_result = bimonth_cal_events.get('items', [])
 
         for e in range(len(bimonth_events_result)):
             bimonth_events.append(bimonth_events_result[e])
-        
-        for e in range(len(bimonth_events)):
-            if bimonth_events[e]['start'].get('dateTime') < week_end:
-                week_events.append(bimonth_events[e])
 
+    for e in range(len(bimonth_events)):
+        event_start = bimonth_events[e]['start'].get('dateTime')
+        if event_start < week_end:
+            week_events.append(bimonth_events[e])
+            if event_start < upcoming_end:
+                print("upcoming_event: ", event_start)
 
+    upcoming_start_formatted = datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d")
     print("Session reminders for " + upcoming_start_formatted + ":")
 
     # Send reminder email to students ~2 days in advance
-    for event in events:
+    for event in upcoming_events_list:
         for student in active_students:
             name = full_name(student)
             tutor = Tutor.query.get_or_404(student.tutor_id)
