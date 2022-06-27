@@ -119,8 +119,6 @@ def main():
         event_start = bimonth_events[e]['start'].get('dateTime')
         if event_start < week_end:
             week_events.append(bimonth_events[e])
-            if event_start < upcoming_end:
-                print("upcoming_event: ", event_start)
 
     upcoming_start_formatted = datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d")
     print("Session reminders for " + upcoming_start_formatted + ":")
