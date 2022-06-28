@@ -64,7 +64,6 @@ def main():
     calendars = ['primary', "n6dbnktn1mha2t4st36h6ljocg@group.calendar.google.com"]
 
     upcoming_events = []
-    upcoming_events_list = []
     week_events = []
     week_events_list = []
     bimonth_events = []
@@ -119,12 +118,14 @@ def main():
         event_start = bimonth_events[e]['start'].get('dateTime')
         if event_start < week_end:
             week_events.append(bimonth_events[e])
+            if event_start < upcoming_end:
+                upcoming_events.append(bimonth_events[e])
 
     upcoming_start_formatted = datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d")
     print("Session reminders for " + upcoming_start_formatted + ":")
 
     # Send reminder email to students ~2 days in advance
-    for event in upcoming_events_list:
+    for event in upcoming_events:
         for student in active_students:
             name = full_name(student)
             tutor = Tutor.query.get_or_404(student.tutor_id)

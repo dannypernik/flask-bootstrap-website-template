@@ -136,8 +136,6 @@ def send_reminder_email(event, student, tutor, quote):
     reply_email = student.tutor.email
     if reply_email == '':
         reply_email = app.config['MAIL_USERNAME']
-    
-    print(reply_email)
 
     data = {
         'Messages': [
