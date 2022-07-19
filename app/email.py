@@ -283,7 +283,6 @@ def send_score_analysis_email(student, school):
         print("Score analysis confirmation email failed to send with code " + result.status_code, result.reason)
 
 
-
 def send_practice_test_email(user, test, relation, student):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
