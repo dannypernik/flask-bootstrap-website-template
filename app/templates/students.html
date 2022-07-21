@@ -77,6 +77,16 @@
     const slideDown = element => element.style.height = `${element.scrollHeight}px`;
     const slideUp = element => element.style.height = 0;
 
+    document.getElementById("add-student").addEventListener("click", function () {
+      this.parentElement.style.display = "none";
+      slideDown(document.getElementById("add-student-form"));
+    });
+
+    document.getElementById("hide-form").addEventListener("click", function () {
+      slideUp(this.parentElement);
+      document.getElementById("add-student").parentElement.style.display = "block";
+    });
+
     let slideToggle = (target) => {
       var style = window.getComputedStyle(target),
           height = style.getPropertyValue('height');
@@ -87,22 +97,12 @@
       }
     }
 
-    document.getElementById("add-student").addEventListener("click", function () {
-      this.parentElement.style.display = "none";
-      slideDown(document.getElementById("add-student-form"));
-    });
-
     var elements = document.getElementsByClassName("slide-toggle");
 
     Array.from(elements).forEach(function(element) {
       element.addEventListener("click", function () {
           slideToggle(element.nextElementSibling);
         });
-    });
-
-    document.getElementById("hide-form").addEventListener("click", function () {
-      slideUp(this.parentElement);
-      document.getElementById("add-student").parentElement.style.display = "block";
     });
   </script>
 {% endblock end_scripts %}

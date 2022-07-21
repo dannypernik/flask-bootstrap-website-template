@@ -237,7 +237,8 @@ def send_test_strategies_email(user, relation, student):
                 "To": to_email,
                 "Bcc": [{"Email": app.config['MAIL_USERNAME']}],
                 "Subject": "10 Strategies to Master the SAT & ACT",
-                "HTMLPart": render_template('email/test-strategies.html', user=user, relation=relation, sender_name=sender_name, student=student, link=link)
+                "HTMLPart": render_template('email/test-strategies.html', user=user, relation=relation, sender_name=sender_name, student=student, link=link),
+                "TextPart": render_template('email/test-strategies.txt', user=user, relation=relation, sender_name=sender_name, student=student, link=link)
             }
         ]
     }
