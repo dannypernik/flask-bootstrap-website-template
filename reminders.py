@@ -99,20 +99,13 @@ def main():
 
 
     for id in calendars:
-        # upcoming_cal_events = service.events().list(calendarId=id,
-        #     timeMin=upcoming_start, timeMax=upcoming_end,
-        #     singleEvents=True, orderBy='startTime').execute()
-        # upcoming_cal_events_result = upcoming_cal_events.get('items', [])
-
-        # for e in range(len(upcoming_cal_events_result)):
-        #     upcoming_events.append(upcoming_cal_events_result[e])
-
         bimonth_cal_events = service.events().list(calendarId=id, timeMin=upcoming_start,
             timeMax=bimonth_end, singleEvents=True, orderBy='startTime').execute()
         bimonth_events_result = bimonth_cal_events.get('items', [])
 
         for e in range(len(bimonth_events_result)):
-            bimonth_events.append(bimonth_events_result[e])
+            if bimonth_events_result[e]['start'].get('dateTime'):
+                bimonth_events.append(bimonth_events_result[e])
 
     for e in range(len(bimonth_events)):
         event_start = bimonth_events[e]['start'].get('dateTime')
@@ -162,7 +155,7 @@ def main():
 
     # send weekly report
     if day_of_week == "Friday":
-        #Get number of active students, number of sessions, and list of unscheduled students
+        # Get number of active students, number of sessions, and list of unscheduled students
         for student in active_students:
             name = full_name(student)
             name_check = " " + name + " and"
