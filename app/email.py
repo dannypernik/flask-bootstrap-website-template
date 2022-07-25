@@ -341,9 +341,9 @@ def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_stud
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 
     dt = datetime.datetime
-    start = (now + datetime.timedelta(hours=39)).isoformat() + 'Z'
+    start = (now + datetime.timedelta(hours=40)).isoformat() + 'Z'
     start_date = dt.strftime(parse(start), format="%b %-d")
-    end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
+    end = (now + datetime.timedelta(days=7, hours=40)).isoformat() + 'Z'
     end_date = dt.strftime(parse(end), format="%b %-d")
     future_students = ', '.join(future_list)
     if future_students == '':
@@ -388,6 +388,51 @@ def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_stud
                     "<br/>Active students scheduled after next week: " + future_students + \
                     "<br/>Paused students: " + paused_students + \
                     "<br/><br/><br/>" + quote_header + '"' + message + '"' + "<br/>&ndash; " + author
+            }
+        ]
+    }
+
+    result = mailjet.send.create(data=data)
+    if result.status_code == 200:
+        print("\nWeekly report email sent.\n")
+    else:
+        print("\nWeekly report email error:", str(result.status_code), result.reason, "\n")
+    print(result.json())
+
+
+def send_spreadsheet_report(now, spreadsheet_data):
+    api_key = app.config['MAILJET_KEY']
+    api_secret = app.config['MAILJET_SECRET']
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+    dt = datetime.datetime
+    start = (now + datetime.timedelta(hours=40)).isoformat() + 'Z'
+    start_date = dt.strftime(parse(start), format="%b %-d")
+    end = (now + datetime.timedelta(days=7, hours=40)).isoformat() + 'Z'
+    end_date = dt.strftime(parse(end), format="%b %-d")
+
+    low_active_students = []
+
+    for s in spreadsheet_data['low_active_students']:
+        low_active_students.append('<br>' + str(s[0]) + ": " + str(s[1]) + ' hrs')
+    
+    low_hours_list = ', '.join(low_active_students)
+    
+
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": app.config['MAIL_USERNAME'],
+                    "Name": "Open Path Tutoring"
+                },
+                "To": [
+                    {
+                    "Email": app.config['MAIL_USERNAME']
+                    }
+                ],
+                "Subject": "Weekly financial report for " + start_date + " to " + end_date,
+                "HTMLPart": "Active students with low hours:<br>" + low_hours_list
             }
         ]
     }

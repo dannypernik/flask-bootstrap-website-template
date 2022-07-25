@@ -1,12 +1,19 @@
 from __future__ import print_function
-
 import os.path
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
+import datetime
+from dotenv import load_dotenv
+from app import app
+from flask import render_template
+from app.email import send_spreadsheet_report
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -40,13 +47,14 @@ def main():
 
     try:
         service = build('sheets', 'v4', credentials=creds)
-
         # Call the Sheets API
         sheet = service.spreadsheets()
         result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
                                     range=SUMMARY_RANGE_NAME).execute()
 
         summary = result.get('values', [])
+        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+        now_str = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
         low_active_students = []
 
         if not summary:
@@ -58,6 +66,11 @@ def main():
             if row[14] == 'Active':
                 if float(row[1]) <= 1.5:
                     low_active_students.append([row[0], row[1]])
+
+        spreadsheet_data = dict(low_active_students=low_active_students)
+
+        send_spreadsheet_report(now_str, spreadsheet_data)
+
     except HttpError as err:
         print(err)
 
