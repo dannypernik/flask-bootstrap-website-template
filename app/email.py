@@ -331,7 +331,7 @@ def send_practice_test_email(user, test, relation, student):
         print("Practice test email failed to send with code " + str(result.status_code), result.reason)
 
 
-def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_student_count, \
+def send_weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_student_count, \
     future_list, unscheduled_list, outsourced_session_count, outsourced_hours, \
     outsourced_scheduled_student_count, outsourced_unscheduled_list, \
     paused, now, quote):
@@ -400,7 +400,7 @@ def weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_stud
     print(result.json())
 
 
-def send_spreadsheet_report(now, spreadsheet_data):
+def send_spreadsheet_report_email(now, spreadsheet_data):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -431,7 +431,7 @@ def send_spreadsheet_report(now, spreadsheet_data):
                     "Email": app.config['MAIL_USERNAME']
                     }
                 ],
-                "Subject": "Weekly financial report for " + start_date + " to " + end_date,
+                "Subject": "Spreadsheet data report for " + start_date + " to " + end_date,
                 "HTMLPart": "Active students with low hours:<br>" + low_hours_list
             }
         ]

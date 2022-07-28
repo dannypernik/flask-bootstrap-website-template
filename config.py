@@ -22,3 +22,4 @@ class Config(object):
     DAD_EMAIL = os.environ.get('DAD_EMAIL')
     ADMINS = [os.environ.get('ADMINS')]
     GMAIL_USERNAME = os.environ.get('GMAIL_USERNAME')
+    SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID')

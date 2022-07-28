@@ -10,15 +10,19 @@ from google.oauth2.credentials import Credentials
 from app import app
 from dotenv import load_dotenv
 from app.models import Student, Tutor
-from app.email import send_reminder_email, weekly_report_email
+from app.email import send_reminder_email, send_weekly_report_email, send_spreadsheet_report_email
 import requests
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
-            #, 'https://www.googleapis.com/auth/spreadsheets.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly',
+    'https://www.googleapis.com/auth/spreadsheets.readonly']
+
+# ID and ranges of a sample spreadsheet.
+SPREADSHEET_ID = app.config['SPREADSHEET_ID']
+SUMMARY_RANGE = 'Student summary!A1:Q'
 
 def main():
     """
@@ -52,15 +56,22 @@ def main():
             token.write(creds.to_json())
 
     # Call the Calendar API
-    service = build('calendar', 'v3', credentials=creds)
+    service_cal = build('calendar', 'v3', credentials=creds)
+
+    # Call the Sheets API
+    service_sheets = build('sheets', 'v4', credentials=creds)
+    sheet = service_sheets.spreadsheets()
+    result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
+                                range=SUMMARY_RANGE).execute()
+    summary_data = result.get('values', [])
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    today = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
+    now_str = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     day_of_week = datetime.datetime.strftime(parse(now), format="%A")
-    upcoming_start = (today + datetime.timedelta(hours=39)).isoformat() + 'Z'
-    upcoming_end = (today + datetime.timedelta(hours=63)).isoformat() + 'Z'
-    week_end = (today + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
-    bimonth_end = (today + datetime.timedelta(days=60, hours=31)).isoformat() + 'Z'
+    upcoming_start = (now_str + datetime.timedelta(hours=39)).isoformat() + 'Z'
+    upcoming_end = (now_str + datetime.timedelta(hours=63)).isoformat() + 'Z'
+    week_end = (now_str + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
+    bimonth_end = (now_str + datetime.timedelta(days=60, hours=31)).isoformat() + 'Z'
     calendars = ['primary', "n6dbnktn1mha2t4st36h6ljocg@group.calendar.google.com"]
 
     upcoming_events = []
@@ -74,6 +85,7 @@ def main():
     scheduled_students = set()
     future_schedule = set()
     outsourced_scheduled_students = set()
+    low_active_students = []
 
     tutoring_hours = 0
     session_count = 0
@@ -99,7 +111,7 @@ def main():
 
 
     for id in calendars:
-        bimonth_cal_events = service.events().list(calendarId=id, timeMin=upcoming_start,
+        bimonth_cal_events = service_cal.events().list(calendarId=id, timeMin=upcoming_start,
             timeMax=bimonth_end, singleEvents=True, orderBy='startTime').execute()
         bimonth_events_result = bimonth_cal_events.get('items', [])
 
@@ -153,8 +165,8 @@ def main():
         print("No reminders sent.")
     print("\n\n" + quote.json()[0]['q'] + " - " + quote.json()[0]['a'] + "\n\n")
 
-    # send weekly report
-    if day_of_week == "Friday":
+    # send weekly reports
+    if day_of_week == "Thursday":
         # Get number of active students, number of sessions, and list of unscheduled students
         for student in active_students:
             name = full_name(student)
@@ -189,27 +201,24 @@ def main():
             name = full_name(student)
             paused_list.append(name)
 
-        weekly_report_email(str(session_count), str(tutoring_hours), str(len(scheduled_students)), \
+        send_weekly_report_email(str(session_count), str(tutoring_hours), str(len(scheduled_students)), \
             future_schedule, unscheduled_list, str(outsourced_session_count), \
             str(outsourced_hours), str(len(outsourced_scheduled_students)), \
-            outsourced_unscheduled_list, paused_list, today, quote)
+            outsourced_unscheduled_list, paused_list, now_str, quote)
 
+        # Generate spreadsheet report
+        if not summary_data:
+            print('No summary data found.')
+            return
 
-        # Call the Sheets API
-        #OPT_SS_ID = '1M6Xs6zLR_QdPpOJYO0zaZOwJZ6dxdXsURD2PkpP2Vis'
-        #STUDENT_SUMMARY_RANGE = 'Student summary!A1:Q'
-        #sheets_service = build('sheets', 'v4', credentials=creds)
+        for row in summary_data:
+            if row[14] == 'Active':
+                if float(row[1]) <= 1.5:
+                    low_active_students.append([row[0], row[1]])
+        
+        spreadsheet_data = {'low_active_students': low_active_students}
 
-        #sheet = sheets_service.spreadsheets()
-        #result = sheet.values().get(spreadsheetId=OPT_SS_ID,
-        #                            range=STUDENT_SUMMARY_RANGE).execute()
-        #values = result.get('values', [])
-
-        #if not values:
-        #    print('No data found.')
-        #else:
-        #    for row in values:
-        #        print('%s, %s' % (row[0],row[1]))
+        send_spreadsheet_report_email(now_str, spreadsheet_data)
 
 if __name__ == '__main__':
     main()
