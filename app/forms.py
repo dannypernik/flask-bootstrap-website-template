@@ -70,7 +70,7 @@ def tutor_name(Tutor):
 class StudentForm(FlaskForm):
     student_name = StringField('Student name', render_kw={"placeholder": "Student name"}, \
         validators=[InputRequired()])
-    last_name = StringField('Last name', render_kw={"placeholder": "Last name (optional)"})
+    last_name = StringField('Last name', render_kw={"placeholder": "Last name"})
     student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     parent_name = StringField('Parent name', render_kw={"placeholder": "Parent name"}, \
