@@ -15,8 +15,9 @@
           {{ form.status(class='d-inline-block') }}
         </div>
         <label for="date">Test date:</label>{{ form.date(class='mb-2') }}
-        <label for="reg_date">Registration date:</label>{{ form.reg_date(class='mb-2') }}
-        <label for="late_date">Late registration:</label>{{ form.late_date(class='mb-2') }}
+        <label for="reg_date">Registration deadline:</label>{{ form.reg_date(class='mb-2') }}
+        <label for="late_date">Late deadline:</label>{{ form.late_date(class='mb-2') }}
+        <label for="other_date">Other deadline:</label>{{ form.other_date(class='mb-2') }}
         {{ form.submit }}
       </div>
     </div>
@@ -38,6 +39,9 @@
             <ul>
               <li>Registration deadline: {{ d.reg_date.strftime('%B %-d') }}</li>
               <li>Late deadline: {{ d.late_date.strftime('%B %-d') }}</li>
+              {% if d.other_date != None %}
+                <li>Other deadline: {{ d.other_date.strftime('%B %-d') }}</li>
+              {% endif %}
             </ul>
           </div>
 

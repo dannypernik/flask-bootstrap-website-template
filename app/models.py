@@ -81,6 +81,7 @@ class TestDate(db.Model):
     status = db.Column(db.String(24), default = "confirmed")
     reg_date = db.Column(db.Date)
     late_date = db.Column(db.Date)
+    other_date = db.Column(db.Date)
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)

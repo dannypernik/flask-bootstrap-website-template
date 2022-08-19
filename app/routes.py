@@ -340,7 +340,8 @@ def test_dates():
     if form.validate_on_submit():
         print(form.test.data, form.date.data)
         date = TestDate(test=form.test.data, date=form.date.data, \
-        reg_date=form.reg_date.data, late_date=form.late_date.data, status=form.status.data)
+            reg_date=form.reg_date.data, late_date=form.late_date.data, \
+            other_date=form.other_date.data, status=form.status.data)
         try:
             db.session.add(date)
             db.session.commit()
@@ -364,6 +365,7 @@ def edit_date(id):
             date.date=form.date.data
             date.reg_date=form.reg_date.data
             date.late_date=form.late_date.data
+            date.other_date=form.other_date.data
             date.status=form.status.data
             try:
                 db.session.add(date)
@@ -387,6 +389,7 @@ def edit_date(id):
         form.date.data=date.date
         form.reg_date.data=date.reg_date
         form.late_date.data=date.late_date
+        form.other_date.data=date.other_date
         form.status.data=date.status
     return render_template('edit-date.html', title='Edit date', form=form, date=date)
 

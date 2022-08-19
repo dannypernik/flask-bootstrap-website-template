@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, \
-    SubmitField, IntegerField, RadioField, SelectField
+    SubmitField, IntegerField, RadioField, SelectField, validators
 from wtforms.fields.html5 import DateField
 from wtforms.validators import ValidationError, InputRequired, DataRequired, \
     Email, EqualTo, Length
@@ -118,6 +118,7 @@ class TestDateForm(FlaskForm):
     date = DateField('Test date', format='%Y-%m-%d', validators=[InputRequired()])
     reg_date = DateField('Registration deadline', format='%Y-%m-%d')
     late_date = DateField('Late deadline', format='%Y-%m-%d')
+    other_date = DateField('Other deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
     status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('cancelled','Cancelled')])
     submit = SubmitField('Save')
 
