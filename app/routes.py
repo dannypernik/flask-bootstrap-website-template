@@ -337,6 +337,7 @@ def test_dates():
     form = TestDateForm()
     tests = TestDate.query.with_entities(TestDate.test).distinct()
     dates = TestDate.query.order_by(TestDate.date).all()
+    statuses = ['confirmed', 'unconfirmed', 'past']
     if form.validate_on_submit():
         print(form.test.data, form.date.data)
         date = TestDate(test=form.test.data, date=form.date.data, \
@@ -351,7 +352,7 @@ def test_dates():
             flash(date.date.strftime('%b %-d') + ' could not be added', 'error')
             return redirect(url_for('test_dates'))
         return redirect(url_for('test_dates'))
-    return render_template('test-dates.html', title="Test dates", form=form, dates=dates, tests=tests)
+    return render_template('test-dates.html', title="Test dates", form=form, dates=dates, tests=tests, statuses=statuses)
 
 
 @app.route('/edit_date/<int:id>', methods=['GET', 'POST'])

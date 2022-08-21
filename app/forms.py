@@ -119,7 +119,7 @@ class TestDateForm(FlaskForm):
     reg_date = DateField('Registration deadline', format='%Y-%m-%d')
     late_date = DateField('Late deadline', format='%Y-%m-%d')
     other_date = DateField('Other deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
-    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('cancelled','Cancelled'),('past','Past')])
+    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('past','Past')])
     submit = SubmitField('Save')
 
 
