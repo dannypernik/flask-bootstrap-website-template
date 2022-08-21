@@ -46,6 +46,12 @@
               {% endif %}
             </ul>
           </div>
+
+          <div class="col-3 col-md-2 text-end">
+            <a class="edit btn sec" href="{{ url_for('edit_date', id=d.id) }}">
+              Edit
+            </a>
+          </div>
         </div>
       {% endif %}
     {% endfor %}
