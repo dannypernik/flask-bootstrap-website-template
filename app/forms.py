@@ -119,7 +119,7 @@ class TestDateForm(FlaskForm):
     reg_date = DateField('Registration deadline', format='%Y-%m-%d')
     late_date = DateField('Late deadline', format='%Y-%m-%d')
     other_date = DateField('Other deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
-    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('cancelled','Cancelled')])
+    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('cancelled','Cancelled'),('past','Past')])
     submit = SubmitField('Save')
 
 
@@ -128,8 +128,6 @@ class TestStrategiesForm(FlaskForm):
         validators=[InputRequired()])
     email = StringField('Email address', render_kw={'placeholder': 'Email address'}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
-    #test = RadioField('Test preference:', choices=[('sat', 'SAT'),('act','ACT'),('unsure','Not sure')], \
-    #    validators=[InputRequired()])
     relation = RadioField('I am a:', choices=[('parent','Parent'),('student','Student')], \
         validators=[InputRequired()])
     parent_name = StringField('Parent\'s name', render_kw={'placeholder': 'Parent\'s name'})
