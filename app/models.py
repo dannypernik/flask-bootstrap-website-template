@@ -87,6 +87,12 @@ class TestDate(db.Model):
         return '<TestDate {}>'.format(self.date)
 
 
+student_test_dates = db.Table('student_test_dates',
+    db.Column('student_id', db.Integer, db.ForeignKey('student.id')),
+    db.Column('test_date_id', db.Integer, db.ForeignKey('test_date.id'))
+)
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
