@@ -145,12 +145,19 @@ def students():
     form = StudentForm()
     students = Student.query.order_by(Student.student_name).all()
     statuses = ['active', 'paused', 'inactive']
+    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
         student_email=form.student_email.data, parent_name=form.parent_name.data, \
         parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
         timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
         tutor=form.tutor_id.data)
+
+        selected_dates = request.form.getlist('test_dates')
+        print(selected_dates)
+        # for d in upcoming_dates:
+        #     if not student.is_testing(d):
+        #         student.add_test_date(d)
         try:
             db.session.add(student)
             db.session.commit()
@@ -160,13 +167,15 @@ def students():
             return redirect(url_for('students'))
         flash(student.student_name + ' added')
         return redirect(url_for('students'))
-    return render_template('students.html', title="Students", form=form, students=students, statuses=statuses)
+    return render_template('students.html', title="Students", form=form, students=students, \
+        statuses=statuses, upcoming_dates=upcoming_dates)
 
 @app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
 @admin_required
 def edit_student(id):
     form = StudentForm()
     student = Student.query.get_or_404(id)
+    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     if form.validate_on_submit():
         if 'save' in request.form:
             student.student_name=form.student_name.data
@@ -179,6 +188,13 @@ def edit_student(id):
             student.location=form.location.data
             student.status=form.status.data
             student.tutor=form.tutor_id.data
+
+            selected_dates = request.form.getlist('test_dates')
+            for d in upcoming_dates:
+                if d in selected_dates:
+                    student.add_test_date(d)
+                else:
+                    student.remove_test_date(d)
             try:
                 db.session.add(student)
                 db.session.commit()
@@ -207,8 +223,8 @@ def edit_student(id):
         form.location.data=student.location
         form.status.data=student.status
         form.tutor_id.data=student.tutor
-    return render_template('edit-student.html', title='Edit Student',
-                           form=form, student=student)
+    return render_template('edit-student.html', title='Edit Student', form=form, \
+        student=student, upcoming_dates=upcoming_dates)
 
 
 @app.route('/tutors', methods=['GET', 'POST'])

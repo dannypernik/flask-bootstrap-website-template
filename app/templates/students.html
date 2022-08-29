@@ -20,8 +20,30 @@
     {{ form.secondary_email }}
     {{ form.timezone }}
     {{ form.location }}
-    {{ form.status(class="my-2") }}
-    {{ form.tutor_id }}
+
+    <div class="row my-3">
+      <h3>Test dates:</h3>
+      {% for d in upcoming_dates %}
+      <div class="col">
+        <input type="checkbox" id="{{ d.date }}" value="{{ d.date }}" name="test_dates">
+        <label for="{{ d.date }}" class="text-nowrap">
+          {{ d.date.strftime('%B %-d') }}
+        </label>
+      </div>
+    {% endfor %}
+    </div>
+
+    <div class="row mb-2">
+      <div class="col">
+        <h3>Tutor:</h3>
+        {{ form.tutor_id }}
+      </div>
+
+      <div class="col">
+        <h3>Status:</h3>
+        {{ form.status }}
+      </div>
+    </div>
     {{ form.submit(class="mb-3") }}
   </form>
   {% for status in statuses %}

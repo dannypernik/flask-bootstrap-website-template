@@ -43,6 +43,12 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
 
 
+student_test_dates = db.Table('student_test_dates',
+    db.Column('student_id', db.Integer, db.ForeignKey('student.id')),
+    db.Column('test_date_id', db.Integer, db.ForeignKey('test_date.id'))
+)
+
+
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_name = db.Column(db.String(64), index=True)
@@ -56,9 +62,26 @@ class Student(db.Model):
     status = db.Column(db.String(24), default = "active", index=True)
     pronouns = db.Column(db.String(32))
     tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
+    test_dates = db.relationship(
+        'TestDate', secondary=student_test_dates,
+        primaryjoin=(student_test_dates.c.student_id == id),
+        secondaryjoin=(student_test_dates.c.test_date_id == id),
+        backref=db.backref('test_date_students', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
         return '<Student {}>'.format(self.student_name + " " + self.last_name)
+    
+    def add_test_date(self, test_date):
+        if not self.is_testing(test_date):
+            self.test_dates.append(test_date)
+
+    def remove_test_date(self, test_date):
+        if self.is_testing(test_date):
+            self.test_dates.remove(test_date)
+
+    def is_testing(self, test_date):
+        return self.followed.filter(
+            student_test_dates.c.test_date_id == test_date.id).count() > 0
 
 
 class Tutor(db.Model):
@@ -85,12 +108,6 @@ class TestDate(db.Model):
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)
-
-
-student_test_dates = db.Table('student_test_dates',
-    db.Column('student_id', db.Integer, db.ForeignKey('student.id')),
-    db.Column('test_date_id', db.Integer, db.ForeignKey('test_date.id'))
-)
 
 
 @login.user_loader
