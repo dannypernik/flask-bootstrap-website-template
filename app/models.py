@@ -48,6 +48,18 @@ student_test_dates = db.Table('student_test_dates',
     db.Column('test_date_id', db.Integer, db.ForeignKey('test_date.id'))
 )
 
+class TestDate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date)
+    test = db.Column(db.String(24))
+    status = db.Column(db.String(24), default = "confirmed")
+    reg_date = db.Column(db.Date)
+    late_date = db.Column(db.Date)
+    other_date = db.Column(db.Date)
+
+    def __repr__(self):
+        return '<TestDate {}>'.format(self.date)
+
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +77,7 @@ class Student(db.Model):
     test_dates = db.relationship(
         'TestDate', secondary=student_test_dates,
         primaryjoin=(student_test_dates.c.student_id == id),
-        secondaryjoin=(student_test_dates.c.test_date_id == id),
+        secondaryjoin=(student_test_dates.c.test_date_id == TestDate.id),
         backref=db.backref('test_date_students', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
@@ -80,8 +92,13 @@ class Student(db.Model):
             self.test_dates.remove(test_date)
 
     def is_testing(self, test_date):
-        return self.followed.filter(
+        return self.test_dates.filter(
             student_test_dates.c.test_date_id == test_date.id).count() > 0
+    
+    def get_dates(self):
+        return TestDate.query.join(
+                student_test_dates, (student_test_dates.c.test_date_id == TestDate.id)
+            ).filter(student_test_dates.c.student_id == self.id)
 
 
 class Tutor(db.Model):
@@ -95,19 +112,6 @@ class Tutor(db.Model):
 
     def __repr__(self):
         return '<Tutor {}>'.format(self.first_name + " " + self.last_name)
-
-
-class TestDate(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
-    test = db.Column(db.String(24))
-    status = db.Column(db.String(24), default = "confirmed")
-    reg_date = db.Column(db.Date)
-    late_date = db.Column(db.Date)
-    other_date = db.Column(db.Date)
-
-    def __repr__(self):
-        return '<TestDate {}>'.format(self.date)
 
 
 @login.user_loader

@@ -18,13 +18,14 @@
         <div class="row my-3">
           <h3>Test dates:</h3>
           {% for d in upcoming_dates %}
-          <div class="col">
-            <input type="checkbox" id="{{ d.date }}" value="{{ d.date }}" name="test_dates">
-            <label for="{{ d.date }}" class="text-nowrap">
-              {{ d.date.strftime('%B %-d') }}
-            </label>
-          </div>
-        {% endfor %}
+            <div class="col">
+              <input type="checkbox" id="{{ d.date }}" value="{{ d.date }}" name="test_dates"
+                {{ "checked" if d.date in checked_dates }}>
+              <label for="{{ d.date }}" class="text-nowrap">
+                {{ d.date.strftime('%B %-d') }}
+              </label>
+            </div>
+          {% endfor %}
         </div>
     
         <div class="row mb-2">
