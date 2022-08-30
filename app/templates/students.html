@@ -21,17 +21,21 @@
     {{ form.timezone }}
     {{ form.location }}
 
-    <div class="row my-3">
-      <h3>Test dates:</h3>
-      {% for d in upcoming_dates %}
-      <div class="col">
-        <input type="checkbox" id="{{ d.date }}" value="{{ d.date }}" name="test_dates">
-        <label for="{{ d.date }}" class="text-nowrap">
-          {{ d.date.strftime('%B %-d') }}
-        </label>
+    {% for t in tests %}
+      <div class="row my-3">
+        <h3>{{ t.upper() }} dates:</h3>
+        {% for d in upcoming_dates %}
+          {% if d.test == t %}
+            <div class="col">
+              <input type="checkbox" id="{{ d.date }}" value="{{ d.date }}" name="test_dates">
+              <label for="{{ d.date }}" class="text-nowrap">
+                {{ d.date.strftime('%B %-d') }}
+              </label>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
     {% endfor %}
-    </div>
 
     <div class="row mb-2">
       <div class="col">

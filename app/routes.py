@@ -146,6 +146,7 @@ def students():
     students = Student.query.order_by(Student.student_name).all()
     statuses = ['active', 'paused', 'inactive']
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
+    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
         student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
         student_email=form.student_email.data, parent_name=form.parent_name.data, \
@@ -167,7 +168,7 @@ def students():
         flash(student.student_name + ' added')
         return redirect(url_for('students'))
     return render_template('students.html', title="Students", form=form, students=students, \
-        statuses=statuses, upcoming_dates=upcoming_dates)
+        statuses=statuses, upcoming_dates=upcoming_dates, tests=tests)
 
 @app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
 @admin_required
@@ -175,6 +176,7 @@ def edit_student(id):
     form = StudentForm()
     student = Student.query.get_or_404(id)
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
+    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
         if request.method == "POST":
             student.student_name=form.student_name.data
@@ -230,7 +232,8 @@ def edit_student(id):
                 checked_dates.append(d.date)
 
     return render_template('edit-student.html', title='Edit Student', form=form, \
-        student=student, upcoming_dates=upcoming_dates, checked_dates=checked_dates)
+        student=student, upcoming_dates=upcoming_dates, checked_dates=checked_dates, \
+        tests=tests)
 
 
 @app.route('/tutors', methods=['GET', 'POST'])
