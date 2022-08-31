@@ -623,6 +623,11 @@ div.alert {
   transition: height 0.2s ease-out;
   overflow: hidden;
 }
+
+.test-date {
+  width: 177px;
+}
+
 // Hidden fields to be revealed //
 
 .hidden-form, #parent-info, #student-info, #inactive-students {
