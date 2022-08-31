@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <button id="add-date" class="btn d-inline-block my-0 ms-0 me-2">+ Add date</button>
-  <a href="{{ url_for('students') }}" class="btn sec me-2 my-0 py-2">Students</a>
-
+  <div>
+    <button id="add-date" class="btn d-inline-block my-0 ms-0 me-2">+ Add date</button>
+    <a href="{{ url_for('students') }}" class="btn sec me-2 my-0 py-2">Students</a>
+    <a href="{{ url_for('tutors') }}" class="btn sec my-0 py-2">Tutors</a>
+  </div>
+  
   <form id="add-date-form" class="hidden-form" action="" method="post">
-    <h1 class="mb-3 d-inline-block">Add test date</h1>
+    <h1 class="mb-3 me-2 d-inline-block">Add test date</h1>
     <a id="hide-form" href="#">Hide</a>
 
     <div class="row">
@@ -85,13 +88,13 @@
     const slideUp = element => element.style.height = '0px';
 
     document.getElementById("add-date").addEventListener("click", function () {
-      this.style.display = "none";
+      this.parentElement.style.display = "none";
       slideDown(document.getElementById("add-date-form"));
     });
 
     document.getElementById("hide-form").addEventListener("click", function () {
       slideUp(this.parentElement);
-      document.getElementById("add-date").style.display = "block";
+      document.getElementById("add-date").parentElement.style.display = "block";
     });
   </script>
 {% endblock end_scripts %}

@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="">
+  <div>
     <button id="add-tutor" class="btn d-inline-block my-0 me-2">+ Add tutor</button>
-    <a href="{{ url_for('students') }}" class="btn sec py-2">Students</a>
+    <a href="{{ url_for('students') }}" class="btn sec me-2 py-2">Students</a>
+    <a href="{{ url_for('test_dates') }}" class="btn sec py-2">Test dates</a>
   </div>
 
   <form id="add-tutor-form" class="hidden-form" action="" method="post">
-    <h1 class="mb-3 me-3 d-inline-block">Add tutor</h1>
+    <h1 class="mb-3 me-2 d-inline-block">Add tutor</h1>
     <a id="hide-form" href="#">Hide</a>
 
     {{ form.hidden_tag() }}
