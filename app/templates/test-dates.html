@@ -50,6 +50,9 @@
               {% if d.other_date != None %}
                 <li>Other deadline: {{ d.other_date.strftime('%B %-d') }}</li>
               {% endif %}
+              {% if d.score_date != None %}
+                <li>Score release date: {{ d.score_date.strftime('%B %-d') }}</li>
+              {% endif %}
             </ul>
           </div>
 

@@ -56,6 +56,7 @@ class TestDate(db.Model):
     reg_date = db.Column(db.Date)
     late_date = db.Column(db.Date)
     other_date = db.Column(db.Date)
+    score_date = db.Column(db.Date)
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)

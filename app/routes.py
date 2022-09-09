@@ -393,6 +393,7 @@ def edit_date(id):
             date.reg_date=form.reg_date.data
             date.late_date=form.late_date.data
             date.other_date=form.other_date.data
+            date.score_date=form.score_date.data
             date.status=form.status.data
             try:
                 db.session.add(date)
@@ -415,6 +416,7 @@ def edit_date(id):
         form.reg_date.data=date.reg_date
         form.late_date.data=date.late_date
         form.other_date.data=date.other_date
+        form.score_date.data=date.score_date
         form.status.data=date.status
     return render_template('edit-date.html', title='Edit date', form=form, date=date)
 
