@@ -1,0 +1,27 @@
+Hi {{ student.student_name }}, you're almost there! Here are some suggestions to put yourself in the best possible position for the {{ td }} {{ test_date.test.upper() }}. You can get started with item #1 today:
+
+Before test day
+-  Look at your schedule from now until the test to see how you can minimize stress in the couple days leading up to the {{ test_date.test.upper() }}.
+-  The day before the test, review your subject strategies and notes for key concepts, but don't cram practice questions.
+-  Get extra rest the 2 nights before the {{ test_date.test.upper() }}.
+
+Things to bring
+-  Photo ID
+-  Admission ticket
+-  #2 pencils: 2 sharpened, 1 dull
+-  Approved calculator with new batteries
+-  Watch with alarm setting turned off
+-  Snacks and drink for break time
+-  Extra layer of clothing
+
+During the test
+-  Plan to arrive by 7:45am, especially if you have never been to the testing center. You may be denied entry if you arrive after 8:00am.
+-  Focus over speed. It's better to get through 90% of the questions focused than 100% of the questions rushed.
+-  Before the start of each section, visualize yourself using your chosen strategies, feeling confident in your answers, and moving easily through the test.
+-  Find what's familiar. Each {{ test_date.test.upper() }} brings new ways to ask questions that cover the same old concepts. Identifying the concept is often half the challenge.
+-  {% if test_date.test == 'sat' %}The SAT usually ends with an experimental 5th section.{% elif test_date.test == 'act' %}The ACT usually includes an experimental 5th section after Science but before the optional essay.{% endif %} This section does not count toward your score.
+
+Above all, remember to trust yourself! You've put in the work to train your intuition, and now is your time to use it! If you have any questions, please don't hesitate to ask by replying to this email.
+
+All the best,
+The Open Path Team

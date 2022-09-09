@@ -190,9 +190,9 @@ def edit_student(id):
             student.status=form.status.data
             student.tutor=form.tutor_id.data
 
-            selected_dates = request.form.getlist('test_dates')
+            selected_date_ids = request.form.getlist('test_dates')
             for d in upcoming_dates:
-                if str(d.date) in selected_dates:
+                if str(d.id) in selected_date_ids:
                     student.add_test_date(d)
                 else:
                     student.remove_test_date(d)
@@ -226,13 +226,13 @@ def edit_student(id):
         form.tutor_id.data=student.tutor
 
         selected_dates = student.get_dates().all()
-        checked_dates = []
+        selected_date_ids = []
         for d in upcoming_dates:
             if d in selected_dates:
-                checked_dates.append(d.date)
+                selected_date_ids.append(d.id)
 
     return render_template('edit-student.html', title='Edit Student', form=form, \
-        student=student, upcoming_dates=upcoming_dates, checked_dates=checked_dates, \
+        student=student, upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids, \
         tests=tests)
 
 
@@ -402,8 +402,6 @@ def edit_date(id):
                 db.session.rollback()
                 flash(date.date.strftime('%b %-d') + ' could not be updated', 'error')
                 return redirect(url_for('test_dates'))
-            finally:
-                db.session.close()
         elif 'delete' in request.form:
             db.session.delete(date)
             db.session.commit()

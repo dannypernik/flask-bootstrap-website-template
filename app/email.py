@@ -174,6 +174,139 @@ def send_reminder_email(event, student, tutor, quote):
         print("Error for " + student.student_name + "\'s reminder email with code " + str(result.status_code), result.reason)
 
 
+def send_registration_reminder_email(student, test_date):
+    with app.app_context():
+        api_key = app.config['MAILJET_KEY']
+        api_secret = app.config['MAILJET_SECRET']
+        mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+        cc_email = [{ "Email": student.parent_email }]
+        if student.secondary_email:
+            cc_email.append({ "Email": student.secondary_email })
+
+        td = test_date.date.strftime('%B %-d')
+        reg_dl = test_date.reg_date.strftime('%A, %B %-d')
+        reg_dl_day = test_date.reg_date.strftime('%A')
+        
+        if test_date.late_date is not None:
+            late_dl = test_date.late_date.strftime('%A, %B %-d')
+        else:
+            late_dl = None
+
+        data = {
+            'Messages': [
+                {
+                    "From": {
+                        "Email": app.config['MAIL_USERNAME'],
+                        "Name": "Open Path Tutoring"
+                    },
+                    "To": [
+                        { "Email": student.student_email }
+                    ],
+                    "Cc": cc_email,
+                    "ReplyTo": { "Email": app.config['MAIL_USERNAME'] },
+                    "Subject": "Registration deadline for the " + td + " " + test_date.test.upper() + " is this " + reg_dl_day,
+                    "HTMLPart": render_template('email/registration-reminder.html', \
+                        student=student, test_date=test_date, td=td, reg_dl=reg_dl, late_dl=late_dl),
+                    "TextPart": render_template('email/registration-reminder.txt', \
+                        student=student, test_date=test_date, td=td, reg_dl=reg_dl, late_dl=late_dl)
+                }
+            ]
+        }
+        
+        result = mailjet.send.create(data=data)
+
+        if result.status_code == 200:
+            print("Registration reminder for", td, test_date.test.upper(), "sent to", student.student_name, student.last_name)
+        else:
+            print("Error for " + student.student_name + "\'s registration reminder with code " + str(result.status_code), result.reason)
+
+
+def send_late_registration_reminder_email(student, test_date):
+    with app.app_context():
+        api_key = app.config['MAILJET_KEY']
+        api_secret = app.config['MAILJET_SECRET']
+        mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+        cc_email = [{ "Email": student.parent_email }]
+        if student.secondary_email:
+            cc_email.append({ "Email": student.secondary_email })
+
+        td = test_date.date.strftime('%B %-d')
+        late_dl = test_date.late_date.strftime('%A, %B %-d')
+        late_dl_day = test_date.late_date.strftime('%A')
+
+        data = {
+            'Messages': [
+                {
+                    "From": {
+                        "Email": app.config['MAIL_USERNAME'],
+                        "Name": "Open Path Tutoring"
+                    },
+                    "To": [
+                        { "Email": student.student_email }
+                    ],
+                    "Cc": cc_email,
+                    "ReplyTo": { "Email": app.config['MAIL_USERNAME'] },
+                    "Subject": "Late registration deadline for the " + td + " " + test_date.test.upper() + " is this " + late_dl_day,
+                    "HTMLPart": render_template('email/late-registration-reminder.html', \
+                        student=student, test_date=test_date, td=td, late_dl=late_dl),
+                    "TextPart": render_template('email/late-registration-reminder.txt', \
+                        student=student, test_date=test_date, td=td, late_dl=late_dl)
+                }
+            ]
+        }
+        
+        result = mailjet.send.create(data=data)
+
+        if result.status_code == 200:
+            print("Late registration reminder for", td, test_date.test.upper(), "sent to", student.student_name, student.last_name)
+        else:
+            print("Error for " + student.student_name + "\'s late registration reminder with code " + str(result.status_code), result.reason)
+
+
+def send_test_reminders_email(student, test_date):
+    with app.app_context():
+        api_key = app.config['MAILJET_KEY']
+        api_secret = app.config['MAILJET_SECRET']
+        mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+        cc_email = [{ "Email": student.parent_email }]
+        if student.secondary_email:
+            cc_email.append({ "Email": student.secondary_email })
+
+        td = test_date.date.strftime('%B %-d')
+        td_day = test_date.date.strftime('%A')
+
+        data = {
+            'Messages': [
+                {
+                    "From": {
+                        "Email": app.config['MAIL_USERNAME'],
+                        "Name": "Open Path Tutoring"
+                    },
+                    "To": [
+                        { "Email": student.student_email }
+                    ],
+                    "Cc": cc_email,
+                    "ReplyTo": { "Email": app.config['MAIL_USERNAME'] },
+                    "Subject": "Things to remember for your " + test_date.test.upper() + " on " + td_day + ", " + td,
+                    "HTMLPart": render_template('email/test-reminders.html', \
+                        student=student, test_date=test_date, td=td),
+                    "TextPart": render_template('email/test-reminders.txt', \
+                        student=student, test_date=test_date, td=td)
+                }
+            ]
+        }
+        
+        result = mailjet.send.create(data=data)
+
+        if result.status_code == 200:
+            print(td, test_date.test.upper(), "reminder sent to", student.student_name, student.last_name)
+        else:
+            print("Error for " + student.student_name + "\'s test reminder with code " + str(result.status_code), result.reason)
+
+
 def send_password_reset_email(user):
     token = user.get_reset_password_token()
     api_key = app.config['MAILJET_KEY']
@@ -394,10 +527,9 @@ def send_weekly_report_email(scheduled_session_count, scheduled_hours, scheduled
 
     result = mailjet.send.create(data=data)
     if result.status_code == 200:
-        print("\nWeekly report email sent.\n")
+        print("Weekly report email sent.\n")
     else:
-        print("\nWeekly report email error:", str(result.status_code), result.reason, "\n")
-    print(result.json())
+        print("Weekly report email error:", str(result.status_code), result.reason, "\n")
 
 
 def send_spreadsheet_report_email(now, spreadsheet_data):
@@ -439,7 +571,6 @@ def send_spreadsheet_report_email(now, spreadsheet_data):
 
     result = mailjet.send.create(data=data)
     if result.status_code == 200:
-        print("\nWeekly report email sent.\n")
+        print("Spreadsheet report email sent.\n")
     else:
-        print("\nWeekly report email error:", str(result.status_code), result.reason, "\n")
-    print(result.json())
+        print("Spreadsheet report email error:", str(result.status_code), result.reason, "\n")

@@ -7,10 +7,12 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow, Flow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from app import app
+from app import app, db
 from dotenv import load_dotenv
-from app.models import Student, Tutor
-from app.email import send_reminder_email, send_weekly_report_email, send_spreadsheet_report_email
+from app.models import Student, Tutor, TestDate
+from app.email import send_reminder_email, send_weekly_report_email, \
+    send_registration_reminder_email, send_spreadsheet_report_email, \
+    send_test_reminders_email
 import requests
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -65,13 +67,13 @@ def main():
                                 range=SUMMARY_RANGE).execute()
     summary_data = result.get('values', [])
 
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    now_str = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
-    day_of_week = datetime.datetime.strftime(parse(now), format="%A")
-    upcoming_start = (now_str + datetime.timedelta(hours=39)).isoformat() + 'Z'
-    upcoming_end = (now_str + datetime.timedelta(hours=63)).isoformat() + 'Z'
-    week_end = (now_str + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
-    bimonth_end = (now_str + datetime.timedelta(days=60, hours=31)).isoformat() + 'Z'
+    now  = datetime.datetime.strptime(datetime.datetime.utcnow().isoformat(), "%Y-%m-%dT%H:%M:%S.%f")
+    today = datetime.date.today()
+    day_of_week = datetime.datetime.strftime(now, format="%A")
+    upcoming_start = (now + datetime.timedelta(hours=39)).isoformat() + 'Z'
+    upcoming_end = (now + datetime.timedelta(hours=63)).isoformat() + 'Z'
+    week_end = (now + datetime.timedelta(days=7, hours=31)).isoformat() + 'Z'
+    bimonth_end = (now + datetime.timedelta(days=60, hours=31)).isoformat() + 'Z'
     calendars = ['primary', "n6dbnktn1mha2t4st36h6ljocg@group.calendar.google.com"]
 
     upcoming_events = []
@@ -108,6 +110,33 @@ def main():
         else:
             name = student.student_name + " " + student.last_name
         return name
+    
+### Test date reminders
+    test_dates = TestDate.query.all()
+    # for d in test_dates:
+    #     print("test", d.id)
+    #     for s in students:
+    #         print(s.student_name)
+    #         for t in s.test_dates:
+    #             print(t.date, t.id)
+    #             if d.id == t.id:
+    #                 print(d.id, t.id)
+    
+    for s in students:
+        for d in s.get_dates():
+            if d.reg_date == today + datetime.timedelta(days=5):
+                send_registration_reminder_email(s, d)
+            elif d.late_date == today + datetime.timedelta(days=5):
+                send_late_registration_reminder_email(s, d)
+            elif d.date == today + datetime.timedelta(days=6):
+                send_test_reminders_email(s, d)
+
+            # mark test dates as past
+            if d.date == today:
+                d.status = 'past'
+                db.session.add(d)
+                db.session.commit()
+                print('Test date', d.date, 'marked as past')
 
 
     for id in calendars:
@@ -129,7 +158,7 @@ def main():
     upcoming_start_formatted = datetime.datetime.strftime(parse(upcoming_start), format="%A, %b %-d")
     print("Session reminders for " + upcoming_start_formatted + ":")
 
-    # Send reminder email to students ~2 days in advance
+### Send reminder email to students ~2 days in advance
     for event in upcoming_events:
         for student in active_students:
             name = full_name(student)
@@ -165,7 +194,7 @@ def main():
         print("No reminders sent.")
     print("\n\n" + quote.json()[0]['q'] + " - " + quote.json()[0]['a'] + "\n\n")
 
-    # send weekly reports
+### send weekly reports
     if day_of_week == "Friday":
         # Get number of active students, number of sessions, and list of unscheduled students
         for student in active_students:
@@ -189,13 +218,10 @@ def main():
                             outsourced_hours += hours
             elif any(name_check in nest for nest in bimonth_events_list):
                 future_schedule.add(name)
-                print(name + " eventually scheduled with " + student.tutor.first_name)
             elif student.tutor_id == 1:
                 unscheduled_list.append(name)
-                print(name + " unscheduled with Danny")
             else:
                 outsourced_unscheduled_list.append(name)
-                print(name + " unscheduled with " + student.tutor.first_name)
 
         for student in paused_students:
             name = full_name(student)
@@ -204,13 +230,14 @@ def main():
         send_weekly_report_email(str(session_count), str(tutoring_hours), str(len(scheduled_students)), \
             future_schedule, unscheduled_list, str(outsourced_session_count), \
             str(outsourced_hours), str(len(outsourced_scheduled_students)), \
-            outsourced_unscheduled_list, paused_list, now_str, quote)
+            outsourced_unscheduled_list, paused_list, now, quote)
 
-        # Generate spreadsheet report
+### Generate spreadsheet report
         if not summary_data:
             print('No summary data found.')
             return
 
+        # Get list of students with low hours
         for row in summary_data:
             if row[14] == 'Active':
                 if float(row[1]) <= 1.5:
@@ -218,7 +245,7 @@ def main():
         
         spreadsheet_data = {'low_active_students': low_active_students}
 
-        send_spreadsheet_report_email(now_str, spreadsheet_data)
+        send_spreadsheet_report_email(now, spreadsheet_data)
 
 if __name__ == '__main__':
     main()

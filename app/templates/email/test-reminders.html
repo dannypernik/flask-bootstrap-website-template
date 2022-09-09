@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body style="color: #1C4D65;">
+    <p>
+      Hi {{ student.student_name }}, you're almost there! Here are some suggestions to
+      put yourself in the best possible position for the {{ td }}
+      {{ test_date.test.upper() }}. You can get started with item #1 today:
+    </p>
+    <p>
+      <strong>Before test day</strong>
+      <ul>
+        <li>
+          Look at your schedule from now until the test to see how you can minimize
+          stress in the couple days leading up to the {{ test_date.test.upper() }}.
+        </li>
+        <li>
+          The day before the test, review your subject strategies and notes for key
+          concepts, but don't cram practice questions.
+        </li>
+        <li>
+          Get extra rest the 2 nights before the {{ test_date.test.upper() }}.
+        </li>
+      </ul>
+    </p>
+    <p>
+      <strong>Things to bring</strong>
+      <ul>
+        <li>Photo ID</li>
+        <li>Admission ticket</li>
+        <li>#2 pencils: 2 sharpened, 1 dull</li>
+        <li>
+          {% if test_date.test == 'sat' %}
+            <a href="https://satsuite.collegeboard.org/sat/what-to-bring-do/calculator-policy" target="_blank">
+              Approved calculator</a>
+          {% elif test_date.test == 'act' %}
+            Calculator
+          {% endif %}
+          with new batteries
+        </li>
+        <li>Watch with alarm setting turned off</li>
+        <li>Snacks and drink for break time</li>
+        <li>Extra layer of clothing</li>
+      </ul>
+    </p>
+    <p>
+      <strong>During the test</strong>
+      <li>
+        Plan to arrive by 7:45am, especially if you have never been to the testing
+        center. You may be denied entry if you arrive after 8:00am.
+      </li>
+      <li>
+        Focus over speed. It's better to get through 90% of the questions
+        focused than 100% of the questions rushed.
+      </li>
+      <li>
+        Before the start of each section, visualize yourself using your chosen
+        strategies, feeling confident in your answers, and moving easily
+        through the test.
+      </li>
+      <li>
+        Find what's familiar. Each {{ test_date.test.upper() }} brings new ways to
+        ask questions that cover the same old concepts. Identifying the concept is
+        often half the challenge.
+      </li>
+      <li>
+        {% if test_date.test == 'sat' %}
+          The SAT usually ends with a 5th experimental section.
+          This section does not count toward your score.
+        {% elif test_date.test == 'act' %}
+          The ACT usually includes a 5th experimental section after Science but
+          before the optional essay. This section does not count toward your score.
+        {% endif %}
+      </li>
+    </p>
+    <p>
+      Above all, remember to trust yourself! You've put in the work to train your
+      intuition, and now is your time to use it! If you have any questions, please
+      don't hesitate to ask by replying to this email.
+    </p>
+    <p>
+      All the best,<br>
+      The Open Path Team
+    </p>
+  </body>
+</html>
