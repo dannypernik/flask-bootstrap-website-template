@@ -43,7 +43,9 @@
               {% endif %}
             </h2>
             <ul>
-              <li>Registration deadline: {{ d.reg_date.strftime('%B %-d') }}</li>
+              {% if d.reg_date != None %}
+                <li>Registration deadline: {{ d.reg_date.strftime('%B %-d') }}</li>
+              {% endif %}
               {% if d.late_date != None %}
                 <li>Late deadline: {{ d.late_date.strftime('%B %-d') }}</li>
               {% endif %}
