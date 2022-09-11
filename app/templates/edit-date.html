@@ -2,8 +2,8 @@
 
 {% block container %}
   <div class="row justify-content-center">
-    <div class="col-11 col-sm-9 col-lg-6">
-      <h1>Edit test date</h1>
+    <div class="col-11 col-sm-9 col-lg-5 mb-4">
+      <h1 class="d-inline-block me-4">Edit {{ date.date.strftime('%B %-d') }}</h1>
       <form class="" action="" method="post">
         {{ form.hidden_tag() }}
         {{ form.test }}
@@ -13,22 +13,23 @@
           <label for="reg_date">Registration deadline:</label>{{ form.reg_date(class='mb-2') }}
           <label for="late_date">Late deadline:</label>{{ form.late_date(class='mb-2') }}
           <label for="other_date">Other deadline:</label>{{ form.other_date(class='mb-2') }}
-          <label for="score_date">Score release date:</label>{{ form.score_date(class='mb-2') }}
+          <label for="score_date">Score release date:</label>{{ form.score_date }}
         </div>
-        <div class="row mt-3 g-0">
-          <div class="col-6">
 
+        <div class="row">
+          <div class="col-8">
+            <input type="submit" name="save" value="Save">
           </div>
-
-          <div class="col-6 text-end">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#delete-modal" data-text="delete">
-              <button type="button" class="btn sec alert">Delete</button>
+          <div class="col-4">
+            <a href="#" class="btn alert mt-3 w-100" data-bs-toggle="modal" data-bs-target="#delete-modal" data-text="delete">
+              Delete
             </a>
           </div>
-        </div>
-
-        <div class="mb-3">
-          <input type="submit" name="save" value="Save">
+          <div class="col-12 text-center">
+            <a href="{{ url_for('test_dates') }}" class="btn sec">
+              Test dates
+            </a>
+          </div>
         </div>
 
         <div id="delete-modal" class="modal fade" tabindex="-1">
@@ -49,15 +50,22 @@
           </div>
         </div>
       </form>
-
-      <div class="text-center">
-        <a href="{{ url_for('test_dates') }}">
-          <button class="btn sec">
-            Test dates
-          </button>
-        </a>
-      </div>
     </div>
+
+    <div class="col-11 col-sm-9 col-lg-4 offset-lg-1">
+      <h1>Students interested</h1>
+      {% for s in students %}
+        <div class="row">
+          <div class="col-8">
+            <h2 class="my-1">{{ s.student_name }} {{ s.last_name }}</h2>
+          </div>
+          <div class="col-4">
+            <a href="{{ url_for('edit_student', id=s.id) }}" class="edit btn sec">Edit</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+      
   </div>
 {% endblock container %}
 

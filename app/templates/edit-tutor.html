@@ -10,6 +10,7 @@
         {{ form.last_name }}
         {{ form.email }}
         {{ form.timezone }}
+        
         <div class="row mt-3 g-0">
           <div class="col-6">
             {{ form.status }}
@@ -20,10 +21,16 @@
               <button type="button" class="btn sec alert">Delete</button>
             </a>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <input type="submit" name="save" value="Save">
+          <div class="col-12 text-center">
+            <div class="mb-3">
+              <input type="submit" name="save" value="Save">
+            </div>
+    
+            <a href="{{ url_for('tutors') }}" class="btn sec">
+              Tutor list
+            </a>
+          </div>
         </div>
 
         <div id="delete-modal" class="modal fade" tabindex="-1">
@@ -44,14 +51,6 @@
           </div>
         </div>
       </form>
-
-      <div class="text-center">
-        <a href="{{ url_for('tutors') }}">
-          <button class="btn sec">
-            Tutor list
-          </button>
-        </a>
-      </div>
     </div>
   </div>
 {% endblock container %}

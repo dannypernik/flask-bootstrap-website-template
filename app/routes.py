@@ -386,6 +386,7 @@ def test_dates():
 def edit_date(id):
     form = TestDateForm()
     date = TestDate.query.get_or_404(id)
+    students = date.test_date_students
     if form.validate_on_submit():
         if 'save' in request.form:
             date.test=form.test.data
@@ -418,7 +419,7 @@ def edit_date(id):
         form.other_date.data=date.other_date
         form.score_date.data=date.score_date
         form.status.data=date.status
-    return render_template('edit-date.html', title='Edit date', form=form, date=date)
+    return render_template('edit-date.html', title='Edit date', form=form, date=date, students=students)
 
 
 @app.route('/griffin', methods=['GET', 'POST'])
