@@ -53,16 +53,32 @@
     </div>
 
     <div class="col-11 col-sm-9 col-lg-4 offset-lg-1">
-      <h1>Students interested</h1>
+      <h1 class="mb-2">Students registered</h1>
       {% for s in students %}
-        <div class="row">
-          <div class="col-8">
-            <h2 class="my-1">{{ s.student_name }} {{ s.last_name }}</h2>
+        {% if s.is_registered %}
+          <div class="row">
+            <div class="col-8">
+              <h2 class="my-1">{{ s.students.student_name }} {{ s.students.last_name }}</h2>
+            </div>
+            <div class="col-4">
+              <a href="{{ url_for('edit_student', id=s.student_id) }}" class="edit btn sec">Edit</a>
+            </div>
           </div>
-          <div class="col-4">
-            <a href="{{ url_for('edit_student', id=s.id) }}" class="edit btn sec">Edit</a>
+        {% endif %}
+      {% endfor %}
+
+      <h1 class="mb-2 mt-4">Students interested</h1>
+      {% for s in students %}
+        {% if not s.is_registered %}
+          <div class="row">
+            <div class="col-8">
+              <h2 class="my-1">{{ s.students.student_name }} {{ s.students.last_name }}</h2>
+            </div>
+            <div class="col-4">
+              <a href="{{ url_for('edit_student', id=s.student_id) }}" class="edit btn sec">Edit</a>
+            </div>
           </div>
-        </div>
+        {% endif %}
       {% endfor %}
     </div>
       

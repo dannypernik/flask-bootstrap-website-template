@@ -386,7 +386,7 @@ def test_dates():
 def edit_date(id):
     form = TestDateForm()
     date = TestDate.query.get_or_404(id)
-    students = date.test_date_students
+    students = date.students_interested
     if form.validate_on_submit():
         if 'save' in request.form:
             date.test=form.test.data
@@ -488,6 +488,7 @@ def test_strategies():
 def download_file (filename):
     path = os.path.join(app.root_path, 'static/files/')
     return send_from_directory(path, filename, as_attachment=False)
+
 
 @app.route('/practice_test_sent')
 def free_test_sent():

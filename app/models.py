@@ -42,13 +42,17 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
+class StudentTestDates(db.Model):
+    __tablename__ = 'student_test_dates'
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), primary_key=True)
+    test_date_id = db.Column(db.Integer, db.ForeignKey('test_date.id'), primary_key=True)
+    is_registered = db.Column(db.Boolean)
+    students = db.relationship("Student", backref=db.backref('planned_tests', lazy='dynamic'))
+    test_dates = db.relationship("TestDate", backref=db.backref('students_interested', lazy='dynamic'))
 
-student_test_dates = db.Table('student_test_dates',
-    db.Column('student_id', db.Integer, db.ForeignKey('student.id')),
-    db.Column('test_date_id', db.Integer, db.ForeignKey('test_date.id'))
-)
 
 class TestDate(db.Model):
+    __tablename__ = 'test_date'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
     test = db.Column(db.String(24))
@@ -57,12 +61,14 @@ class TestDate(db.Model):
     late_date = db.Column(db.Date)
     other_date = db.Column(db.Date)
     score_date = db.Column(db.Date)
+    students = db.relationship('StudentTestDates', backref=db.backref('dates_interested'), lazy='dynamic')
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)
 
 
 class Student(db.Model):
+    __tablename__ = 'student'
     id = db.Column(db.Integer, primary_key=True)
     student_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64))
@@ -75,11 +81,10 @@ class Student(db.Model):
     status = db.Column(db.String(24), default = "active", index=True)
     pronouns = db.Column(db.String(32))
     tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
-    test_dates = db.relationship(
-        'TestDate', secondary=student_test_dates,
-        primaryjoin=(student_test_dates.c.student_id == id),
-        secondaryjoin=(student_test_dates.c.test_date_id == TestDate.id),
-        backref=db.backref('test_date_students', lazy='dynamic'), lazy='dynamic')
+    test_dates = db.relationship('StudentTestDates', #secondary=StudentTestDates,
+        #primaryjoin=(StudentTestDates.student_id == id),
+        #secondaryjoin=(StudentTestDates.test_date_id == TestDate.id),
+        backref=db.backref('test_date_students'), lazy='dynamic')
 
     def __repr__(self):
         return '<Student {}>'.format(self.student_name + " " + self.last_name)
@@ -94,12 +99,12 @@ class Student(db.Model):
 
     def is_testing(self, test_date):
         return self.test_dates.filter(
-            student_test_dates.c.test_date_id == test_date.id).count() > 0
+            StudentTestDates.test_date_id == test_date.id).count() > 0
     
     def get_dates(self):
         return TestDate.query.join(
-                student_test_dates, (student_test_dates.c.test_date_id == TestDate.id)
-            ).filter(student_test_dates.c.student_id == self.id)
+                StudentTestDates, (StudentTestDates.test_date_id == TestDate.id)
+            ).filter(StudentTestDates.student_id == self.id)
 
 
 class Tutor(db.Model):
