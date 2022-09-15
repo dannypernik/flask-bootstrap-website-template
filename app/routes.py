@@ -439,7 +439,7 @@ def griffin():
 def appamada():
     form = ScoreAnalysisForm()
     school='Appamada School'
-    test='SAT'
+    test='mini SAT'
     if form.validate_on_submit():
         student = Student(student_name=form.student_first_name.data, \
         last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
