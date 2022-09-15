@@ -401,7 +401,7 @@ def send_score_analysis_email(student, school):
                     }
                 ],
                 "Bcc": [{"Email": app.config['MAIL_USERNAME']}],
-                "Subject": "Email confirmation + a quote from Brene Brown",
+                "Subject": "Score analysis request received",
                 "TextPart": render_template('email/score-analysis-email.txt',
                                          student=student, school=school),
                 "HTMLPart": render_template('email/score-analysis-email.html',
