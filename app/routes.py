@@ -433,7 +433,7 @@ def griffin():
         parent_email=form.parent_email.data)
         send_score_analysis_email(student, school)
         return render_template('score-analysis-requested.html', email=form.parent_email.data)
-    return render_template('griffin.html', form=form, school=school, test=test)
+    return render_template('school.html', form=form, school=school, test=test)
 
 @app.route('/appamada', methods=['GET', 'POST'])
 def appamada():
@@ -446,7 +446,21 @@ def appamada():
         parent_email=form.parent_email.data)
         send_score_analysis_email(student, school)
         return render_template('score-analysis-requested.html', email=form.parent_email.data)
-    return render_template('appamada.html', form=form, school=school, test=test)
+    return render_template('school.html', form=form, school=school, test=test)
+
+
+@app.route('/huntington-surrey', methods=['GET', 'POST'])
+def huntington_surrey():
+    form = ScoreAnalysisForm()
+    school='Huntington-Surrey School'
+    test='SAT'
+    if form.validate_on_submit():
+        student = Student(student_name=form.student_first_name.data, \
+        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
+        parent_email=form.parent_email.data)
+        send_score_analysis_email(student, school)
+        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+    return render_template('school.html', form=form, school=school, test=test)
 
 
 @app.route('/practice_test', methods=['GET', 'POST'])
