@@ -11,8 +11,8 @@ from app import app, db
 from dotenv import load_dotenv
 from app.models import Student, Tutor, TestDate
 from app.email import send_reminder_email, send_weekly_report_email, \
-    send_registration_reminder_email, send_spreadsheet_report_email, \
-    send_test_reminders_email
+    send_registration_reminder_email, send_late_registration_reminder_email, \
+    send_spreadsheet_report_email, send_test_reminders_email
 import requests
 
 basedir = os.path.abspath(os.path.dirname(__file__))
