@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
-class StudentTestDates(db.Model):
+class StudentTestDate(db.Model):
     __tablename__ = 'student_test_dates'
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), primary_key=True)
     test_date_id = db.Column(db.Integer, db.ForeignKey('test_date.id'), primary_key=True)
@@ -61,7 +61,7 @@ class TestDate(db.Model):
     late_date = db.Column(db.Date)
     other_date = db.Column(db.Date)
     score_date = db.Column(db.Date)
-    #students = db.relationship('StudentTestDates', backref=db.backref('dates_interested'), lazy='dynamic')
+    #students = db.relationship('StudentTestDate', backref=db.backref('dates_interested'), lazy='dynamic')
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)
@@ -81,8 +81,8 @@ class Student(db.Model):
     status = db.Column(db.String(24), default = "active", index=True)
     pronouns = db.Column(db.String(32))
     tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
-    test_dates = db.relationship('StudentTestDates',
-                                foreign_keys=[StudentTestDates.student_id],
+    test_dates = db.relationship('StudentTestDate',
+                                foreign_keys=[StudentTestDate.student_id],
                                 backref=db.backref('student', lazy='joined'),
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
@@ -92,7 +92,7 @@ class Student(db.Model):
     
     def add_test_date(self, test_date):
         if not self.is_testing(test_date):
-            t = StudentTestDates(student_id=self.id, test_date_id=test_date.id)
+            t = StudentTestDate(student_id=self.id, test_date_id=test_date.id)
             db.session.add(t)
             db.session.commit()
 
@@ -104,12 +104,12 @@ class Student(db.Model):
 
     def is_testing(self, test_date):
         return self.test_dates.filter(
-            StudentTestDates.test_date_id == test_date.id).count() > 0
+            StudentTestDate.test_date_id == test_date.id).count() > 0
     
     def get_dates(self):
         return TestDate.query.join(
-                StudentTestDates, (StudentTestDates.test_date_id == TestDate.id)
-            ).filter(StudentTestDates.student_id == self.id)
+                StudentTestDate, (StudentTestDate.test_date_id == TestDate.id)
+            ).filter(StudentTestDate.student_id == self.id)
 
 
 class Tutor(db.Model):
