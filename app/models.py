@@ -61,7 +61,7 @@ class TestDate(db.Model):
     late_date = db.Column(db.Date)
     other_date = db.Column(db.Date)
     score_date = db.Column(db.Date)
-    students = db.relationship('StudentTestDates', backref=db.backref('dates_interested'), lazy='dynamic')
+    #students = db.relationship('StudentTestDates', backref=db.backref('dates_interested'), lazy='dynamic')
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)
@@ -81,21 +81,26 @@ class Student(db.Model):
     status = db.Column(db.String(24), default = "active", index=True)
     pronouns = db.Column(db.String(32))
     tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
-    test_dates = db.relationship('StudentTestDates', #secondary=StudentTestDates,
-        #primaryjoin=(StudentTestDates.student_id == id),
-        #secondaryjoin=(StudentTestDates.test_date_id == TestDate.id),
-        backref=db.backref('test_date_students'), lazy='dynamic')
+    test_dates = db.relationship('StudentTestDates',
+                                foreign_keys=[StudentTestDates.student_id],
+                                backref=db.backref('student', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<Student {}>'.format(self.student_name + " " + self.last_name)
     
     def add_test_date(self, test_date):
         if not self.is_testing(test_date):
-            self.test_dates.append(test_date)
+            t = StudentTestDates(student_id=self.id, test_date_id=test_date.id)
+            db.session.add(t)
+            db.session.commit()
 
     def remove_test_date(self, test_date):
-        if self.is_testing(test_date):
-            self.test_dates.remove(test_date)
+        f = self.test_dates.filter_by(test_date_id=test_date.id).first()
+        if f:
+            db.session.delete(f)
+            
 
     def is_testing(self, test_date):
         return self.test_dates.filter(

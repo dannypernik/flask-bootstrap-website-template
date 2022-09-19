@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block container %}
-  <div class="row justify-content-center">
-    <div class="col-11 col-sm-9 col-lg-5 mb-4">
-      <h1 class="d-inline-block me-4">Edit {{ date.date.strftime('%B %-d') }}</h1>
-      <form class="" action="" method="post">
+  <form class="" action="" method="post">
+    <div class="row justify-content-center">
+      <div class="col-11 col-sm-9 col-lg-5 mb-4">
+        <h1 class="d-inline-block me-4">Edit {{ date.date.strftime('%B %-d') }}</h1>
         {{ form.hidden_tag() }}
         {{ form.test }}
         {{ form.status }}
@@ -49,40 +49,34 @@
             </div>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
 
-    <div class="col-11 col-sm-9 col-lg-4 offset-lg-1">
-      <h1 class="mb-2">Students registered</h1>
-      {% for s in students %}
-        {% if s.is_registered %}
+      <div class="col-11 col-sm-9 col-lg-4 offset-lg-1">
+        <div class="row">
+          <div class="col-7 col-md-8">
+            <h2>Students</h2>
+          </div>
+          <div class="col-5 col-md-4">
+            <h2>Registered?</h2>
+          </div>
+        </div>
+        
+        {% for s in students %}
           <div class="row">
-            <div class="col-8">
-              <h2 class="my-1">{{ s.students.student_name }} {{ s.students.last_name }}</h2>
+            <div class="col-7 col-md-8">
+              <h3>{{ s.students.student_name }} {{ s.students.last_name }}</h3>
             </div>
-            <div class="col-4">
-              <a href="{{ url_for('edit_student', id=s.student_id) }}" class="edit btn sec">Edit</a>
+            <div class="col-5 col-md-4">
+              <input type="checkbox" id="{{ s.students.id }}" value="{{ s.students.id }}" name="registered_students"
+                {{ "checked" if s.is_registered }}>
+                <label for="{{ s.students.id }}" class="text-nowrap">
+                </label>
             </div>
           </div>
-        {% endif %}
-      {% endfor %}
-
-      <h1 class="mb-2 mt-4">Students interested</h1>
-      {% for s in students %}
-        {% if not s.is_registered %}
-          <div class="row">
-            <div class="col-8">
-              <h2 class="my-1">{{ s.students.student_name }} {{ s.students.last_name }}</h2>
-            </div>
-            <div class="col-4">
-              <a href="{{ url_for('edit_student', id=s.student_id) }}" class="edit btn sec">Edit</a>
-            </div>
-          </div>
-        {% endif %}
-      {% endfor %}
+        {% endfor %}
+      </div>
     </div>
-      
-  </div>
+  </form>
 {% endblock container %}
 
 {% block end_scripts %}

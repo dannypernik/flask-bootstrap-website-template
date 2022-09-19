@@ -204,8 +204,6 @@ def edit_student(id):
                 db.session.rollback()
                 flash(student.student_name + ' could not be updated', 'error')
                 return redirect(url_for('students'))
-            finally:
-                db.session.close()
         elif 'delete' in request.form:
             db.session.delete(student)
             db.session.commit()
@@ -396,6 +394,13 @@ def edit_date(id):
             date.other_date=form.other_date.data
             date.score_date=form.score_date.data
             date.status=form.status.data
+
+            registered_students = request.form.getlist('registered_students')
+            for s in students:
+                if str(s.student_id) in registered_students:
+                    s.is_registered = True
+                else:
+                    s.is_registered = False
             try:
                 db.session.add(date)
                 db.session.commit()
