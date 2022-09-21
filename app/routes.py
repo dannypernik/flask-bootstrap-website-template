@@ -50,8 +50,6 @@ def index():
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = form.subject.data
-        db.session.add(user)
-        db.session.commit()
         send_contact_email(user, message, subject)
         flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
         return redirect(url_for('index', _anchor="home"))
