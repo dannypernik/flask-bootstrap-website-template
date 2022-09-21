@@ -6,7 +6,9 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
   <body style="color: #1C4D65;">
-    <p>{{ user.first_name }} ({{ user.email }}) has sent you a message:</p>
+    <p>{{ user.first_name }}
+      ({{ user.email }}{% if user.phone %}, {{ user.phone }}{% endif %})
+      has sent you a message:</p>
     <p style="white-space: pre-wrap;">{{ message }}</p>
   </body>
 </html>
