@@ -3,10 +3,10 @@ from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file
 from app import app, db, login, hcaptcha
 from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, \
-    StudentForm, ScoreAnalysisForm, PracticeTestForm, TutorForm, TestDateForm, \
+    StudentForm, ScoreAnalysisForm, PracticeTestForm, TestDateForm, \
     UserForm, RequestPasswordResetForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
-from app.models import User, Student, Tutor, TestDate
+from app.models import User, TestDate, UserTestDate
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_contact_email, send_password_reset_email, \
@@ -72,15 +72,17 @@ def signup():
         return redirect(url_for('index'))
     form = SignupForm()
     if form.validate_on_submit():
-        username_check = User.query.filter_by(username=form.email.data).first()
-        if username_check is not None:
-            flash('User already exists', 'error')
+        email_check = User.query.filter_by(email=form.email.data).first()
+        if email_check is not None:
+            flash('A user with that email already exists', 'error')
             return redirect(url_for('signup'))
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
         email=form.email.data)
+        # TODO: Add user fields
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        # TODO: Send verification email
         flash("You are now registered. We're glad you're here!")
         return redirect(url_for('index'))
     return render_template('signup.html', title='Sign up', form=form)
@@ -141,22 +143,25 @@ def logout():
 @admin_required
 def students():
     form = StudentForm()
-    students = Student.query.order_by(Student.student_name).all()
+    students = User.query.order_by(User.first_name).filter_by(role='student')
     statuses = ['active', 'paused', 'inactive']
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
-        student = Student(student_name=form.student_name.data, last_name=form.last_name.data, \
-        student_email=form.student_email.data, parent_name=form.parent_name.data, \
-        parent_email=form.parent_email.data, secondary_email=form.secondary_email.data, \
-        timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
-        tutor=form.tutor_id.data)
+        parent = User(first_name=form.parent_name.data, last_name=form.parent_last_name.data, email=form.parent_email.data, 
+        timezone=form.timezone.data, status=form.status.data, role='parent')
+        student = User(first_name=form.student_name.data, last_name=form.student_last_name.data, \
+        email=form.student_email.data, timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
+        tutor_id=form.tutor.data, role='student')
 
         selected_dates = request.form.getlist('test_dates')
         for d in upcoming_dates:
             if str(d.date) in selected_dates:
                 student.add_test_date(d)
         try:
+            db.session.add(parent)
+            db.session.flush()
+            student.parent_id = parent.id
             db.session.add(student)
             db.session.commit()
         except:
@@ -168,67 +173,69 @@ def students():
     return render_template('students.html', title="Students", form=form, students=students, \
         statuses=statuses, upcoming_dates=upcoming_dates, tests=tests)
 
-@app.route('/edit_student/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
 @admin_required
-def edit_student(id):
+def edit_user(id):
     form = StudentForm()
-    student = Student.query.get_or_404(id)
+    user = User.query.get_or_404(id)
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
         if request.method == "POST":
-            student.student_name=form.student_name.data
-            student.last_name=form.last_name.data
-            student.student_email=form.student_email.data
-            student.parent_name=form.parent_name.data
-            student.parent_email=form.parent_email.data
-            student.secondary_email=form.secondary_email.data
-            student.timezone=form.timezone.data
-            student.location=form.location.data
-            student.status=form.status.data
-            student.tutor=form.tutor_id.data
+            user.first_name=form.first_name.data
+            user.last_name=form.last_name.data
+            user.email=form.email.data
+            user.phone=form.phone.data
+            user.secondary_email=form.secondary_email.data
+            user.timezone=form.timezone.data
+            user.location=form.location.data
+            user.status=form.status.data
+            user.role=form.role.data
+            user.tutor=form.tutor.data
+            user.parent=form.parent.data
 
             selected_date_ids = request.form.getlist('test_dates')
             for d in upcoming_dates:
                 if str(d.id) in selected_date_ids:
-                    student.add_test_date(d)
+                    user.add_test_date(d)
                 else:
-                    student.remove_test_date(d)
+                    user.remove_test_date(d)
             try:
-                db.session.add(student)
+                db.session.add(user)
                 db.session.commit()
                 flash(student.student_name + ' updated')
             except:
                 db.session.rollback()
-                flash(student.student_name + ' could not be updated', 'error')
-                return redirect(url_for('students'))
+                flash(user.first_name + ' could not be updated', 'error')
+                return redirect(url_for('users'))
         elif 'delete' in request.form:
-            db.session.delete(student)
+            db.session.delete(user)
             db.session.commit()
-            flash('Deleted ' + student.student_name)
+            flash('Deleted ' + user.first_name)
         else:
             flash('Code error in POST request', 'error')
-        return redirect(url_for('students'))
+        return redirect(url_for('users'))
     elif request.method == "GET":
-        form.student_name.data=student.student_name
-        form.last_name.data=student.last_name
-        form.student_email.data=student.student_email
-        form.parent_name.data=student.parent_name
-        form.parent_email.data=student.parent_email
-        form.secondary_email.data=student.secondary_email
-        form.timezone.data=student.timezone
-        form.location.data=student.location
-        form.status.data=student.status
-        form.tutor_id.data=student.tutor
+        form.first_name.data=user.first_name
+        form.last_name.data=user.last_name
+        form.email.data=user.email
+        form.phone.data=user.phone
+        form.secondary_email=user.secondary_email
+        form.timezone.data=user.timezone
+        form.location.data=user.location
+        form.status.data=user.status
+        form.role.data=user.role
+        form.tutor.data=user.tutor
+        form.parent.data=user.parent
 
-        selected_dates = student.get_dates().all()
+        selected_dates = user.get_dates().all()
         selected_date_ids = []
         for d in upcoming_dates:
             if d in selected_dates:
                 selected_date_ids.append(d.id)
 
-    return render_template('edit-student.html', title='Edit Student', form=form, \
-        student=student, upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids, \
+    return render_template('edit-user.html', title='Edit User', form=form, \
+        user=user, upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids, \
         tests=tests)
 
 
@@ -311,45 +318,6 @@ def users():
             return redirect(url_for('users'))
         return redirect(url_for('users'))
     return render_template('users.html', title="Users", form=form, users=users, admins=admins)
-
-@app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
-@admin_required
-def edit_user(id):
-    form = UserForm()
-    user = User.query.get_or_404(id)
-    if form.validate_on_submit():
-        if 'save' in request.form:
-            user.first_name=form.first_name.data
-            user.last_name=form.last_name.data
-            user.email=form.email.data
-            user.phone=form.phone.data
-            user.about_me=form.about_me.data
-            user.is_admin=form.is_admin.data
-            try:
-                db.session.add(user)
-                db.session.commit()
-                flash(user.first_name + ' updated')
-            except:
-                db.session.rollback()
-                flash(user.first_name + ' could not be updated', 'error')
-                return redirect(url_for('users'))
-            finally:
-                db.session.close()
-        elif 'delete' in request.form:
-            db.session.delete(user)
-            db.session.commit()
-            flash('Deleted ' + user.first_name)
-        else:
-            flash('Code error in POST request', 'error')
-        return redirect(url_for('users'))
-    elif request.method == "GET":
-        form.first_name.data=user.first_name
-        form.last_name.data=user.last_name
-        form.email.data=user.email
-        form.phone.data=user.phone
-        form.about_me.data=user.about_me
-        form.is_admin.data=user.is_admin
-    return render_template('edit-user.html', title='Edit User', form=form, user=user)
 
 
 @app.route('/test_dates', methods=['GET', 'POST'])

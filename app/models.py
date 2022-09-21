@@ -6,6 +6,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
+class UserTestDate(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    test_date_id = db.Column(db.Integer, db.ForeignKey('test_date.id'), primary_key=True)
+    is_registered = db.Column(db.Boolean)
+    users = db.relationship("User", backref=db.backref('planned_tests', lazy='dynamic'))
+    test_dates = db.relationship("TestDate", backref=db.backref('users_interested', lazy='dynamic'))
+    
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(32), index=True)
@@ -18,13 +26,14 @@ class User(UserMixin, db.Model):
     status = db.Column(db.String(24), default = "active", index=True)
     tutor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     students = db.relationship('User', backref='tutor', lazy='dynamic')
-    parents = db.relationship('User', backref='child', lazy='dynamic')
+    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    children = db.relationship('User', backref='parent', lazy='dynamic')
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
     role = db.Column(db.String(24), index=True)
     is_admin = db.Column(db.Boolean)
     test_dates = db.relationship('UserTestDate',
-                                foreign_keys=[UserTestDate.student_id],
+                                foreign_keys=[UserTestDate.user_id],
                                 backref=db.backref('student', lazy='joined'),
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
@@ -87,14 +96,6 @@ class TestDate(db.Model):
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)
-
-
-class UserTestDate(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    test_date_id = db.Column(db.Integer, db.ForeignKey('test_date.id'), primary_key=True)
-    is_registered = db.Column(db.Boolean)
-    users = db.relationship("User", backref=db.backref('planned_tests', lazy='dynamic'))
-    test_dates = db.relationship("TestDate", backref=db.backref('users_interested', lazy='dynamic'))
 
 
 @login.user_loader
