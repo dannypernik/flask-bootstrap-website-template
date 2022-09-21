@@ -22,6 +22,8 @@ def upgrade():
         batch_op.add_column(sa.Column('timezone', sa.Integer, nullable=True))
         batch_op.add_column(sa.Column('location', sa.VARCHAR(length=128), nullable=True))
         batch_op.add_column(sa.Column('status', sa.VARCHAR(length=24), nullable=True))
+        batch_op.add_column(sa.Column('tutor_id', sa.Integer, nullable=True))
+        batch_op.add_column(sa.Column('parent_id', sa.Integer, nullable=True))
         batch_op.create_index(batch_op.f('ix_user_status'), ['status'], unique=False)
         batch_op.add_column(sa.Column('role', sa.VARCHAR(length=24), nullable=True))
         batch_op.create_index(batch_op.f('ix_user_role'), ['role'], unique=False)
