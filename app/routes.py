@@ -466,6 +466,11 @@ def huntington_surrey():
     return render_template('school.html', form=form, school=school, test=test)
 
 
+@app.route('/sat-act-data')
+def sat_act_data():
+    return render_template('sat-act-data.html', title="SAT & ACT data")
+
+
 @app.route('/practice_test', methods=['GET', 'POST'])
 def practice_test():
     form = PracticeTestForm()

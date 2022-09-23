@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>SAT & ACT data</h1>
+  <p>Below you will find data for many official SATs and ACTs that can assist your
+    test prep endeavors. You can access PDFs of
+    <a href="https://app.box.com/s/jok32eudf57qif9usjq0qkhco3mv60oy"target="_blank">
+      official SATs here
+    </a> and
+    <a href="https://www.dropbox.com/sh/524zhp4d0s6evgc/AABuAYbmwGxl8PZrNQbNmnhRa?dl=0" target="_blank">
+      official ACTs here
+    </a>.
+  </p>
+  <p>
+    SAT test codes in the table are in YYMM format of the date the test was
+    administered, while ACT test codes are in YYYYMM format. (For example, 1810
+    is the Oct 2018 SAT, while 202012 is the Dec 2020 ACT.) SATs 1601-1610 are
+    <a href="https://satsuite.collegeboard.org/sat/practice-preparation/practice-tests/paper" target="_blank">
+      practice tests #1-10 from the College Board
+    </a>. 
+  </p>
+  <p>
+    if you have any questions or wish to get help preparing for the SAT or ACT,
+    please do not hesitate to
+    <a href="{{ url_for('index', _anchor='contact') }}">get in touch</a>.
+  </p>
+
+  <iframe style="width:100%; height:75vh" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS0fS1N3RV6w_OqR-OhoCtltkZRNuNuZnrjUdArW2PWXRfwOzBp0iLQO_VKEwXNeMYje3EmnxDgRoZk/pubhtml?widget=true&amp;headers=false&amp;chrome=false"></iframe>
+{% endblock content %}
+
+

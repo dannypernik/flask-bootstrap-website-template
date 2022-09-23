@@ -235,17 +235,27 @@ select {
 
 a {
   display: inline-block;
+  color: rgb(36, 157, 179);
+}
+
+.home-section a, .inverse a {
   text-decoration: none;
-  color: $primary-color;
+}
+
+.white, .inverse {
+  color: white;
+}
+
+.inverse a {
+  color: white;
 }
 
 a:hover {
-  color: $primary-color;
+  color: $hover-color;
 }
 
-a.white:hover {
+.inverse a:hover {
   color: white;
-  text-decoration: underline;
 }
 
 a:hover h2 {
@@ -274,10 +284,6 @@ button, .btn {
 
 a.btn {
   display: inline-block;
-}
-
-.white {
-  color: white;
 }
 
 button.clr {
@@ -563,14 +569,6 @@ div.alert {
 .btn.cta {
   margin-top: calc(2rem + 1vw);
   font-size: $lead-font-size;
-}
-
-.inverse {
-  color: white;
-}
-
-.inverse a {
-  color: white;
 }
 
 .home-next {
