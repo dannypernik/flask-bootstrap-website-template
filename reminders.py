@@ -105,10 +105,7 @@ def main():
 
 
     def full_name(student):
-        if student.last_name == "":
-            name = student.student_name
-        else:
-            name = student.student_name + " " + student.last_name
+        name = student.student_name + " " + student.last_name
         return name
     
 ### Test date reminders
