@@ -203,7 +203,7 @@ def main():
                 for x in week_events_list:
                     count = 0
                     hours = 0
-                    if name_check in x[0]:
+                    if name in x[0]:
                         count += 1
                         hours += x[1]
                         if student.tutor_id == 1:
