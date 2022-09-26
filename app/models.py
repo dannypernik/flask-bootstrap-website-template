@@ -20,21 +20,24 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(32), index=True)
     email = db.Column(db.String(64), index=True)
     phone = db.Column(db.String(32), index=True)
+    #secondary_email = db.Column(db.String(64))
     password_hash = db.Column(db.String(128))
     timezone = db.Column(db.Integer)
     location = db.Column(db.String(128))
     status = db.Column(db.String(24), default = "active", index=True)
     tutor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    students = db.relationship('User', backref='tutor', lazy='dynamic')
+    students = db.relationship('User', backref=db.backref('tutor'), 
+        foreign_keys=[tutor_id], remote_side=[id])
     parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    children = db.relationship('User', backref='parent', lazy='dynamic')
+    children = db.relationship('User', backref=db.backref('parent'), 
+        foreign_keys=[parent_id], remote_side=[id])
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
     role = db.Column(db.String(24), index=True)
     is_admin = db.Column(db.Boolean)
     test_dates = db.relationship('UserTestDate',
                                 foreign_keys=[UserTestDate.user_id],
-                                backref=db.backref('student', lazy='joined'),
+                                backref=db.backref('user', lazy='joined'),
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
 
@@ -54,7 +57,7 @@ class User(UserMixin, db.Model):
     
     def add_test_date(self, test_date):
         if not self.is_testing(test_date):
-            t = UserTestDate(student_id=self.id, test_date_id=test_date.id)
+            t = UserTestDate(user_id=self.id, test_date_id=test_date.id)
             db.session.add(t)
             db.session.commit()
 
@@ -71,7 +74,7 @@ class User(UserMixin, db.Model):
     def get_dates(self):
         return TestDate.query.join(
                 UserTestDate, (UserTestDate.test_date_id == TestDate.id)
-            ).filter(UserTestDate.student_id == self.id)
+            ).filter(UserTestDate.user_id == self.id)
 
     @staticmethod
     def verify_reset_password_token(token):

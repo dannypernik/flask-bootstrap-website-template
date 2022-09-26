@@ -70,6 +70,27 @@ def get_parents():
 def full_name(User):
     return User.first_name + " " + User.last_name
 
+
+class UserForm(FlaskForm):
+    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
+        validators=[InputRequired()])
+    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
+        validators=[InputRequired()])
+    email = StringField('Email address', render_kw={"placeholder": "Email address"})
+    phone = StringField('Phone', render_kw={"placeholder": "Phone"})
+    #secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
+    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
+        validators=[InputRequired()])
+    location = StringField('Location', render_kw={"placeholder": "Location"}, \
+        validators=[InputRequired()])
+    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
+    role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('tutor','Tutor'),('admin','Admin')])
+    tutor_id = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=full_name, allow_blank=True, get_pk=lambda x: x.tutor_id)
+    parent_id = QuerySelectField('Parent', query_factory=get_parents, get_label=full_name, allow_blank=True, get_pk=lambda x: x.parent_id)
+    is_admin = BooleanField('Admin')
+    submit = SubmitField('Save')
+
+
 class StudentForm(FlaskForm):
     student_name = StringField('Student first name', render_kw={"placeholder": "Student first name"}, \
         validators=[InputRequired()])
@@ -86,27 +107,8 @@ class StudentForm(FlaskForm):
     location = StringField('Location', render_kw={"placeholder": "Location"}, \
         validators=[InputRequired()])
     status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    tutor = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=full_name, \
+    tutor_id = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=full_name, \
         validators=[InputRequired()])
-    submit = SubmitField('Save')
-
-
-class UserForm(FlaskForm):
-    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
-        validators=[InputRequired()])
-    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
-        validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"})
-    phone = StringField('Phone', render_kw={"placeholder": "Phone"})
-    secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
-    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
-        validators=[InputRequired()])
-    location = StringField('Location', render_kw={"placeholder": "Location"}, \
-        validators=[InputRequired()])
-    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('tutor','Tutor'),('admin','Admin')])
-    tutor = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=full_name)
-    parent = QuerySelectField('Parent', default=1, query_factory=get_parents, get_label=full_name)
     submit = SubmitField('Save')
 
 
