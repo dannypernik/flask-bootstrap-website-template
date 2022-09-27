@@ -6,16 +6,42 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
+class UserTestDate(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    test_date_id = db.Column(db.Integer, db.ForeignKey('test_date.id'), primary_key=True)
+    is_registered = db.Column(db.Boolean)
+    users = db.relationship("User", backref=db.backref('planned_tests', lazy='dynamic'))
+    test_dates = db.relationship("TestDate", backref=db.backref('users_interested', lazy='dynamic'))
+    
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(32), index=True)
     last_name = db.Column(db.String(32), index=True)
     email = db.Column(db.String(64), index=True)
     phone = db.Column(db.String(32), index=True)
+    #secondary_email = db.Column(db.String(64))
     password_hash = db.Column(db.String(128))
+    timezone = db.Column(db.Integer)
+    location = db.Column(db.String(128))
+    status = db.Column(db.String(24), default = "active", index=True)
+    tutor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    students = db.relationship('User',
+        backref=db.backref('tutor', remote_side=[id]), 
+        foreign_keys=[tutor_id])
+    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    children = db.relationship('User',
+        backref=db.backref('parent', remote_side=[id]), 
+        foreign_keys=[parent_id])
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
+    role = db.Column(db.String(24), index=True)
     is_admin = db.Column(db.Boolean)
+    test_dates = db.relationship('UserTestDate',
+                                foreign_keys=[UserTestDate.user_id],
+                                backref=db.backref('user', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
@@ -30,67 +56,10 @@ class User(UserMixin, db.Model):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
             app.config['SECRET_KEY'], algorithm='HS256')
-
-    @staticmethod
-    def verify_reset_password_token(token):
-        try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
-                            algorithms=['HS256'])['reset_password']
-        except:
-            return
-        return User.query.get(id)
-
-class StudentTestDate(db.Model):
-    __tablename__ = 'student_test_dates'
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), primary_key=True)
-    test_date_id = db.Column(db.Integer, db.ForeignKey('test_date.id'), primary_key=True)
-    is_registered = db.Column(db.Boolean)
-    students = db.relationship("Student", backref=db.backref('planned_tests', lazy='dynamic'))
-    test_dates = db.relationship("TestDate", backref=db.backref('students_interested', lazy='dynamic'))
-
-
-class TestDate(db.Model):
-    __tablename__ = 'test_date'
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
-    test = db.Column(db.String(24))
-    status = db.Column(db.String(24), default = "confirmed")
-    reg_date = db.Column(db.Date)
-    late_date = db.Column(db.Date)
-    other_date = db.Column(db.Date)
-    score_date = db.Column(db.Date)
-    #students = db.relationship('StudentTestDate', backref=db.backref('dates_interested'), lazy='dynamic')
-
-    def __repr__(self):
-        return '<TestDate {}>'.format(self.date)
-
-
-class Student(db.Model):
-    __tablename__ = 'student'
-    id = db.Column(db.Integer, primary_key=True)
-    student_name = db.Column(db.String(64), index=True)
-    last_name = db.Column(db.String(64))
-    student_email = db.Column(db.String(64), index=True)
-    parent_name = db.Column(db.String(64))
-    parent_email = db.Column(db.String(64))
-    secondary_email = db.Column(db.String(64))
-    timezone = db.Column(db.Integer)
-    location = db.Column(db.String(128))
-    status = db.Column(db.String(24), default = "active", index=True)
-    pronouns = db.Column(db.String(32))
-    tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
-    test_dates = db.relationship('StudentTestDate',
-                                foreign_keys=[StudentTestDate.student_id],
-                                backref=db.backref('student', lazy='joined'),
-                                lazy='dynamic',
-                                cascade='all, delete-orphan')
-
-    def __repr__(self):
-        return '<Student {}>'.format(self.student_name + " " + self.last_name)
     
     def add_test_date(self, test_date):
         if not self.is_testing(test_date):
-            t = StudentTestDate(student_id=self.id, test_date_id=test_date.id)
+            t = UserTestDate(user_id=self.id, test_date_id=test_date.id)
             db.session.add(t)
             db.session.commit()
 
@@ -102,25 +71,36 @@ class Student(db.Model):
 
     def is_testing(self, test_date):
         return self.test_dates.filter(
-            StudentTestDate.test_date_id == test_date.id).count() > 0
+            UserTestDate.test_date_id == test_date.id).count() > 0
     
     def get_dates(self):
         return TestDate.query.join(
-                StudentTestDate, (StudentTestDate.test_date_id == TestDate.id)
-            ).filter(StudentTestDate.student_id == self.id)
+                UserTestDate, (UserTestDate.test_date_id == TestDate.id)
+            ).filter(UserTestDate.user_id == self.id)
+
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id = jwt.decode(token, app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return User.query.get(id)
 
 
-class Tutor(db.Model):
+class TestDate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(64), index=True)
-    last_name = db.Column(db.String(64))
-    email = db.Column(db.String(64), index=True)
-    timezone = db.Column(db.Integer)
-    status = db.Column(db.String(24), default = "active", index=True)
-    students = db.relationship('Student', backref='tutor', lazy='dynamic')
+    date = db.Column(db.Date)
+    test = db.Column(db.String(24))
+    status = db.Column(db.String(24), default = "confirmed")
+    reg_date = db.Column(db.Date)
+    late_date = db.Column(db.Date)
+    other_date = db.Column(db.Date)
+    score_date = db.Column(db.Date)
+    #students = db.relationship('UserTestDate', backref=db.backref('dates_interested'), lazy='dynamic')
 
     def __repr__(self):
-        return '<Tutor {}>'.format(self.first_name + " " + self.last_name)
+        return '<TestDate {}>'.format(self.date)
 
 
 @login.user_loader

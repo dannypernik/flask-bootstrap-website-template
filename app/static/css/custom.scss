@@ -5,7 +5,7 @@ $spacer: 2rem;
 $enable-smooth-scroll: false;
 $primary-color: #1C4D65;
 $secondary-color: #ababee;
-$hover-color: lighten($primary-color, 10%);
+$hover-color: #03cdb2;
 $body-font: 'Montserrat', 'Helvetica', sans-serif;
 $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 
@@ -235,30 +235,25 @@ select {
 
 a {
   display: inline-block;
-  color: rgb(36, 157, 179);
-}
-
-.home-section a, .inverse a {
   text-decoration: none;
-}
-
-.white, .inverse {
-  color: white;
-}
-
-.inverse a {
-  color: white;
+  color: $primary-color;
+  transition: all 0.2s ease-in-out;
 }
 
 a:hover {
   color: $hover-color;
 }
 
-.inverse a:hover {
-  color: white;
+a.btn:hover {
+  text-decoration: none;
 }
 
-a:hover h2 {
+a.white:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.inverse a:hover h2 {
   font-weight: 600;
 }
 
@@ -284,6 +279,10 @@ button, .btn {
 
 a.btn {
   display: inline-block;
+}
+
+.white {
+  color: white;
 }
 
 button.clr {
@@ -569,6 +568,14 @@ div.alert {
 .btn.cta {
   margin-top: calc(2rem + 1vw);
   font-size: $lead-font-size;
+}
+
+.inverse {
+  color: white;
+}
+
+.inverse a {
+  color: white;
 }
 
 .home-next {

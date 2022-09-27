@@ -10,13 +10,56 @@
         {{ form.last_name }}
         {{ form.email }}
         {{ form.phone }}
+        <!-- {{ form.secondary_email }} -->
+        {{ form.timezone }}
+        {{ form.location }}
 
-        <div class="row mt-3 g-0">
-          <div class="col-6">
-            {{ form.is_admin }}
+        <div class="d-sm-flex mt-3 justify-content-between">
+          <div class="mb-2">
+            <h3 class="mb-1">Role:</h3>
+            {{ form.role }}
+          </div>
+
+          <div id="parent-div" class="mb-2">
+            <h3 class="mb-1">Parent:</h3>
+            {{ form.parent_id }}
+          </div>
+          <div id="tutor-div" class="mb-2">
+            <h3 class="mb-1">Tutor:</h3>
+            {{ form.tutor_id }}
+          </div>
+        </div>
+        
+
+        {% for t in tests %}
+          <div class="row mt-3">
+            <h3 class="mb-1">{{ t.upper() }} dates:</h3>
+            <div class="d-flex flex-wrap">
+              {% for d in upcoming_dates %}
+                {% if d.test == t %}
+                  <div class="test-date mt-1">
+                    <input type="checkbox" id="{{ d.id }}" value="{{ d.id }}" name="test_dates"
+                      {{ "checked" if d.id in selected_date_ids }}>
+                    <label for="{{ d.id }}" class="text-nowrap">
+                      {{ d.date.strftime('%B %-d') }}
+                    </label>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+        <div class="row mt-3">
+          <div class="col">
+            {{ form.status }}
+          </div>
+          <div class="col">
+            <input type="checkbox" id="is_admin" name="is_admin"
+              {{ "checked" if user.is_admin }}>
             <label for="is_admin" class="mt-2 ms-2">Admin</label>
           </div>
-          <div class="col-6 text-end">
+          <div class="col text-end">
             <a href="#" data-bs-toggle="modal" data-bs-target="#delete-modal" data-text="delete">
               <button type="button" class="btn sec alert">Delete</button>
             </a>
@@ -58,5 +101,6 @@
 {% endblock container %}
 
 {% block end_scripts %}
-  <script src="{{ url_for('static', filename="js/bootstrap.js") }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/toggle-parent-tutor.js') }}"></script>
 {% endblock end_scripts %}

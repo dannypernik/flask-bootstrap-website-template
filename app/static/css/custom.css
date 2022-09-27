@@ -5365,30 +5365,25 @@ select {
 
 a {
   display: inline-block;
-  color: rgb(36, 157, 179);
-}
-
-.home-section a, .inverse a {
   text-decoration: none;
-}
-
-.white, .inverse {
-  color: white;
-}
-
-.inverse a {
-  color: white;
+  color: #1C4D65;
+  transition: all 0.2s ease-in-out;
 }
 
 a:hover {
-  color: #276b8d;
+  color: #03cdb2;
 }
 
-.inverse a:hover {
+a.btn:hover {
+  text-decoration: none;
+}
+
+a.white:hover {
   color: white;
+  text-decoration: underline;
 }
 
-a:hover h2, a:hover .h2 {
+.inverse a:hover h2, .inverse a:hover .h2 {
   font-weight: 600;
 }
 
@@ -5414,6 +5409,10 @@ button, .btn {
 
 a.btn {
   display: inline-block;
+}
+
+.white {
+  color: white;
 }
 
 button.clr {
@@ -5452,8 +5451,8 @@ button.clr {
 }
 
 button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
-  background-color: #276b8d;
-  border-color: #276b8d;
+  background-color: #03cdb2;
+  border-color: #03cdb2;
   color: white;
 }
 
@@ -5681,6 +5680,14 @@ div.alert {
 .btn.cta {
   margin-top: calc(2rem + 1vw);
   font-size: calc(2rem + 0.1vw);
+}
+
+.inverse {
+  color: white;
+}
+
+.inverse a {
+  color: white;
 }
 
 .home-next {

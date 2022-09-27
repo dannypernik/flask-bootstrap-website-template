@@ -5,7 +5,7 @@ from wtforms.fields.html5 import DateField
 from wtforms.validators import ValidationError, InputRequired, DataRequired, \
     Email, EqualTo, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from app.models import User, Student, Tutor, TestDate
+from app.models import User, TestDate, UserTestDate
 
 class InquiryForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
@@ -62,42 +62,13 @@ class ResetPasswordForm(FlaskForm):
 
 
 def get_tutors():
-    return Tutor.query
+    return User.query.filter_by(role='tutor')
 
-def tutor_name(Tutor):
-    return Tutor.first_name + " " + Tutor.last_name
+def get_parents():
+    return User.query.filter_by(role='parent')
 
-class StudentForm(FlaskForm):
-    student_name = StringField('Student name', render_kw={"placeholder": "Student name"}, \
-        validators=[InputRequired()])
-    last_name = StringField('Last name', render_kw={"placeholder": "Last name"})
-    student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address")])
-    parent_name = StringField('Parent name', render_kw={"placeholder": "Parent name"}, \
-        validators=[InputRequired()])
-    parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address")])
-    secondary_email = StringField('Secondary Email (optional)', render_kw={"placeholder": "Secondary Email (optional)"})
-    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
-        validators=[InputRequired()])
-    location = StringField('Location', render_kw={"placeholder": "Location"}, \
-        validators=[InputRequired()])
-    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    tutor_id = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=tutor_name, \
-        validators=[InputRequired()])
-    submit = SubmitField('Save')
-
-
-class TutorForm(FlaskForm):
-    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
-        validators=[InputRequired()])
-    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
-        validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"})
-    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
-        validators=[InputRequired()])
-    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    submit = SubmitField('Save')
+def full_name(User):
+    return User.first_name + " " + User.last_name
 
 
 class UserForm(FlaskForm):
@@ -107,8 +78,37 @@ class UserForm(FlaskForm):
         validators=[InputRequired()])
     email = StringField('Email address', render_kw={"placeholder": "Email address"})
     phone = StringField('Phone', render_kw={"placeholder": "Phone"})
-    about_me = StringField('About me', render_kw={"placeholder": "About me"})
+    #secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
+    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
+        validators=[InputRequired()])
+    location = StringField('Location', render_kw={"placeholder": "Location"}, \
+        validators=[InputRequired()])
+    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
+    role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('tutor','Tutor'),('admin','Admin')])
+    tutor_id = SelectField('Tutor', coerce=int)
+    parent_id = SelectField('Parent', coerce=int)
     is_admin = BooleanField('Admin')
+    submit = SubmitField('Save')
+
+
+class StudentForm(FlaskForm):
+    student_name = StringField('Student first name', render_kw={"placeholder": "Student first name"}, \
+        validators=[InputRequired()])
+    student_last_name = StringField('Student last name', render_kw={"placeholder": "Student last name"})
+    student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    parent_name = StringField('Parent name', render_kw={"placeholder": "Parent name"}, \
+        validators=[InputRequired()])
+    parent_last_name = StringField('Parent last name', render_kw={"placeholder": "Parent last name"})
+    parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
+        validators=[InputRequired()])
+    location = StringField('Location', render_kw={"placeholder": "Location"}, \
+        validators=[InputRequired()])
+    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
+    tutor_id = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=full_name, \
+        validators=[InputRequired()])
     submit = SubmitField('Save')
 
 
