@@ -5367,10 +5367,15 @@ a {
   display: inline-block;
   text-decoration: none;
   color: #1C4D65;
+  transition: all 0.2s ease-in-out;
 }
 
 a:hover {
-  color: #1C4D65;
+  color: #03cdb2;
+}
+
+a.btn:hover {
+  text-decoration: none;
 }
 
 a.white:hover {
@@ -5378,7 +5383,7 @@ a.white:hover {
   text-decoration: underline;
 }
 
-a:hover h2, a:hover .h2 {
+.inverse a:hover h2, .inverse a:hover .h2 {
   font-weight: 600;
 }
 
@@ -5446,8 +5451,8 @@ button.clr {
 }
 
 button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
-  background-color: #276b8d;
-  border-color: #276b8d;
+  background-color: #03cdb2;
+  border-color: #03cdb2;
   color: white;
 }
 

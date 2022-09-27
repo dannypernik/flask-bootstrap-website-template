@@ -17,16 +17,16 @@
         <div class="d-sm-flex mt-3 justify-content-between">
           <div class="mb-2">
             <h3 class="mb-1">Role:</h3>
-        {{ form.role }}
+            {{ form.role }}
           </div>
 
           <div id="parent-div" class="mb-2">
             <h3 class="mb-1">Parent:</h3>
-        {{ form.parent_id }}
+            {{ form.parent_id }}
           </div>
           <div id="tutor-div" class="mb-2">
             <h3 class="mb-1">Tutor:</h3>
-        {{ form.tutor_id }}
+            {{ form.tutor_id }}
           </div>
         </div>
         
@@ -102,4 +102,5 @@
 
 {% block end_scripts %}
   <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/toggle-parent-tutor.js') }}"></script>
 {% endblock end_scripts %}
