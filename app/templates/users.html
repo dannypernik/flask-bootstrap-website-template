@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="">
+  <div class="mb-3">
     <button id="add-user" class="btn d-inline-block my-0 me-2">+ Add user</button>
     <a href="{{ url_for('students') }}" class="btn sec py-2">Students</a>
   </div>
@@ -42,18 +42,27 @@
 
   
   {% for r in roles %}
-    <h1 class="mt-3">Active {{ r.title() }}s</h1>
-    {% for u in active_users %}
-      {% if u.role == r %}
-        <div class="row">
-          <div class="col-9">
-            <h3>
-              <a href="{{ url_for('edit_user', id=u.id) }}">
-                {{ u.first_name }} {{ u.last_name }}
-              </a>
-            </h3>
-            {% if u.role == 'student' %}
+    <h1 class="slide-toggle mt-2">Active {{ r.title() }}s</h1>
+    <div id="active-{{ r }}s" class="user-list">
+      {% for u in active_users %}
+        {% if u.role == r %}
+          <div class="row mb-3">
+            <div class="col">
+              <h3 class="mb-1">
+                <a class="semibold" href="{{ url_for('edit_user', id=u.id) }}">
+                  {{ u.first_name }} {{ u.last_name }}
+                </a>
+              </h3>
+              <p class="mb-1">
+                <a href="mailto:{{ u.email }}" target="_blank">
+                  {{ u.email }}
+                </a>{% if u.phone != "" %},
+                <a href="tel:+1{{ u.phone }}">
+                  {{ u.phone }}
+                </a>{% endif %}
+              </p>
               <ul>
+              {% if u.role == 'student' %}
                 <li>
                   Parent:
                   {% if u.parent_id %}
@@ -74,18 +83,44 @@
                     None  
                   {% endif %}
                 </li>
-              </ul>             
-            {% endif %}
+
+                {% elif u.role == 'tutor' %}
+                  <li>Students:
+                    {% for s in u.students %}
+                      <a href="{{ url_for('edit_user', id=s.id) }}">
+                        {{ s.first_name }} {{ s.last_name }}{{ "," if not loop.last else "" }}
+                      </a>
+                    {% endfor %}
+                  </li>
+                
+                {% elif u.role == 'parent' %}
+                  <li>Children:
+                    {% for c in u.children %}
+                      <a href="{{ url_for('edit_user', id=c.id) }}">
+                        {{ c.first_name }} {{ c.last_name }}{{ "," if not loop.last else "" }}
+                      </a>
+                    {% endfor %}
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
           </div>
-          <div class="col-3">
-            <a class="edit btn sec" href="{{ url_for('edit_user', id=u.id) }}">
-              Edit
-            </a>
-          </div>
-        </div>
-        
-      {% endif %}
-    {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <h1 class="slide-toggle mt-2">Other users</h1>
+  {% for u in other_users %}
+    <div class="row mb-3">
+      <div class="col">
+        <h3 class="mb-1">
+          <a class="semibold" href="{{ url_for('edit_user', id=u.id) }}">
+            {{ u.first_name }} {{ u.last_name }} ({{ u.status.title() }} {{ u.role }})
+          </a>
+        </h3>
+      </div>
+    </div>
   {% endfor %}
 {% endblock content %}
 
@@ -102,6 +137,24 @@
     document.getElementById("hide-form").addEventListener("click", function () {
       slideUp(this.parentElement);
       document.getElementById("add-user").parentElement.style.display = "block";
+    });
+
+    let slideToggle = (target) => {
+      var style = window.getComputedStyle(target),
+          height = style.getPropertyValue('height');
+      if (height == '0px') {
+        return slideDown(target);
+      } else {
+        return slideUp(target);
+      }
+    }
+
+    var elements = document.getElementsByClassName("slide-toggle");
+
+    Array.from(elements).forEach(function(element) {
+      element.addEventListener("click", function () {
+          slideToggle(element.nextElementSibling);
+        });
     });
   </script>
 
