@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>SAT & ACT data</h1>
+  <p>Below you will find concept categorizations for questions from selected
+    official SATs and ACTs. To see the full dataset including recently administered
+    tests, please request access to the Google Sheet linked below.
+  </p>
+  <p>
+    SAT test codes in the table are in YYMM format of the date the test was
+    administered, while ACT test codes are in YYYYMM format. (For example, 2203
+    is the March 2022 SAT, while 202204 is the April 2022 ACT.) SATs 1601-1610 are
+    <a href="https://satsuite.collegeboard.org/sat/practice-preparation/practice-tests/paper" target="_blank">
+      practice tests #1-10 from the College Board
+    </a>. Many official tests are available courtesy of Reddit's
+    <a href="https://www.reddit.com/r/Sat/comments/llxpn0/official_reddit_sat_qas_megathread_pdfs_of_all/" target="_blank">
+      SAT
+    </a> and
+    <a href="https://www.reddit.com/r/SATACTprep/comments/oab84z/official_act_tests_19962021/" target=""_blank>
+      ACT
+    </a> communities.
+  </p>
+  <p class="mb-1">
+    If you have any questions or wish to get help preparing for the SAT or ACT,
+    please do not hesitate to
+    <a href="{{ url_for('index', _anchor='contact') }}">get in touch</a>.
+  </p>
+  <p class="mb-2">
+    <a href="https://docs.google.com/spreadsheets/d/1FJFM3AmKHYkwMy4Creo84P2HbBTVaoMzF7XyZzcCQvM/edit?usp=sharing"
+    class="btn" target="_blank">Request access to full dataset in Google Sheets</a>
+  </p>
+
+  <iframe style="width:100%; height:75vh" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS0fS1N3RV6w_OqR-OhoCtltkZRNuNuZnrjUdArW2PWXRfwOzBp0iLQO_VKEwXNeMYje3EmnxDgRoZk/pubhtml?widget=false&amp;headers=false"></iframe>
+{% endblock content %}
+
+

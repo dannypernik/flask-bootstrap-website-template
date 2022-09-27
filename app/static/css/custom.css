@@ -5365,6 +5365,10 @@ select {
 
 a {
   display: inline-block;
+  color: rgb(36, 157, 179);
+}
+
+.home-section a, .inverse a {
   text-decoration: none;
   color: #1C4D65;
   transition: all 0.2s ease-in-out;
@@ -5380,7 +5384,6 @@ a.btn:hover {
 
 a.white:hover {
   color: white;
-  text-decoration: underline;
 }
 
 .inverse a:hover h2, .inverse a:hover .h2 {
@@ -5409,10 +5412,6 @@ button, .btn {
 
 a.btn {
   display: inline-block;
-}
-
-.white {
-  color: white;
 }
 
 button.clr {
@@ -5680,14 +5679,6 @@ div.alert {
 .btn.cta {
   margin-top: calc(2rem + 1vw);
   font-size: calc(2rem + 0.1vw);
-}
-
-.inverse {
-  color: white;
-}
-
-.inverse a {
-  color: white;
 }
 
 .home-next {
