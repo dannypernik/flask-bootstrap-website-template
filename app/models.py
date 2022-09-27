@@ -26,11 +26,13 @@ class User(UserMixin, db.Model):
     location = db.Column(db.String(128))
     status = db.Column(db.String(24), default = "active", index=True)
     tutor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    students = db.relationship('User', backref=db.backref('tutor'), 
-        foreign_keys=[tutor_id], remote_side=[id])
+    students = db.relationship('User',
+        backref=db.backref('tutor', remote_side=[id]), 
+        foreign_keys=[tutor_id])
     parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    children = db.relationship('User', backref=db.backref('parent'), 
-        foreign_keys=[parent_id], remote_side=[id])
+    children = db.relationship('User',
+        backref=db.backref('parent', remote_side=[id]), 
+        foreign_keys=[parent_id])
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
     role = db.Column(db.String(24), index=True)

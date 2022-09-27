@@ -143,13 +143,28 @@ def logout():
 @admin_required
 def users():
     form = UserForm()
-    users = User.query.filter_by(is_admin=False).order_by(User.first_name)
-    admins = User.query.filter_by(is_admin=True).order_by(User.first_name)
-    print(admins)
+    active_users = User.query.filter_by(status='active')
+    other_users = User.query.filter(User.status != 'active')
+    roles = ['student', 'tutor', 'parent', 'admin']
+    parents = User.query.filter_by(role='parent')
+    parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
+    tutors = User.query.filter_by(role='tutor')
+    tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
+    form.parent_id.choices = parent_list
+    form.tutor_id.choices = tutor_list
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-        email=form.email.data, phone=form.phone.data, timezone=form.timezone.data, \
-        location=form.location.data, tutor_id=form.tutor_id.data, is_admin=False)
+            email=form.email.data, phone=form.phone.data, timezone=form.timezone.data, \
+            location=form.location.data, role=form.role.data, \
+            status='active', is_admin=False)
+        if form.tutor_id.data == 0:
+            user.tutor_id=None
+        else:
+            user.tutor_id=form.tutor_id.data
+        if form.parent_id.data == 0:
+            user.parent_id=None
+        else:
+            user.parent_id=form.parent_id.data
         try:
             db.session.add(user)
             db.session.commit()
@@ -159,7 +174,8 @@ def users():
             flash(user.first_name + ' could not be added', 'error')
             return redirect(url_for('users'))
         return redirect(url_for('users'))
-    return render_template('users.html', title="Users", form=form, users=users, admins=admins)
+    return render_template('users.html', title="Users", form=form, active_users=active_users, \
+        other_users=other_users, roles=roles)
 
 
 @app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
@@ -168,6 +184,12 @@ def edit_user(id):
     form = UserForm()
     user = User.query.get_or_404(id)
     selected_date_ids = []
+    parents = User.query.filter_by(role='parent')
+    parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
+    tutors = User.query.filter_by(role='tutor')
+    tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
+    form.parent_id.choices = parent_list
+    form.tutor_id.choices = tutor_list
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
@@ -182,9 +204,14 @@ def edit_user(id):
             user.status=form.status.data
             user.role=form.role.data
             user.is_admin=form.is_admin.data
-            user.tutor_id=form.tutor_id.data
-            user.parent_id=form.parent_id.data
-            
+            if form.tutor_id.data == 0:
+                user.tutor_id=None
+            else:
+                user.tutor_id=form.tutor_id.data
+            if form.parent_id.data == 0:
+                user.parent_id=None
+            else:
+                user.parent_id=form.parent_id.data
 
             selected_date_ids = request.form.getlist('test_dates')
             for d in upcoming_dates:

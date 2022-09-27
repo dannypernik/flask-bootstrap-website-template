@@ -85,8 +85,8 @@ class UserForm(FlaskForm):
         validators=[InputRequired()])
     status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
     role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('tutor','Tutor'),('admin','Admin')])
-    tutor_id = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=full_name, allow_blank=True, get_pk=lambda x: x.tutor_id)
-    parent_id = QuerySelectField('Parent', query_factory=get_parents, get_label=full_name, allow_blank=True, get_pk=lambda x: x.parent_id)
+    tutor_id = SelectField('Tutor', coerce=int)
+    parent_id = SelectField('Parent', coerce=int)
     is_admin = BooleanField('Admin')
     submit = SubmitField('Save')
 
