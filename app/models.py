@@ -101,7 +101,7 @@ class TestDate(db.Model):
     late_date = db.Column(db.Date)
     other_date = db.Column(db.Date)
     score_date = db.Column(db.Date)
-    #students = db.relationship('UserTestDate', backref=db.backref('dates_interested'), lazy='dynamic')
+    students = db.relationship('User', secondary="user_test_date", backref=db.backref('dates_interested'), lazy='dynamic')
 
     def __repr__(self):
         return '<TestDate {}>'.format(self.date)

@@ -96,18 +96,18 @@ class StudentForm(FlaskForm):
     student_last_name = StringField('Student last name', render_kw={"placeholder": "Student last name"})
     student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    student_phone = StringField('Student phone', render_kw={"placeholder": "Student phone"})
     parent_name = StringField('Parent name', render_kw={"placeholder": "Parent name"}, \
         validators=[InputRequired()])
     parent_last_name = StringField('Parent last name', render_kw={"placeholder": "Parent last name"})
     parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    parent_phone = StringField('Parent phone', render_kw={"placeholder": "Parent phone"})
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
         validators=[InputRequired()])
-    location = StringField('Location', render_kw={"placeholder": "Location"}, \
-        validators=[InputRequired()])
+    location = StringField('Location', render_kw={"placeholder": "Location"})
     status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    tutor_id = QuerySelectField('Tutor', default=1, query_factory=get_tutors, get_label=full_name, \
-        validators=[InputRequired()])
+    tutor_id = SelectField('Tutor', coerce=int)
     submit = SubmitField('Save')
 
 

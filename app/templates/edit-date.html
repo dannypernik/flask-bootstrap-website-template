@@ -64,13 +64,12 @@
         {% for s in students %}
           <div class="row">
             <div class="col-7 col-md-8">
-              <h3>{{ s.students.student_name }} {{ s.students.last_name }}</h3>
+              <h3>{{ s.first_name }} {{ s.last_name }}</h3>
             </div>
             <div class="col-5 col-md-4">
-              <input type="checkbox" id="{{ s.students.id }}" value="{{ s.students.id }}" name="registered_students"
+              <input type="checkbox" id="{{ s.id }}" value="{{ s.id }}" name="registered_students"
                 {{ "checked" if s.is_registered }}>
-                <label for="{{ s.students.id }}" class="text-nowrap">
-                </label>
+                <label for="{{ s.id }}" class="text-nowrap"></label>
             </div>
           </div>
         {% endfor %}

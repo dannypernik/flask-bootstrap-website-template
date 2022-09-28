@@ -193,7 +193,7 @@ def edit_user(id):
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
-        if request.method == "POST":
+        if 'save' in request.form:
             user.first_name=form.first_name.data
             user.last_name=form.last_name.data
             user.email=form.email.data
@@ -262,20 +262,26 @@ def edit_user(id):
 def students():
     form = StudentForm()
     students = User.query.order_by(User.first_name).filter_by(role='student')
+    tutors = User.query.filter_by(role='tutor')
+    tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
+    form.tutor_id.choices = tutor_list
     statuses = ['active', 'paused', 'inactive']
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
-        parent = User(first_name=form.parent_name.data, last_name=form.parent_last_name.data, email=form.parent_email.data, 
-        timezone=form.timezone.data, status=form.status.data, role='parent')
         student = User(first_name=form.student_name.data, last_name=form.student_last_name.data, \
-        email=form.student_email.data, timezone=form.timezone.data, location=form.location.data, status=form.status.data, \
-        tutor_id=form.tutor_id.data, role='student')
+            email=form.student_email.data, phone=form.student_phone.data, timezone=form.timezone.data, \
+            location=form.location.data, status=form.status.data, \
+            tutor_id=form.tutor_id.data, role='student')
+        parent = User(first_name=form.parent_name.data, last_name=form.parent_last_name.data, \
+            email=form.parent_email.data, phone=form.parent_phone.data, \
+            timezone=form.timezone.data, role='parent')
 
         selected_dates = request.form.getlist('test_dates')
         for d in upcoming_dates:
             if str(d.date) in selected_dates:
                 student.add_test_date(d)
+
         try:
             db.session.add(parent)
             db.session.flush()
@@ -284,9 +290,9 @@ def students():
             db.session.commit()
         except:
             db.session.rollback()
-            flash(student.student_name + ' could not be added', 'error')
+            flash(student.first_name + ' could not be added', 'error')
             return redirect(url_for('students'))
-        flash(student.student_name + ' added')
+        flash(student.first_name + ' added')
         return redirect(url_for('students'))
     return render_template('students.html', title="Students", form=form, students=students, \
         statuses=statuses, upcoming_dates=upcoming_dates, tests=tests)
@@ -343,7 +349,8 @@ def test_dates():
 def edit_date(id):
     form = TestDateForm()
     date = TestDate.query.get_or_404(id)
-    students = date.students_interested
+    students = date.students
+    print(students)
     if form.validate_on_submit():
         if 'save' in request.form:
             date.test=form.test.data

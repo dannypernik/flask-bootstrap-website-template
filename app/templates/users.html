@@ -42,11 +42,11 @@
 
   
   {% for r in roles %}
-    <h1 class="slide-toggle mt-2">Active {{ r.title() }}s</h1>
+    <h1 class="slide-toggle my-2">Active {{ r.title() }}s</h1>
     <div id="active-{{ r }}s" class="user-list">
       {% for u in active_users %}
         {% if u.role == r %}
-          <div class="row mb-3">
+          <div class="row mb-2">
             <div class="col">
               <h3 class="mb-1">
                 <a class="semibold" href="{{ url_for('edit_user', id=u.id) }}">
@@ -102,6 +102,14 @@
                     {% endfor %}
                   </li>
                 {% endif %}
+
+                <li>Tests:
+                  {% for d in u.test_dates %}
+                    <a href="{{ url_for('edit_date', id=d.test_date_id) }}">
+                      {{ d.test_dates.date.strftime('%b %-d, %Y') }}
+                    </a>{{ ";" if not loop.last else "" }}
+                  {% endfor %}
+                </li>
               </ul>
             </div>
           </div>

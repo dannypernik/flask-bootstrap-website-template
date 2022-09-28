@@ -19,7 +19,7 @@
     {{ form.parent_name }}
     {{ form.parent_last_name }}
     {{ form.parent_email }}
-    {{ form.secondary_email }}
+    <!-- {{ form.secondary_email }} -->
     {{ form.timezone }}
     {{ form.location }}
 
@@ -61,18 +61,37 @@
       {% for s in students %}
         {% if s.status == status %}
           <div class="row justify-content-centered">
-            <div class="col-9 col-md-10">
-              <h2 class="my-1">{{ s.first_name }} {{ s.last_name }}</h2>
+            <div class="col">
+              <h2 class="my-1">
+                <a href="{{ url_for('edit_user', id=s.id) }}">
+                  {{ s.first_name }} {{ s.last_name }}
+                </a>
+                ({{ s.email }})
+              </h2>
 
               {% if status == 'active' %}
                 <ul class="mb-3">
-                  <li>{{ s.student_email }}</li>
-                  <li>Parent: {{ s.parent_name }} ({{ s.parent_email }})</li>
-                  {% if s.secondary_email %}
-                    <li>Email 2: {{ s.secondary_email }}</li>
-                  {% endif %}
-                  <li>Tutor: {{ s.tutor.first_name }} {{ s.tutor.last_name }}</li>
-                  <li>Timezone:
+                  <li>
+                    Parent:
+                    <a href="{{ url_for('edit_user', id=s.parent.id) }}">
+                      {{ s.parent.first_name }} {{ s.parent.last_name }}
+                    </a>
+                    ({{ s.parent.email }})
+                  </li>
+                  <li>
+                    Tutor:
+                    <a href="{{ url_for('edit_user', id=s.tutor.id) }}">
+                      {{ s.tutor.first_name }} {{ s.tutor.last_name }}
+                    </a>
+                  </li>
+                  <li>Tests:
+                    {% for d in s.test_dates %}
+                      <a href="{{ url_for('edit_date', id=d.test_date_id) }}">
+                        {{ d.test_dates.date.strftime('%b %-d, %Y') }}
+                      </a>{{ ";" if not loop.last else "" }}
+                    {% endfor %}
+                  </li>
+                  <!-- <li>Timezone:
                     {% if s.timezone == -2 %}
                         Pacific
                       {% elif s.timezone == -1 %}
@@ -84,16 +103,9 @@
                       {% else %}
                           {{ s.timezone }}
                     {% endif %}
-                  </li>
-                  <li>Location: {{ s.location }}</li>
+                  </li> -->
                 </ul>
               {% endif %}
-            </div>
-
-            <div class="col-3 col-md-2 text-end">
-              <a class="edit btn sec" href="{{ url_for('edit_user', id=s.id) }}">
-                Edit
-              </a>
             </div>
           </div>
         {% endif %}
