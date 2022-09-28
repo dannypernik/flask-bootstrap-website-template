@@ -21,7 +21,7 @@ def upgrade():
     with op.batch_alter_table('user', schema=None) as batch_op:
         #batch_op.add_column(sa.Column('location', sa.String(length=128), nullable=True))
         #batch_op.add_column(sa.Column('parent_id', sa.Integer(), nullable=True))
-        batch_op.add_column(sa.Column('role', sa.String(length=24), nullable=True))
+        #batch_op.add_column(sa.Column('role', sa.String(length=24), nullable=True))
         #batch_op.add_column(sa.Column('status', sa.String(length=24), nullable=True))
         #batch_op.add_column(sa.Column('timezone', sa.Integer(), nullable=True))
         batch_op.add_column(sa.Column('tutor_id', sa.Integer(), nullable=True))
