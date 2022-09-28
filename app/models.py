@@ -13,12 +13,6 @@ class UserTestDate(db.Model):
     users = db.relationship("User", backref=db.backref('planned_tests', lazy='dynamic'))
     test_dates = db.relationship("TestDate", backref=db.backref('users_interested', lazy='dynamic'))
 
-class TempTestDate(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    test_date_id = db.Column(db.Integer, db.ForeignKey('test_date.id'), primary_key=True)
-    is_registered = db.Column(db.Boolean)
-    users = db.relationship("User", backref=db.backref('planned_tests', lazy='dynamic'))
-    test_dates = db.relationship("TestDate", backref=db.backref('users_interested', lazy='dynamic'))
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
