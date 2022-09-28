@@ -81,8 +81,7 @@ class UserForm(FlaskForm):
     #secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
         validators=[InputRequired()])
-    location = StringField('Location', render_kw={"placeholder": "Location"}, \
-        validators=[InputRequired()])
+    location = StringField('Location', render_kw={"placeholder": "Location"})
     status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
     role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('tutor','Tutor'),('admin','Admin')])
     tutor_id = SelectField('Tutor', coerce=int)

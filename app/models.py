@@ -28,11 +28,15 @@ class User(UserMixin, db.Model):
     tutor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     students = db.relationship('User',
         backref=db.backref('tutor', remote_side=[id]), 
-        foreign_keys=[tutor_id])
+        primaryjoin=(id==tutor_id),
+        foreign_keys=[tutor_id],
+        post_update=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     children = db.relationship('User',
-        backref=db.backref('parent', remote_side=[id]), 
-        foreign_keys=[parent_id])
+        primaryjoin=(id==parent_id),
+        backref=db.backref('parent', remote_side=[id]),
+        foreign_keys=[parent_id],
+        post_update=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
     role = db.Column(db.String(24), index=True)
