@@ -342,7 +342,7 @@ def send_password_reset_email(user):
         print("Password reset email failed to send with code " + str(result.status_code), result.reason)
 
 
-def send_test_strategies_email(user, relation, student):
+def send_test_strategies_email(student, parent, relation):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -350,13 +350,9 @@ def send_test_strategies_email(user, relation, student):
     filename = 'SAT-ACT-strategies.pdf'
 
     to_email = []
-    sender_name = user.parent_name.title()
-    student = student.title()
-
     if relation == 'student':
-        sender_name = student
-        to_email.append({ "Email": user.student_email })
-    to_email.append({ "Email": user.parent_email })
+        to_email.append({ "Email": student.email })
+    to_email.append({ "Email": parent.email })
 
     link = "https://www.openpathtutoring.com/download/" + filename
 
@@ -370,8 +366,8 @@ def send_test_strategies_email(user, relation, student):
                 "To": to_email,
                 "Bcc": [{"Email": app.config['MAIL_USERNAME']}],
                 "Subject": "10 Strategies to Master the SAT & ACT",
-                "HTMLPart": render_template('email/test-strategies.html', user=user, relation=relation, sender_name=sender_name, student=student, link=link),
-                "TextPart": render_template('email/test-strategies.txt', user=user, relation=relation, sender_name=sender_name, student=student, link=link)
+                "HTMLPart": render_template('email/test-strategies.html', relation=relation, student=student, parent=parent, link=link),
+                "TextPart": render_template('email/test-strategies.txt', relation=relation, student=student, parent=parent, link=link)
             }
         ]
     }

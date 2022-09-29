@@ -1,6 +1,6 @@
-Hi {{ sender_name }}, thank you for requesting 10 Strategies to Master the SAT & ACT. Please click the button below to download the PDF. Let me know if you{% if relation == 'parent' %} and {{ student }}{% endif %} find it useful!
+Hi {% if relation == 'student' %}{{ student.first_name }}{% else %}{{ parent.first_name }}{% endif %}, thank you for requesting 10 Strategies to Master the SAT & ACT. Please click the button below to download the PDF. Let me know if you{% if relation == 'parent' %} and {{ student.first_name }}{% endif %} find it useful!
 {% if relation == 'student' %}
-{{ user.parent_name }}, I also wanted to let you know that {{ sender_name }} expressed interest in this resource. If you have any questions, you can reply to this email. Feel free to include your phone number and a convenient time that I may call you.
+{{ parent.first_name }}, I also wanted to let you know that {{ student.first_name }} expressed interest in this resource. If you have any questions, you can reply to this email. Feel free to include your phone number and a convenient time that I may call you.
 {% endif %}
 Download SAT & ACT Strategies: {{ link }}
 

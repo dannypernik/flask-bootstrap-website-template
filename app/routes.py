@@ -401,10 +401,9 @@ def griffin():
     school='Griffin School'
     test='ACT'
     if form.validate_on_submit():
-        student = Student(student_name=form.student_first_name.data, \
-        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
-        parent_email=form.parent_email.data)
-        send_score_analysis_email(student, school)
+        student = User(first_name=form.student_first_name.data, last_name=form.student_last_name.data)
+        parent = User(first_name=form.parent_first_name.data, email=form.parent_email.data)
+        send_score_analysis_email(student, parent, school)
         return render_template('score-analysis-requested.html', email=form.parent_email.data)
     return render_template('school.html', form=form, school=school, test=test)
 
@@ -464,13 +463,12 @@ def test_strategies():
     if form.validate_on_submit():
         relation = form.relation.data
         if relation == 'student':
-            user = Student(student_email=form.email.data, parent_name=form.parent_name.data, \
-            parent_email=form.parent_email.data)
-            student = form.first_name.data
+            student = User(first_name=form.first_name.data, email=form.email.data)
+            parent = User(first_name=form.parent_name.data, email=form.parent_email.data)
         elif relation == 'parent':
-            user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
-            student = form.student_name.data
-        send_test_strategies_email(user, relation, student)
+            parent = User(first_name=form.first_name.data, email=form.email.data)
+            student = User(first_name=form.student_name.data)
+        send_test_strategies_email(student, parent, relation)
         return render_template('test-strategies-sent.html', email=form.email.data, relation=relation)
     return render_template('test-strategies.html', form=form)
 
