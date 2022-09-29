@@ -42,7 +42,7 @@
 
   
   {% for r in roles %}
-    <h1 class="slide-toggle my-2">Active {{ r }}s</h1>
+    <h1 class="slide-toggle">Active {{ r }}s</h1>
     <div id="active-{{ r }}s" class="user-list">
       {% for u in active_users %}
         {% if u.role == r %}
@@ -76,7 +76,7 @@
                 <li>
                   Tutor:
                   {% if u.tutor_id %}
-                    <a href="{{ url_for('edit_user', id=u.parent_id) }}">
+                    <a href="{{ url_for('edit_user', id=u.tutor_id) }}">
                       {{ u.tutor.first_name }} {{ u.tutor.last_name }}
                     </a>
                   {% else %}
