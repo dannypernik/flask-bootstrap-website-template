@@ -144,7 +144,8 @@ def logout():
 def users():
     form = UserForm()
     active_users = User.query.filter_by(status='active')
-    other_users = User.query.filter(User.status != 'active')
+    other_users = User.query.filter((User.status != 'active') | (User.status == None) | \
+        (User.role == None))
     roles = ['student', 'tutor', 'parent', 'admin']
     parents = User.query.filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
