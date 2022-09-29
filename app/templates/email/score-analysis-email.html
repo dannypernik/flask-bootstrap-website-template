@@ -7,13 +7,13 @@
   </head>
   <body style="color: #1C4D65;">
     <p>
-      Hi {{ student.parent_name }}, thank you for requesting your student's practice
+      Hi {{ parent.first_name }}, thank you for requesting your student's practice
       test score analysis. You should receive the analysis within 48 hours. Feel free
       to reply to this address with any questions in the meantime.<br/>
     </p>
 
     <p>
-      Student name: {{ student.student_name }} {{ student.last_name }}<br/>
+      Student name: {{ student.first_name }} {{ student.last_name }}<br/>
       School: {{ school }}
     </p>
 

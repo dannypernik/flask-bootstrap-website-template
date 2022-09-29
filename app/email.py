@@ -383,7 +383,7 @@ def send_test_strategies_email(user, relation, student):
         print("Top 10 email failed to send with code " + str(result.status_code), result.reason)
 
 
-def send_score_analysis_email(student, school):
+def send_score_analysis_email(student, parent, school):
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
@@ -397,15 +397,15 @@ def send_score_analysis_email(student, school):
                 },
                 "To": [
                     {
-                    "Email": student.parent_email
+                    "Email": parent.email
                     }
                 ],
                 "Bcc": [{"Email": app.config['MAIL_USERNAME']}],
                 "Subject": "Score analysis request received",
                 "TextPart": render_template('email/score-analysis-email.txt',
-                                         student=student, school=school),
-                "HTMLPart": render_template('email/score-analysis-email.html',
-                                         student=student, school=school)
+                                         student=student, parent=parent, school=school),
+                # "HTMLPart": render_template('email/score-analysis-email.html',
+                #                          student=student, parent=parent, school=school)
             }
         ]
     }
