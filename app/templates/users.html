@@ -70,7 +70,7 @@
                       {{ u.parent.first_name }} {{ u.parent.last_name }}
                     </a>
                   {% else %}
-                    None  
+                    None
                   {% endif %}
                 </li>
                 <li>
@@ -124,8 +124,10 @@
       <div class="col">
         <h3 class="mb-1">
           <a class="semibold" href="{{ url_for('edit_user', id=u.id) }}">
-            {{ u.first_name }} {{ u.last_name }} ({{ u.status.title() }} {{ u.role }})
+            {{ u.first_name }} {{ u.last_name }}
           </a>
+          ({% if u.status %}{{ u.status.title() }}{% else %}None{% endif %}
+            {{ u.role }})
         </h3>
       </div>
     </div>

@@ -143,10 +143,10 @@ def logout():
 @admin_required
 def users():
     form = UserForm()
-    active_users = User.query.filter((User.status=='active') & (User.role != 'student'))
+    active_users = User.query.filter((User.status=='active'))# & (User.role != 'student'))
     other_users = User.query.filter((User.status != 'active') | (User.status == None) | \
         (User.role == None))
-    roles = ['tutor', 'admin']
+    roles = ['student', 'tutor', 'admin']
     parents = User.query.filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
     tutors = User.query.filter_by(role='tutor')
