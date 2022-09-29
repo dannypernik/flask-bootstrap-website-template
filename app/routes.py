@@ -143,10 +143,10 @@ def logout():
 @admin_required
 def users():
     form = UserForm()
-    active_users = User.query.filter_by(status='active')
+    active_users = User.query.filter((User.status=='active') & (User.role != 'student'))
     other_users = User.query.filter((User.status != 'active') | (User.status == None) | \
         (User.role == None))
-    roles = ['student', 'tutor', 'parent', 'admin']
+    roles = ['tutor', 'admin']
     parents = User.query.filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
     tutors = User.query.filter_by(role='tutor')
@@ -267,6 +267,7 @@ def students():
     tutor_list = [(u.id, u.first_name + " " + u.last_name) for u in tutors]
     form.tutor_id.choices = tutor_list
     statuses = ['active', 'paused', 'inactive']
+    other_students = User.query.filter((User.role=='student') & (User.status.notin_(statuses)))
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
@@ -296,7 +297,7 @@ def students():
         flash(student.first_name + ' added')
         return redirect(url_for('students'))
     return render_template('students.html', title="Students", form=form, students=students, \
-        statuses=statuses, upcoming_dates=upcoming_dates, tests=tests)
+        statuses=statuses, upcoming_dates=upcoming_dates, tests=tests, other_students=other_students)
 
 
 @app.route('/tutors', methods=['GET', 'POST'])

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div>
+  <div class="mb-2">
     <button id="add-student" class="my-0 me-2 btn d-inline-block">+ Add student</button>
-    <a href="{{ url_for('tutors') }}" class="btn sec me-2 my-0 py-2">Tutors</a>
+    <a href="{{ url_for('users') }}" class="btn sec me-2 my-0 py-2">Users</a>
     <a href="{{ url_for('test_dates') }}" class="btn sec my-0 py-2">Test dates</a>
   </div>
 
@@ -55,7 +55,7 @@
     {{ form.submit(class="mb-3") }}
   </form>
   {% for status in statuses %}
-    <h1 class="slide-toggle mt-4">{{ status.title() }} students</h1>
+    <h1 class="slide-toggle mt-3 mb-2">{{ status.title() }} students</h1>
 
     <div id="{{ status }}-students" class="student-list">
       {% for s in students %}
@@ -66,11 +66,13 @@
                 <a href="{{ url_for('edit_user', id=s.id) }}">
                   {{ s.first_name }} {{ s.last_name }}
                 </a>
-                ({{ s.email }})
               </h2>
 
               {% if status == 'active' %}
-                <ul class="mb-3">
+                <a href="mailto:{{ s.email }}" target="_blank">
+                  {{ s.email }}
+                </a>
+                <ul class="my-2">
                   <li>
                     Parent:
                     {% if s.parent_id %}
@@ -117,6 +119,18 @@
           </div>
         {% endif %}
       {% endfor %}
+    </div>
+  {% endfor %}
+
+  {% for s in other_students %}
+    <div class="row justify-content-centered">
+      <div class="col">
+        <h2 class="my-1">
+          <a href="{{ url_for('edit_user', id=s.id) }}">
+            {{ s.first_name }} {{ s.last_name }} ({{ s.status }})
+          </a>
+        </h2>
+      </div>
     </div>
   {% endfor %}
 {% endblock content %}
