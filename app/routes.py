@@ -240,7 +240,7 @@ def edit_user(id):
         form.last_name.data=user.last_name
         form.email.data=user.email
         form.phone.data=user.phone
-        form.secondary_email=user.secondary_email
+        form.secondary_email.data=user.secondary_email
         form.timezone.data=user.timezone
         form.location.data=user.location
         form.status.data=user.status
