@@ -155,9 +155,9 @@ def users():
     form.tutor_id.choices = tutor_list
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-            email=form.email.data, phone=form.phone.data, timezone=form.timezone.data, \
-            location=form.location.data, role=form.role.data, \
-            status='active', is_admin=False)
+            email=form.email.data, secondary_email=form.secondary_email.data, \
+            phone=form.phone.data, timezone=form.timezone.data, location=form.location.data, \
+            role=form.role.data, status='active', is_admin=False)
         if form.tutor_id.data == 0:
             user.tutor_id=None
         else:
@@ -199,7 +199,7 @@ def edit_user(id):
             user.last_name=form.last_name.data
             user.email=form.email.data
             user.phone=form.phone.data
-            #user.secondary_email=form.secondary_email.data
+            user.secondary_email=form.secondary_email.data
             user.timezone=form.timezone.data
             user.location=form.location.data
             user.status=form.status.data
@@ -240,7 +240,7 @@ def edit_user(id):
         form.last_name.data=user.last_name
         form.email.data=user.email
         form.phone.data=user.phone
-        #form.secondary_email=user.secondary_email
+        form.secondary_email=user.secondary_email
         form.timezone.data=user.timezone
         form.location.data=user.location
         form.status.data=user.status
@@ -276,8 +276,8 @@ def students():
             location=form.location.data, status=form.status.data, \
             tutor_id=form.tutor_id.data, role='student')
         parent = User(first_name=form.parent_name.data, last_name=form.parent_last_name.data, \
-            email=form.parent_email.data, phone=form.parent_phone.data, \
-            timezone=form.timezone.data, role='parent')
+            email=form.parent_email.data, secondary_email=form.secondary_email.data, \
+            phone=form.parent_phone.data, timezone=form.timezone.data, role='parent')
 
         selected_dates = request.form.getlist('test_dates')
         for d in upcoming_dates:
