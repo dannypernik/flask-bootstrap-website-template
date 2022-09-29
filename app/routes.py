@@ -264,7 +264,7 @@ def students():
     form = StudentForm()
     students = User.query.order_by(User.first_name).filter_by(role='student')
     tutors = User.query.filter_by(role='tutor')
-    tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
+    tutor_list = [(u.id, u.first_name + " " + u.last_name) for u in tutors]
     form.tutor_id.choices = tutor_list
     statuses = ['active', 'paused', 'inactive']
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')

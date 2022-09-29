@@ -42,7 +42,7 @@
 
   
   {% for r in roles %}
-    <h1 class="slide-toggle my-2">Active {{ r.title() }}s</h1>
+    <h1 class="slide-toggle my-2">Active {{ r }}s</h1>
     <div id="active-{{ r }}s" class="user-list">
       {% for u in active_users %}
         {% if u.role == r %}
