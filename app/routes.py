@@ -279,17 +279,16 @@ def students():
             email=form.parent_email.data, secondary_email=form.secondary_email.data, \
             phone=form.parent_phone.data, timezone=form.timezone.data, role='parent')
 
-        selected_dates = request.form.getlist('test_dates')
-        for d in upcoming_dates:
-            if str(d.date) in selected_dates:
-                student.add_test_date(d)
-
         try:
             db.session.add(parent)
             db.session.flush()
             student.parent_id = parent.id
             db.session.add(student)
             db.session.commit()
+            selected_dates = request.form.getlist('test_dates')
+            for d in upcoming_dates:
+                if str(d.date) in selected_dates:
+                    student.add_test_date(d)
         except:
             db.session.rollback()
             flash(student.first_name + ' could not be added', 'error')
