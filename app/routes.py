@@ -185,9 +185,9 @@ def edit_user(id):
     form = UserForm()
     user = User.query.get_or_404(id)
     selected_date_ids = []
-    parents = User.query.filter_by(role='parent')
+    parents = User.query.order_by(User.first_name).filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
-    tutors = User.query.filter_by(role='tutor')
+    tutors = User.query.order_by(User.first_name).filter_by(role='tutor')
     tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
     form.parent_id.choices = parent_list
     form.tutor_id.choices = tutor_list
