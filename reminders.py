@@ -106,19 +106,11 @@ def main():
 
 
     def full_name(user):
-        name = user.student_name + " " + user.last_name
+        name = user.first_name + " " + user.last_name
         return name
     
 ### Test date reminders
     test_dates = TestDate.query.all()
-    # for d in test_dates:
-    #     print("test", d.id)
-    #     for s in students:
-    #         print(s.student_name)
-    #         for t in s.test_dates:
-    #             print(t.date, t.id)
-    #             if d.id == t.id:
-    #                 print(d.id, t.id)
     
     for s in students:
         for d in s.get_dates():
@@ -163,7 +155,7 @@ def main():
             tutor = User.query.get_or_404(student.tutor_id)
             if name in event.get('summary'):
                 reminder_list.append(name)
-                send_reminder_email(event, student, tutor, quote)
+                send_reminder_email(event, student, quote)
 
     # get list of event names for the bimonth
     for e in bimonth_events:

@@ -10,7 +10,7 @@ from app.models import User, TestDate, UserTestDate
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email import send_contact_email, send_password_reset_email, \
-    send_test_strategies_email, send_score_analysis_email, send_practice_test_email
+    send_test_strategies_email, send_score_analysis_email
 from functools import wraps
 
 @app.before_request
