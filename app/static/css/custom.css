@@ -5370,7 +5370,7 @@ a {
   transition: all 0.2s ease-in-out;
 }
 
-a, .inverse a:hover {
+a:hover, .inverse a:hover {
   color: #03cdb2;
 }
 
