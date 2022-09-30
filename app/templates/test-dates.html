@@ -28,7 +28,7 @@
   </form>
 
   {% for t in tests %}
-    <h1 class="mt-4 mb-2 semibold">
+    <h1 class="mt-4 mb-2">
       {{ t[0].upper() }} dates
     </h1>
     
@@ -36,12 +36,12 @@
       {% if d.test == t[0] %}
         <div class="row justify-content-centered">
           <div class="col-9 col-md-10">
-            <h2 class="my-1">
+            <h3 class="semibold my-1">
               {{ d.date.strftime('%B %-d, %Y') }}
               {% if d.status == 'unconfirmed' %}
                 (unconfirmed)
               {% endif %}
-            </h2>
+            </h3>
             <ul>
               {% if d.reg_date != None %}
                 <li>Registration deadline: {{ d.reg_date.strftime('%B %-d') }}</li>
@@ -66,11 +66,7 @@
         </div>
       {% endif %}
     {% endfor %}
-  {% endfor %}    
-
-  <h1 class="mt-4 mb-2 semibold">
-    Past dates
-  </h1>
+  {% endfor %}
   
   {% for d in past_dates %}
     <div class="row justify-content-centered">
