@@ -1,4 +1,4 @@
-Hi {{ student.student_name }}, you're almost there! Here are some suggestions to put yourself in the best possible position for the {{ td }} {{ test_date.test.upper() }}. You can get started with item #1 today:
+Hi {{ student.first_name }}, you're almost there! Here are some suggestions to put yourself in the best possible position for the {{ td }} {{ test_date.test.upper() }}. You can get started with item #1 today:
 
 Before test day
 -  Look at your schedule from now until the test to see how you can minimize stress in the couple days leading up to the {{ test_date.test.upper() }}.

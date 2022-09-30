@@ -7,7 +7,7 @@
   </head>
   <body style="color: #1C4D65;">
     <p>
-      Hi {{ student.student_name }}, this is an automated reminder that the regular
+      Hi {{ student.first_name }}, this is an automated reminder that the regular
       registration deadline for the {{ test_date.test.upper() }} on {{ td }} is coming up
       on {{ reg_dl }}.
       {% if test_date.late_date is not none %}

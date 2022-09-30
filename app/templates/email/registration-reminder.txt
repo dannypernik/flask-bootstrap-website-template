@@ -1,4 +1,4 @@
-Hi {{ student.student_name }}, this is an automated reminder that the regular registration deadline for the {{ td }} {{ test_date.test.upper() }} is coming up on {{ reg_dl }}. {% if test_date.late_date is not none %}Registration after this date until the late registration deadline on {{ late_dl }} will incur an additional fee.{% endif %}
+Hi {{ student.first_name }}, this is an automated reminder that the regular registration deadline for the {{ td }} {{ test_date.test.upper() }} is coming up on {{ reg_dl }}. {% if test_date.late_date is not none %}Registration after this date until the late registration deadline on {{ late_dl }} will incur an additional fee.{% endif %}
 
 You are receiving this reminder because you expressed interest in this test date. If you have already registered, great job! If you have decided against taking the test on this date, reply to this email with your updated plans so that you only receive relevant reminders.
 
