@@ -82,7 +82,7 @@ class UserForm(FlaskForm):
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
         validators=[InputRequired()])
     location = StringField('Location', render_kw={"placeholder": "Location"})
-    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
+    status = SelectField('Status', choices=[('none','None'),('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
     role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('tutor','Tutor'),('admin','Admin')])
     tutor_id = SelectField('Tutor', coerce=int)
     parent_id = SelectField('Parent', coerce=int)

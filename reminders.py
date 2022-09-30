@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from app import app, db
 from dotenv import load_dotenv
-from app.models import Student, Tutor, TestDate
+from app.models import User, TestDate, UserTestDate
 from app.email import send_reminder_email, send_weekly_report_email, \
     send_registration_reminder_email, send_late_registration_reminder_email, \
     send_spreadsheet_report_email, send_test_reminders_email
@@ -95,17 +95,18 @@ def main():
     outsourced_session_count = 0
 
     reminder_list = []
-    active_students = Student.query.filter_by(status='active')
-    paused_students = Student.query.filter_by(status='paused')
-    students = Student.query.all()
+    students = User.query.order_by(User.first_name).filter(User.role == 'student')
+    active_students = students.filter(User.status == 'active')
+    paused_students = students.filter(User.status == 'paused')
+    
 
     # Use fallback quote if request fails
     quote = None
     quote = requests.get("https://zenquotes.io/api/today")
 
 
-    def full_name(student):
-        name = student.student_name + " " + student.last_name
+    def full_name(user):
+        name = user.student_name + " " + user.last_name
         return name
     
 ### Test date reminders
@@ -159,7 +160,7 @@ def main():
     for event in upcoming_events:
         for student in active_students:
             name = full_name(student)
-            tutor = Tutor.query.get_or_404(student.tutor_id)
+            tutor = User.query.get_or_404(student.tutor_id)
             if name in event.get('summary'):
                 reminder_list.append(name)
                 send_reminder_email(event, student, tutor, quote)

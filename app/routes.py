@@ -112,7 +112,10 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next = request.args.get('next')
         if not next or url_parse(next).netloc != '':
-            next = url_for('students')
+            if current_user.is_admin:
+                next = url_for('students')
+            else:
+                next = url_for('dashboard')
         return redirect(next)
     return render_template('login.html', title="Login", form=form)
 
@@ -152,14 +155,23 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/dashboard/<int:id>')
+@login_required
+def dashboard(id):
+    if current_user.id == id:
+        user = User.query.filter_by(id=id).first_or_404()
+    else:
+        redirect(url_for(dashboard), id=current_user.id)
+    return render_template('dashboard.html', user=user)
+
+
 @app.route('/users', methods=['GET', 'POST'])
 @admin_required
 def users():
     form = UserForm()
     active_users = User.query.order_by(User.first_name).filter((User.status=='active'))# & (User.role != 'student'))
-    other_users = User.query.order_by(User.first_name).filter((User.status != 'active') | (User.status == None) | \
-        (User.role == None))
-    roles = ['student', 'tutor', 'admin']
+    other_users = User.query.order_by(User.first_name).filter((User.status != 'active') | (User.status == None))
+    roles = ['parent', 'tutor', 'student', 'admin']
     parents = User.query.filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
     tutors = User.query.filter_by(role='tutor')
@@ -171,14 +183,15 @@ def users():
             email=form.email.data, secondary_email=form.secondary_email.data, \
             phone=form.phone.data, timezone=form.timezone.data, location=form.location.data, \
             role=form.role.data, status='active', is_admin=False)
+        user.tutor_id=form.tutor_id.data
+        user.status=form.status.data
+        user.parent_id=form.parent_id.data
         if form.tutor_id.data == 0:
             user.tutor_id=None
-        else:
-            user.tutor_id=form.tutor_id.data
         if form.parent_id.data == 0:
             user.parent_id=None
-        else:
-            user.parent_id=form.parent_id.data
+        if form.status.data == 'none':
+            user.status=None
         try:
             db.session.add(user)
             db.session.commit()
@@ -316,10 +329,10 @@ def students():
 @admin_required
 def tutors():
     form = TutorForm()
-    tutors = Tutor.query.order_by(Tutor.first_name).all()
-    statuses = Tutor.query.with_entities(Tutor.status).distinct()
+    tutors = User.query.order_by(Tutor.first_name).filter_by(role='tutor')
+    statuses = tutors.with_entities(User.status).distinct()
     if form.validate_on_submit():
-        tutor = Tutor(first_name=form.first_name.data, last_name=form.last_name.data, \
+        tutor = User(first_name=form.first_name.data, last_name=form.last_name.data, \
         email=form.email.data, timezone=form.timezone.data)
         try:
             db.session.add(tutor)
@@ -487,17 +500,6 @@ def download_file (filename):
 @app.route('/practice_test_sent')
 def free_test_sent():
     return render_template('practice-test-sent.html')
-
-
-@app.route('/profile/<username>')
-@login_required
-def profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
-    return render_template('profile.html', user=user, posts=posts)
 
 
 @app.route('/favicon.ico')
