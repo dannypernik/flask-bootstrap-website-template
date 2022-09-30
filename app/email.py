@@ -484,7 +484,7 @@ def send_weekly_report_email(scheduled_session_count, scheduled_hours, scheduled
 
     result = mailjet.send.create(data=data)
     if result.status_code == 200:
-        print("Weekly report email sent.\n")
+        print("\nWeekly report email sent.")
     else:
         print("Weekly report email error:", str(result.status_code), result.reason, "\n")
     return result.status_code
