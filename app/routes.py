@@ -3,7 +3,7 @@ from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file
 from app import app, db, login, hcaptcha
 from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, \
-    StudentForm, ScoreAnalysisForm, PracticeTestForm, TestDateForm, \
+    StudentForm, ScoreAnalysisForm, TestDateForm, \
     UserForm, RequestPasswordResetForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, TestDate, UserTestDate
@@ -23,6 +23,13 @@ def dir_last_updated(folder):
     return str(max(os.path.getmtime(os.path.join(root_path, f))
                    for root_path, dirs, files in os.walk(folder)
                    for f in files))
+
+hello = app.config['HELLO_EMAIL']
+phone = app.config['PHONE']
+
+@app.context_processor
+def inject_values():
+    return dict(last_updated=dir_last_updated('app/static'), hello=hello, phone=phone)
 
 def admin_required(f):
     @login_required
@@ -50,9 +57,12 @@ def index():
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = form.subject.data
-        send_contact_email(user, message, subject)
-        flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
-        return redirect(url_for('index', _anchor="home"))
+        email_status = send_contact_email(user, message, subject)
+        if email_status == 200:
+            flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
+            return redirect(url_for('index', _anchor="home"))
+        else:
+            flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
 
 
@@ -113,8 +123,11 @@ def request_password_reset():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
-            send_password_reset_email(user)
-        flash('Check your email for instructions to reset your password.')
+            email_status = send_password_reset_email(user)
+            if email_status == 200:
+                flash('Check your email for instructions to reset your password.')
+            else:
+                flash('Email failed to send, please contact ' + hello, 'error')
         return redirect(url_for('login'))
     return render_template('request-password-reset.html', title='Reset password', form=form)
 
@@ -402,8 +415,11 @@ def griffin():
     if form.validate_on_submit():
         student = User(first_name=form.student_first_name.data, last_name=form.student_last_name.data)
         parent = User(first_name=form.parent_first_name.data, email=form.parent_email.data)
-        send_score_analysis_email(student, parent, school)
-        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+        email_status = send_score_analysis_email(student, parent, school)
+        if email_status == 200:
+            return render_template('score-analysis-requested.html', email=form.parent_email.data)
+        else:
+            flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('school.html', form=form, school=school, test=test)
 
 @app.route('/appamada', methods=['GET', 'POST'])
@@ -414,8 +430,11 @@ def appamada():
     if form.validate_on_submit():
         student = User(first_name=form.student_first_name.data, last_name=form.student_last_name.data)
         parent = User(first_name=form.parent_first_name.data, email=form.parent_email.data)
-        send_score_analysis_email(student, parent, school)
-        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+        email_status = send_score_analysis_email(student, parent, school)
+        if email_status == 200:
+            return render_template('score-analysis-requested.html', email=form.parent_email.data)
+        else:
+            flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('school.html', form=form, school=school, test=test)
 
 
@@ -425,35 +444,19 @@ def huntington_surrey():
     school='Huntington-Surrey School'
     test='SAT'
     if form.validate_on_submit():
-        student = Student(student_name=form.student_first_name.data, \
-        last_name=form.student_last_name.data, parent_name=form.parent_first_name.data, \
-        parent_email=form.parent_email.data)
-        send_score_analysis_email(student, school)
-        return render_template('score-analysis-requested.html', email=form.parent_email.data)
+        student = User(first_name=form.student_first_name.data, last_name=form.student_last_name.data)
+        parent = User(first_name=form.parent_first_name.data, email=form.parent_email.data)
+        email_status = send_score_analysis_email(student, parent, school)
+        if email_status == 200:
+            return render_template('score-analysis-requested.html', email=form.parent_email.data)
+        else:
+            flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('school.html', form=form, school=school, test=test)
 
 
 @app.route('/sat-act-data')
 def sat_act_data():
     return render_template('sat-act-data.html', title="SAT & ACT data")
-
-
-@app.route('/practice_test', methods=['GET', 'POST'])
-def practice_test():
-    form = PracticeTestForm()
-    if form.validate_on_submit():
-        relation = form.relation.data
-        if relation == 'student':
-            user = Student(student_email=form.email.data, parent_name=form.parent_name.data, \
-            parent_email=form.parent_email.data)
-            student = form.first_name.data
-        elif relation == 'parent':
-            user = Student(parent_name=form.first_name.data, parent_email=form.email.data)
-            student = form.student_name.data
-        test = form.test.data
-        send_practice_test_email(user, test, relation, student)
-        return render_template('practice-test-sent.html', test=test, email=form.email.data, relation=relation)
-    return render_template('practice-test.html', form=form)
 
 
 @app.route('/test_strategies', methods=['GET', 'POST'])
@@ -467,8 +470,11 @@ def test_strategies():
         elif relation == 'parent':
             parent = User(first_name=form.first_name.data, email=form.email.data)
             student = User(first_name=form.student_name.data)
-        send_test_strategies_email(student, parent, relation)
-        return render_template('test-strategies-sent.html', email=form.email.data, relation=relation)
+        email_status = send_test_strategies_email(student, parent, relation)
+        if email_status == 200:
+            return render_template('test-strategies-sent.html', email=form.email.data, relation=relation)
+        else:
+            flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('test-strategies.html', form=form)
 
 

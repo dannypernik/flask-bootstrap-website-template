@@ -54,7 +54,7 @@ def send_contact_email(user, message, subject):
         print("Confirmation email sent to " + user.email)
     else:
         print("Contact email failed with code " + result.status_code)
-    print(result.json())
+    return result.status_code
 
 
 def send_confirmation_email(user, message):
@@ -88,6 +88,7 @@ def send_confirmation_email(user, message):
         print(result.json())
     else:
         print("Confirmation email failed to send with code " + result.status_code, result.reason)
+    return result.status_code
 
 
 def send_reminder_email(event, student, tutor, quote):
@@ -172,6 +173,7 @@ def send_reminder_email(event, student, tutor, quote):
         print(student.student_name, student.last_name, start_display, timezone)
     else:
         print("Error for " + student.student_name + "\'s reminder email with code " + str(result.status_code), result.reason)
+    return result.status_code
 
 
 def send_registration_reminder_email(student, test_date):
@@ -220,6 +222,7 @@ def send_registration_reminder_email(student, test_date):
             print("Registration reminder for", td, test_date.test.upper(), "sent to", student.student_name, student.last_name)
         else:
             print("Error for " + student.student_name + "\'s registration reminder with code " + str(result.status_code), result.reason)
+        return result.status_code
 
 
 def send_late_registration_reminder_email(student, test_date):
@@ -263,6 +266,7 @@ def send_late_registration_reminder_email(student, test_date):
             print("Late registration reminder for", td, test_date.test.upper(), "sent to", student.student_name, student.last_name)
         else:
             print("Error for " + student.student_name + "\'s late registration reminder with code " + str(result.status_code), result.reason)
+        return result.status_code
 
 
 def send_test_reminders_email(student, test_date):
@@ -305,6 +309,7 @@ def send_test_reminders_email(student, test_date):
             print(td, test_date.test.upper(), "reminder sent to", student.student_name, student.last_name)
         else:
             print("Error for " + student.student_name + "\'s test reminder with code " + str(result.status_code), result.reason)
+        return result.status_code
 
 
 def send_password_reset_email(user):
@@ -340,6 +345,7 @@ def send_password_reset_email(user):
         print(result.json())
     else:
         print("Password reset email failed to send with code " + str(result.status_code), result.reason)
+    return result.status_code
 
 
 def send_test_strategies_email(student, parent, relation):
@@ -377,6 +383,7 @@ def send_test_strategies_email(student, parent, relation):
         print(result.json())
     else:
         print("Top 10 email failed to send with code " + str(result.status_code), result.reason)
+    return result.status_code
 
 
 def send_score_analysis_email(student, parent, school):
@@ -400,8 +407,8 @@ def send_score_analysis_email(student, parent, school):
                 "Subject": "Score analysis request received",
                 "TextPart": render_template('email/score-analysis-email.txt',
                                          student=student, parent=parent, school=school),
-                # "HTMLPart": render_template('email/score-analysis-email.html',
-                #                          student=student, parent=parent, school=school)
+                "HTMLPart": render_template('email/score-analysis-email.html',
+                                         student=student, parent=parent, school=school)
             }
         ]
     }
@@ -410,7 +417,8 @@ def send_score_analysis_email(student, parent, school):
     if result.status_code == 200:
         print(result.json())
     else:
-        print("Score analysis confirmation email failed to send with code " + result.status_code, result.reason)
+        print("Score analysis confirmation email failed to send with code", result.status_code, result.reason)
+    return result.status_code
 
 
 def send_practice_test_email(user, test, relation, student):
@@ -458,6 +466,7 @@ def send_practice_test_email(user, test, relation, student):
         print(result.json())
     else:
         print("Practice test email failed to send with code " + str(result.status_code), result.reason)
+    return result.status_code
 
 
 def send_weekly_report_email(scheduled_session_count, scheduled_hours, scheduled_student_count, \
@@ -526,6 +535,7 @@ def send_weekly_report_email(scheduled_session_count, scheduled_hours, scheduled
         print("Weekly report email sent.\n")
     else:
         print("Weekly report email error:", str(result.status_code), result.reason, "\n")
+    return result.status_code
 
 
 def send_spreadsheet_report_email(now, spreadsheet_data):
@@ -570,3 +580,4 @@ def send_spreadsheet_report_email(now, spreadsheet_data):
         print("Spreadsheet report email sent.\n")
     else:
         print("Spreadsheet report email error:", str(result.status_code), result.reason, "\n")
+    return result.status_code
