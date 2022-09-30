@@ -240,17 +240,12 @@ a {
   transition: all 0.2s ease-in-out;
 }
 
-a:hover {
+a, .inverse a:hover {
   color: $hover-color;
 }
 
 a.btn:hover {
   text-decoration: none;
-}
-
-a.white:hover {
-  color: white;
-  text-decoration: underline;
 }
 
 .inverse a:hover h2 {
