@@ -117,9 +117,15 @@ def login():
             if current_user.is_admin:
                 next = url_for('students')
             else:
-                next = url_for('dashboard')
+                next = url_for('reminders')
         return redirect(next)
     return render_template('login.html', title="Login", form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 
 @app.route('/request_password_reset', methods=['GET', 'POST'])
@@ -149,12 +155,6 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset-password.html', form=form)
-
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
 
 
 @app.route('/reminders', methods=['GET', 'POST'])
