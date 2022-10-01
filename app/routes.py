@@ -26,6 +26,8 @@ def dir_last_updated(folder):
 
 hello = app.config['HELLO_EMAIL']
 phone = app.config['PHONE']
+tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
+
 
 @app.context_processor
 def inject_values():
@@ -155,14 +157,32 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/dashboard/<int:id>')
+@app.route('/reminders', methods=['GET', 'POST'])
 @login_required
-def dashboard(id):
-    if current_user.id == id:
-        user = User.query.filter_by(id=id).first_or_404()
-    else:
-        redirect(url_for(dashboard), id=current_user.id)
-    return render_template('dashboard.html', user=user)
+def reminders():
+    user = User.query.filter_by(id=current_user.id).first_or_404()
+    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
+    selected_date_ids = []
+    if request.method == "POST":
+        selected_date_ids = request.form.getlist('test_dates')
+        for d in upcoming_dates:
+            if str(d.id) in selected_date_ids:
+                user.add_test_date(d)
+            else:
+                user.remove_test_date(d)
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('Test dates updated')
+        except:
+            db.session.rollback()
+            flash('Test dates could not be updated', 'error')
+    selected_dates = user.get_dates().all()
+    for d in upcoming_dates:
+        if d in selected_dates:
+            selected_date_ids.append(d.id)   
+    return render_template('reminders.html', user=user, tests=tests, \
+        upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids)
 
 
 @app.route('/users', methods=['GET', 'POST'])
@@ -217,8 +237,6 @@ def edit_user(id):
     tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
     form.parent_id.choices = parent_list
     form.tutor_id.choices = tutor_list
-    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
-    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     if form.validate_on_submit():
         if 'save' in request.form:
             user.first_name=form.first_name.data
@@ -434,6 +452,7 @@ def griffin():
         else:
             flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('school.html', form=form, school=school, test=test)
+
 
 @app.route('/appamada', methods=['GET', 'POST'])
 def appamada():
