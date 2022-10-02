@@ -152,11 +152,11 @@ def verify_email(token):
 def request_password_reset():
     form = RequestPasswordResetForm()
     if form.validate_on_submit():
-        if hcaptcha.verify():
-            pass
-        else:
-            flash('A computer has questioned your humanity. Please try again.', 'error')
-            return redirect(url_for('request_password_reset'))
+        # if hcaptcha.verify():
+        #     pass
+        # else:
+        #     flash('A computer has questioned your humanity. Please try again.', 'error')
+        #     return redirect(url_for('request_password_reset'))
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             email_status = send_password_reset_email(user)
