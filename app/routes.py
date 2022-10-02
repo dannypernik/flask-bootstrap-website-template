@@ -164,6 +164,8 @@ def request_password_reset():
                 flash('Check your email for instructions to reset your password.')
             else:
                 flash('Email failed to send, please contact ' + hello, 'error')
+        else:
+            flash('Check your email for instructions to reset your password')
         return redirect(url_for('login'))
     return render_template('request-password-reset.html', title='Reset password', form=form)
 
