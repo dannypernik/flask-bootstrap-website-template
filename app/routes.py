@@ -9,7 +9,7 @@ from flask_login import current_user, login_user, logout_user, login_required, l
 from app.models import User, TestDate, UserTestDate
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email import send_contact_email, send_password_reset_email, \
+from app.email import send_contact_email, send_verification_email, send_password_reset_email, \
     send_test_strategies_email, send_score_analysis_email
 from functools import wraps
 
@@ -54,7 +54,7 @@ def index():
         if hcaptcha.verify():
             pass
         else:
-            flash('Please verify that you are human.', 'error')
+            flash('A computer has questioned your humanity. Please try again.', 'error')
             return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
@@ -84,19 +84,18 @@ def signup():
         return redirect(url_for('index'))
     form = SignupForm()
     if form.validate_on_submit():
-        email_check = User.query.filter_by(email=form.email.data).first()
-        if email_check is not None:
-            flash('A user with that email already exists', 'error')
-            return redirect(url_for('signup'))
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
         email=form.email.data)
-        # TODO: Add user fields
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        # TODO: Send verification email
-        flash("You are now registered. We're glad you're here!")
-        return redirect(url_for('index'))
+        email_status = send_verification_email(user)
+        login_user(user)
+        if email_status == 200:
+            flash("Welcome! Please check your inbox to verify your email.")
+            return redirect(url_for('reminders'))
+        else:
+            flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('signup.html', title='Sign up', form=form)
 
 
@@ -118,7 +117,12 @@ def login():
                 next = url_for('students')
             else:
                 next = url_for('reminders')
-        return redirect(next)
+        if user.password_hash == None:
+            return redirect(next)
+        else:
+            email_status = send_verification_email(user)
+            flash('Please check your inbox to verify your email.')
+            return redirect(next)
     return render_template('login.html', title="Login", form=form)
 
 
@@ -128,10 +132,31 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/verify_email/<token>', methods=['GET', 'POST'])
+def verify_email(token):
+    logout_user()
+    user = User.verify_email_token(token)
+    if user:
+        user.is_verified = True
+        db.session.add(user)
+        db.session.commit()
+        flash('Thank you for verifying your account.')
+        login_user(user)
+        return redirect(url_for('reminders'))
+    else:
+        flash('Your verification token is expired or invalid. Please log in to generate a new token.')
+        return redirect(url_for('login'))
+
+
 @app.route('/request_password_reset', methods=['GET', 'POST'])
 def request_password_reset():
     form = RequestPasswordResetForm()
     if form.validate_on_submit():
+        if hcaptcha.verify():
+            pass
+        else:
+            flash('A computer has questioned your humanity. Please try again.', 'error')
+            return redirect(url_for('request_password_reset'))
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             email_status = send_password_reset_email(user)
@@ -145,7 +170,7 @@ def request_password_reset():
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
-    user = User.verify_reset_password_token(token)
+    user = User.verify_email_token(token)
     if not user:
         return redirect(url_for('index'))
     form = ResetPasswordForm()
@@ -231,6 +256,7 @@ def edit_user(id):
     form = UserForm()
     user = User.query.get_or_404(id)
     selected_date_ids = []
+    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     parents = User.query.order_by(User.first_name).filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
     tutors = User.query.order_by(User.first_name).filter_by(role='tutor')

@@ -41,6 +41,7 @@ class User(UserMixin, db.Model):
     last_viewed = db.Column(db.DateTime, default=datetime.utcnow)
     role = db.Column(db.String(24), index=True)
     is_admin = db.Column(db.Boolean)
+    is_verified = db.Column(db.Boolean)
     test_dates = db.relationship('UserTestDate',
                                 foreign_keys=[UserTestDate.user_id],
                                 backref=db.backref('user', lazy='joined'),
@@ -55,8 +56,8 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-    def get_reset_password_token(self, expires_in=600):
+    
+    def get_email_verification_token(self, expires_in=3600):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
             app.config['SECRET_KEY'], algorithm='HS256')
@@ -83,7 +84,7 @@ class User(UserMixin, db.Model):
             ).filter(UserTestDate.user_id == self.id)
 
     @staticmethod
-    def verify_reset_password_token(token):
+    def verify_email_token(token):
         try:
             id = jwt.decode(token, app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']

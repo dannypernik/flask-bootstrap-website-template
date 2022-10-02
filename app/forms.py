@@ -30,7 +30,7 @@ class SignupForm(FlaskForm):
         validators=[InputRequired()])
     password2 = PasswordField('Repeat Password', render_kw={"placeholder": "Repeat Password"}, \
         validators=[InputRequired(), EqualTo('password',message="Passwords do not match.")])
-    submit = SubmitField('Join the movement')
+    submit = SubmitField('Sign up')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()

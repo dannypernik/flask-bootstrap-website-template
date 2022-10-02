@@ -94,13 +94,17 @@
         </div>
       </div>
       <div class="nav-gap"></div>
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="alert {{ category }}" role="alert">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
+      
+      {% block alerts %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert {{ category }}" role="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      {% endblock alerts %}
+
       <div class="section-margin"></div>
 
       <section class="drawer" id="site-menu" data-drawer-target>

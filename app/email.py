@@ -30,7 +30,7 @@ def send_contact_email(user, message, subject):
             {
                 "From": {
                     "Email": app.config['MAIL_USERNAME'],
-                    "Name": "Danny Pernik"
+                    "Name": "Open Path Tutoring"
                 },
                 "To": [
                     {
@@ -51,9 +51,9 @@ def send_contact_email(user, message, subject):
 
     if result.status_code == 200:
         send_confirmation_email(user, message)
-        print("Confirmation email sent to " + user.email)
+        print("Contact email sent from " + user.email)
     else:
-        print("Contact email failed with code " + result.status_code)
+        print("Contact email from " + user.email + " failed with code " + result.status_code)
     return result.status_code
 
 
@@ -85,9 +85,9 @@ def send_confirmation_email(user, message):
 
     result = mailjet.send.create(data=data)
     if result.status_code == 200:
-        print(result.json())
+        print("Confirmation email sent to " + user.email)
     else:
-        print("Confirmation email failed to send with code " + result.status_code, result.reason)
+        print("Confirmation email to " + user.email + " failed to send with code " + result.status_code, result.reason)
     return result.status_code
 
 
@@ -312,8 +312,45 @@ def send_test_reminders_email(student, test_date):
         return result.status_code
 
 
+def send_verification_email(user):
+    api_key = app.config['MAILJET_KEY']
+    api_secret = app.config['MAILJET_SECRET']
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+    token = user.get_email_verification_token()
+
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": app.config['MAIL_USERNAME'],
+                    "Name": "Open Path Tutoring"
+                },
+                "To": [
+                    {
+                    "Email": user.email
+                    }
+                ],
+                "Subject": "Please verify your email address",
+                "TextPart": render_template('email/verification-email.txt',
+                                         user=user, token=token),
+                "HTMLPart": render_template('email/verification-email.html',
+                                         user=user, token=token)
+            }
+        ]
+    }
+
+    result = mailjet.send.create(data=data)
+
+    if result.status_code == 200:
+        print("Verification email sent to " + user.email)
+    else:
+        print("Verification email to " + user.email + " failed with code " + result.status_code)
+    return result.status_code
+
+
 def send_password_reset_email(user):
-    token = user.get_reset_password_token()
+    token = user.get_email_verification_token()
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')

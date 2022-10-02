@@ -1,0 +1,23 @@
+<p>Hi {{ user.first_name }}, we're glad you're here!</p>
+<p>
+  Please verify that you registered an account with Open Path Tutoring by clicking below:
+</p>
+<p>
+  <a href="{{ url_for('verify_email', token=token, _external=True) }}"
+    style="background-color: #1C4D65; font-size: 16px; font-family: Helvetica, Arial, sans-serif;
+      font-weight: bold; text-decoration: none; padding: 7px 14px; color: #ffffff;
+      display: inline-block; mso-padding-alt: 0;">
+    <!--[if mso]>
+    <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 30pt;">&nbsp;</i>
+    <![endif]-->
+    <span style="mso-text-raise: 15pt;">Verify email</span>
+    <!--[if mso]>
+    <i style="letter-spacing: 25px; mso-font-width: -100%;">&nbsp;</i>
+    <![endif]-->
+  </a>
+</p>
+<p>
+  If you did not register an account, please reply to this email to let us know.
+</p>
+<p>Thank you,<br>
+The Open Path Team</p>
