@@ -240,16 +240,18 @@ a {
   transition: all 0.2s ease-in-out;
 }
 
-a:hover, .inverse a:hover {
+a:hover {
   color: $hover-color;
+}
+
+.inverse a:hover, .inverse a:hover h2 {
+  font-weight: 600;
+  color: white;
 }
 
 a.btn:hover {
   text-decoration: none;
-}
-
-.inverse a:hover h2 {
-  font-weight: 600;
+  font-weight: 400;
 }
 
 a:before {
@@ -520,10 +522,6 @@ div.alert {
   margin-top: 2rem;
   font-size: calc(1.75rem + 1vw);
   font-weight: 700;
-}
-
-.grecaptcha-badge {
-  visibility: hidden;
 }
 
 .home-nav {
