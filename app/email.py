@@ -350,10 +350,15 @@ def send_verification_email(user):
 
 
 def send_password_reset_email(user):
-    token = user.get_email_verification_token()
     api_key = app.config['MAILJET_KEY']
     api_secret = app.config['MAILJET_SECRET']
     mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+    token = user.get_email_verification_token()
+    if user.password_hash == None:
+        pw_type = 'set'
+    else:
+        pw_type = 'reset'
 
     data = {
         'Messages': [
@@ -367,12 +372,12 @@ def send_password_reset_email(user):
                     "Email": user.email
                     }
                 ],
-                "Subject": "Reset your password",
+                "Subject": pw_type.title() + ' your password',
                 "ReplyTo": { "Email": user.email },
-                "TextPart": render_template('email/reset-password.txt',
-                                         user=user, token=token),
-                "HTMLPart": render_template('email/reset-password.html',
-                                         user=user, token=token)
+                "TextPart": render_template('email/reset-password.txt', \
+                                         user=user, token=token, pw_type=pw_type),
+                "HTMLPart": render_template('email/reset-password.html', \
+                                         user=user, token=token, pw_type=pw_type)
             }
         ]
     }

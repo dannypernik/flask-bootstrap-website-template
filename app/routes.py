@@ -152,11 +152,11 @@ def verify_email(token):
 def request_password_reset():
     form = RequestPasswordResetForm()
     if form.validate_on_submit():
-        # if hcaptcha.verify():
-        #     pass
-        # else:
-        #     flash('A computer has questioned your humanity. Please try again.', 'error')
-        #     return redirect(url_for('request_password_reset'))
+        if hcaptcha.verify():
+            pass
+        else:
+            flash('A computer has questioned your humanity. Please try again.', 'error')
+            return redirect(url_for('request_password_reset'))
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             email_status = send_password_reset_email(user)
@@ -170,8 +170,8 @@ def request_password_reset():
     return render_template('request-password-reset.html', title='Reset password', form=form)
 
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
+@app.route('/set_password/<token>', methods=['GET', 'POST'])
+def set_password(token):
     user = User.verify_email_token(token)
     if not user:
         return redirect(url_for('index'))
@@ -179,9 +179,10 @@ def reset_password(token):
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
+        login_user(user)
         flash('Your password has been reset.')
         return redirect(url_for('login'))
-    return render_template('reset-password.html', form=form)
+    return render_template('set-password.html', form=form)
 
 
 @app.route('/reminders', methods=['GET', 'POST'])
