@@ -110,21 +110,26 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
+        login_user(user)
+        if user.password_hash == None:
+            email_status = send_verification_email(user)
+            if email_status == 200:
+                flash('Please check your inbox to verify your email.')
+            else:
+                flash('Verification email did not send. Please contact ' + hello)
         next = request.args.get('next')
         if not next or url_parse(next).netloc != '':
-            if current_user.is_admin:
-                next = url_for('students')
-            else:
-                next = url_for('reminders')
-        if user.password_hash == None:
-            return redirect(next)
-        else:
-            email_status = send_verification_email(user)
-            flash('Please check your inbox to verify your email.')
-            return redirect(next)
+            return redirect(url_for('start_page'))
+        return redirect(next)
     return render_template('login.html', title="Login", form=form)
 
+@app.route('/start_page')
+@login_required
+def start_page():
+    if current_user.is_admin:
+        return redirect(url_for('students'))
+    else:
+        return redirect(url_for('reminders'))
 
 @app.route('/logout')
 def logout():
@@ -137,14 +142,14 @@ def verify_email(token):
     logout_user()
     user = User.verify_email_token(token)
     if user:
+        login_user(user)
         user.is_verified = True
         db.session.add(user)
         db.session.commit()
         flash('Thank you for verifying your account.')
-        login_user(user)
         return redirect(url_for('reminders'))
     else:
-        flash('Your verification token is expired or invalid. Please log in to generate a new token.')
+        flash('Your verification link is expired or invalid. Log in to receive a new link.')
         return redirect(url_for('login'))
 
 
@@ -174,14 +179,15 @@ def request_password_reset():
 def set_password(token):
     user = User.verify_email_token(token)
     if not user:
-        return redirect(url_for('index'))
+        flash('The password reset link is expired or invalid. Please try again.')
+        return redirect(url_for('request_password_reset'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
         login_user(user)
         flash('Your password has been reset.')
-        return redirect(url_for('login'))
+        return redirect(url_for('start_page'))
     return render_template('set-password.html', form=form)
 
 
