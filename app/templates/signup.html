@@ -11,7 +11,7 @@
 {% block container %}
   <div class="row justify-content-center">
     <div class="col-11 col-sm-9 col-lg-6">
-      <h1>Register</h1>
+      <h1>Create account</h1>
       <form class="" action="" method="post">
         {{ form.hidden_tag() }}
         {{ form.first_name }}
@@ -21,6 +21,9 @@
         {{ form.password2 }}
         {{ form.submit }}
       </form>
+      <p class="mt-3 text-center">
+        <a href="{{ url_for('login') }}" class="btn sec">Log in</a>
+      </p>
     </div>
   </div>
 {% endblock container %}

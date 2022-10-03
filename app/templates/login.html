@@ -8,9 +8,7 @@
         {{ form.hidden_tag() }}
         {{ form.email }}
         {{ form.password }}
-        <div class="mt-3">
-          {{ form.submit }}
-        </div>
+        {{ form.submit }}
       </form>
       <p class="mt-3 text-center">
         <a href="{{ url_for('request_password_reset') }}" class="btn sec">Reset password</a>
