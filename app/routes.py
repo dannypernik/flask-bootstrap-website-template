@@ -28,7 +28,6 @@ hello = app.config['HELLO_EMAIL']
 phone = app.config['PHONE']
 tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
 
-
 @app.context_processor
 def inject_values():
     return dict(last_updated=dir_last_updated('app/static'), hello=hello, phone=phone)
@@ -81,7 +80,7 @@ def reviews():
 def signup():
     if current_user.is_authenticated:
         flash('You are already signed in')
-        return redirect(url_for('index'))
+        return redirect(url_for('start_page'))
     form = SignupForm()
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
@@ -93,7 +92,7 @@ def signup():
         login_user(user)
         if email_status == 200:
             flash("Welcome! Please check your inbox to verify your email.")
-            return redirect(url_for('reminders'))
+            return redirect(url_for('start_page'))
         else:
             flash('Email failed to send, please contact ' + hello, 'error')
     return render_template('signup.html', title='Sign up', form=form)
@@ -103,7 +102,7 @@ def signup():
 def login():
     if current_user.is_authenticated:
         flash('You are already signed in')
-        return redirect(url_for('index'))
+        return redirect(url_for('start_page'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -111,7 +110,7 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user)
-        if user.password_hash == None:
+        if user.is_verified != True:
             email_status = send_verification_email(user)
             if email_status == 200:
                 flash('Please check your inbox to verify your email.')
@@ -123,6 +122,13 @@ def login():
         return redirect(next)
     return render_template('login.html', title="Login", form=form)
 
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
 @app.route('/start_page')
 @login_required
 def start_page():
@@ -130,11 +136,6 @@ def start_page():
         return redirect(url_for('students'))
     else:
         return redirect(url_for('reminders'))
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
 
 
 @app.route('/verify_email/<token>', methods=['GET', 'POST'])
@@ -147,7 +148,7 @@ def verify_email(token):
         db.session.add(user)
         db.session.commit()
         flash('Thank you for verifying your account.')
-        return redirect(url_for('reminders'))
+        return redirect(url_for('start_page'))
     else:
         flash('Your verification link is expired or invalid. Log in to receive a new link.')
         return redirect(url_for('login'))
@@ -184,6 +185,7 @@ def set_password(token):
     form = ResetPasswordForm()
     if form.validate_on_submit():
         user.set_password(form.password.data)
+        user.is_verified = True
         db.session.commit()
         login_user(user)
         flash('Your password has been reset.')
@@ -196,7 +198,11 @@ def set_password(token):
 def reminders():
     user = User.query.filter_by(id=current_user.id).first_or_404()
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
+    selected_dates = user.get_dates().all()
     selected_date_ids = []
+    for d in upcoming_dates:
+        if d in selected_dates:
+            selected_date_ids.append(d.id)
     if request.method == "POST":
         selected_date_ids = request.form.getlist('test_dates')
         for d in upcoming_dates:
@@ -211,10 +217,7 @@ def reminders():
         except:
             db.session.rollback()
             flash('Test dates could not be updated', 'error')
-    selected_dates = user.get_dates().all()
-    for d in upcoming_dates:
-        if d in selected_dates:
-            selected_date_ids.append(d.id)   
+        return redirect(url_for('index'))
     return render_template('reminders.html', user=user, tests=tests, \
         upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids)
 
