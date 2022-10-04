@@ -106,7 +106,7 @@ def signup():
         if not next or url_parse(next).netloc != '':
             return redirect(url_for('start_page'))
         return redirect(next)
-    return render_template('sign-in.html', title='Sign in', login_form=login_form, signup_form=signup_form)
+    return render_template('signin.html', title='Sign in', login_form=login_form, signup_form=signup_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -132,7 +132,7 @@ def login():
         if not next or url_parse(next).netloc != '':
             return redirect(url_for('start_page'))
         return redirect(next)
-    return render_template('sign-in.html', title='Sign in', login_form=login_form, signup_form=signup_form)
+    return render_template('signin.html', title='Sign in', login_form=login_form, signup_form=signup_form)
 
 
 @app.route('/logout')
