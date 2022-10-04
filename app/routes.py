@@ -41,7 +41,7 @@ def admin_required(f):
         else:
             flash('You must have administrator privileges to access this page.', 'error')
             logout_user()
-            return redirect(login_url('login', next_url=request.url))
+            return redirect(login_url('signin', next_url=request.url))
     return wrap
 
 
@@ -76,39 +76,51 @@ def reviews():
     return render_template('reviews.html', title="Reviews")
 
 
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if current_user.is_authenticated:
+        flash('You are already signed in.')
+        return redirect(url_for('start_page'))
+    login_form = LoginForm()
+    signup_form = SignupForm()
+    return render_template('signin.html', title='Sign in', login_form=login_form, signup_form=signup_form)
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if current_user.is_authenticated:
-        flash('You are already signed in')
-        return redirect(url_for('start_page'))
-    form = SignupForm()
-    if form.validate_on_submit():
-        user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-        email=form.email.data)
-        user.set_password(form.password.data)
+    login_form = LoginForm()
+    signup_form = SignupForm()
+    if signup_form.validate_on_submit():
+        user = User(first_name=signup_form.first_name.data, last_name=signup_form.last_name.data, \
+        email=signup_form.email.data)
+        user.set_password(signup_form.password.data)
         db.session.add(user)
         db.session.commit()
         email_status = send_verification_email(user)
         login_user(user)
         if email_status == 200:
             flash("Welcome! Please check your inbox to verify your email.")
-            return redirect(url_for('start_page'))
         else:
-            flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('signup.html', title='Sign up', form=form)
+            flash('Verification email failed to send, please contact ' + hello, 'error')
+        next = request.args.get('next')
+        if not next or url_parse(next).netloc != '':
+            return redirect(url_for('start_page'))
+        return redirect(next)
+    return render_template('sign-in.html', title='Sign in', login_form=login_form, signup_form=signup_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        flash('You are already signed in')
+        flash('You are already signed in.')
         return redirect(url_for('start_page'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
+    login_form = LoginForm()
+    signup_form = SignupForm()
+    if login_form.validate_on_submit():
+        user = User.query.filter_by(email=login_form.email.data).first()
+        if user is None or not user.check_password(login_form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('signin'))
         login_user(user)
         if user.is_verified != True:
             email_status = send_verification_email(user)
@@ -120,13 +132,13 @@ def login():
         if not next or url_parse(next).netloc != '':
             return redirect(url_for('start_page'))
         return redirect(next)
-    return render_template('login.html', title="Login", form=form)
+    return render_template('sign-in.html', title='Sign in', login_form=login_form, signup_form=signup_form)
 
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('signin'))
 
 
 @app.route('/start_page')
@@ -151,7 +163,7 @@ def verify_email(token):
         return redirect(url_for('start_page'))
     else:
         flash('Your verification link is expired or invalid. Log in to receive a new link.')
-        return redirect(url_for('login'))
+        return redirect(url_for('signin'))
 
 
 @app.route('/request_password_reset', methods=['GET', 'POST'])
@@ -172,7 +184,7 @@ def request_password_reset():
                 flash('Email failed to send, please contact ' + hello, 'error')
         else:
             flash('Check your email for instructions to reset your password')
-        return redirect(url_for('login'))
+        return redirect(url_for('signin'))
     return render_template('request-password-reset.html', title='Reset password', form=form)
 
 
@@ -265,8 +277,8 @@ def users():
 @app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
 @admin_required
 def edit_user(id):
-    form = UserForm()
     user = User.query.get_or_404(id)
+    form = UserForm(obj=user)
     selected_date_ids = []
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     parents = User.query.order_by(User.first_name).filter_by(role='parent')
@@ -287,6 +299,7 @@ def edit_user(id):
             user.status=form.status.data
             user.role=form.role.data
             user.is_admin=form.is_admin.data
+            user.session_reminders=form.session_reminders.data
             if form.tutor_id.data == 0:
                 user.tutor_id=None
             else:
@@ -329,6 +342,8 @@ def edit_user(id):
         form.role.data=user.role
         form.tutor_id.data=user.tutor_id
         form.parent_id.data=user.parent_id
+        form.is_admin.data=user.is_admin
+        form.session_reminders.data=user.session_reminders
 
         selected_dates = user.get_dates().all()
         for d in upcoming_dates:

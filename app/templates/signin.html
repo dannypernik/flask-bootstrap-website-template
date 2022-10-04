@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block alerts %}
+  {{ super() }}
+  
+  {% for field, errors in login_form.errors.items() %}
+    <div class="alert error">{{ errors[0] }}</div>
+  {% endfor %}
+
+  {% for field, errors in signup_form.errors.items() %}
+    <div class="alert error">{{ errors[0] }}</div>
+  {% endfor %}
+{% endblock alerts %}
+
+{% block container %}
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <div class="row">
+        <div class="col-12 col-md-5 mb-4">
+          <h1>Log in</h1>
+          <form action="{{ url_for('login') }}" method="post">
+            {{ login_form.hidden_tag() }}
+            {{ login_form.email }}
+            {{ login_form.password }}
+            {{ login_form.submit }}
+          </form>
+          <p class="mt-3 text-center">
+            <a href="{{ url_for('request_password_reset') }}" class="btn sec">Reset password</a>
+          </p>
+        </div>
+    
+        <div class="col-12 col-md-5 offset-md-2">
+          <h1>Create account</h1>
+          <form action="{{ url_for('signup') }}" method="post">
+            {{ signup_form.hidden_tag() }}
+            {{ signup_form.first_name }}
+            {{ signup_form.last_name }}
+            {{ signup_form.email }}
+            {{ signup_form.password }}
+            {{ signup_form.password2 }}
+            {{ signup_form.submit }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock container %}
