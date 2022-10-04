@@ -23,6 +23,7 @@ hcaptcha = hCaptcha(app)
 
 from app import routes, models, errors
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+login.login_message = u'Please sign in to access this page.'
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
