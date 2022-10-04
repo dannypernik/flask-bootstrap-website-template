@@ -42,6 +42,7 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(24), index=True)
     is_admin = db.Column(db.Boolean)
     is_verified = db.Column(db.Boolean)
+    session_reminders = db.Column(db.Boolean)
     test_dates = db.relationship('UserTestDate',
                                 foreign_keys=[UserTestDate.user_id],
                                 backref=db.backref('user', lazy='joined'),
