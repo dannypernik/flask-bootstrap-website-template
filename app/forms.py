@@ -4,7 +4,6 @@ from wtforms import StringField, BooleanField, PasswordField, TextAreaField, \
 from wtforms.fields.html5 import DateField
 from wtforms.validators import ValidationError, InputRequired, DataRequired, \
     Email, EqualTo, Length
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app.models import User, TestDate, UserTestDate
 
 class InquiryForm(FlaskForm):
@@ -17,6 +16,14 @@ class InquiryForm(FlaskForm):
     message = TextAreaField('Message', render_kw={"placeholder": "Message"}, \
         validators=[InputRequired()])
     submit = SubmitField('Submit')
+
+
+class EmailListForm(FlaskForm):
+    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
+        validators=[InputRequired()])
+    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+    submit = SubmitField()
 
 
 class SignupForm(FlaskForm):
@@ -87,6 +94,7 @@ class UserForm(FlaskForm):
     tutor_id = SelectField('Tutor', coerce=int)
     parent_id = SelectField('Parent', coerce=int)
     is_admin = BooleanField('Admin')
+    session_reminders = BooleanField('Session reminders')
     submit = SubmitField('Save')
 
 

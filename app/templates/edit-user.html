@@ -2,6 +2,7 @@
 
 {% block container %}
   <form class="" action="" method="post">
+    {{ form.hidden_tag() }}
     <div class="row justify-content-center g-0">
       <div class="col-11 col-sm-9 col-lg-6">
         <div class="row">
@@ -12,7 +13,6 @@
             {{ form.status }}
           </div>
           <div class="col-12">
-            {{ form.hidden_tag() }}
             {{ form.first_name }}
             {{ form.last_name }}
             {{ form.email }}

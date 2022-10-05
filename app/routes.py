@@ -2,9 +2,9 @@ import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file
 from app import app, db, login, hcaptcha
-from app.forms import InquiryForm, TestStrategiesForm, SignupForm, LoginForm, \
-    StudentForm, ScoreAnalysisForm, TestDateForm, \
-    UserForm, RequestPasswordResetForm, ResetPasswordForm
+from app.forms import InquiryForm, EmailListForm, TestStrategiesForm, SignupForm, LoginForm, \
+    StudentForm, ScoreAnalysisForm, TestDateForm, UserForm, RequestPasswordResetForm, \
+        ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, TestDate, UserTestDate
 from werkzeug.urls import url_parse
@@ -206,31 +206,39 @@ def set_password(token):
 
 
 @app.route('/reminders', methods=['GET', 'POST'])
-@login_required
 def reminders():
-    user = User.query.filter_by(id=current_user.id).first_or_404()
+    form = EmailListForm()
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
-    selected_dates = user.get_dates().all()
     selected_date_ids = []
-    for d in upcoming_dates:
-        if d in selected_dates:
-            selected_date_ids.append(d.id)
-    if request.method == "POST":
-        selected_date_ids = request.form.getlist('test_dates')
+    if current_user.is_authenticated:
+        user = User.query.filter_by(id=current_user.id).first_or_404()
+        selected_dates = user.get_dates().all()
         for d in upcoming_dates:
-            if str(d.id) in selected_date_ids:
-                user.add_test_date(d)
-            else:
-                user.remove_test_date(d)
+            if d in selected_dates:
+                selected_date_ids.append(d.id)
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            user = User(first_name=form.first_name.data, email=form.email.data)
+            email_status = send_password_reset_email(user)
+            if email_status == 200:
+                flash("Welcome! Please check your inbox to verify your email.")
+        
+        selected_date_ids = request.form.getlist('test_dates')
         try:
             db.session.add(user)
             db.session.commit()
-            flash('Test dates updated')
+            for d in upcoming_dates:
+                if str(d.id) in selected_date_ids:
+                    user.add_test_date(d)
+                else:
+                    user.remove_test_date(d)
+            if current_user.is_authenticated:
+                flash('Test dates updated')
         except:
             db.session.rollback()
-            flash('Test dates could not be updated', 'error')
+            flash('Test dates were not updated, please contact '+ hello, 'error')
         return redirect(url_for('index'))
-    return render_template('reminders.html', user=user, tests=tests, \
+    return render_template('reminders.html', form=form, tests=tests, \
         upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids)
 
 
