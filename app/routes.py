@@ -200,7 +200,7 @@ def set_password(token):
         user.is_verified = True
         db.session.commit()
         login_user(user)
-        flash('Your password has been reset.')
+        flash('Your password has been saved.')
         return redirect(url_for('start_page'))
     return render_template('set-password.html', form=form)
 
