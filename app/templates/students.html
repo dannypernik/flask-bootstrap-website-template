@@ -14,10 +14,12 @@
 
     {{ form.hidden_tag() }}
     {{ form.student_name }}
-    {{ form.student_last_name }}
+    {{ form.student_last_name(onchange="update()") }}
     {{ form.student_email }}
     {{ form.parent_name }}
-    {{ form.parent_last_name }}
+    <input type="checkbox" id="same-last-name" checked>
+    <label for="same-last-name" class="mt-2 ms-2">Same last name as student</label>
+    {{ form.parent_last_name(class="d-none") }}
     {{ form.parent_email }}
     {{ form.secondary_email }}
     {{ form.timezone }}
@@ -137,7 +139,7 @@
 
 {% block end_scripts %}
   <script>
-    const slideDown = element => element.style.height = `${element.scrollHeight}px`;
+    const slideDown = element => element.style.height = `${element.scrollHeight + 30}px`;
     const slideUp = element => element.style.height = 0;
 
     document.getElementById("add-student").addEventListener("click", function () {
@@ -167,5 +169,14 @@
           slideToggle(element.nextElementSibling);
         });
     });
+
+    function update() {
+      let updateValue = document.getElementById('student_last_name').value;
+      document.getElementById("parent_last_name").value = updateValue;
+    }
+    
+    document.querySelector('#same-last-name').onclick = function() {
+      document.getElementById('parent_last_name').classList.toggle('d-none');
+    }
   </script>
 {% endblock end_scripts %}

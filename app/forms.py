@@ -105,7 +105,7 @@ class StudentForm(FlaskForm):
     student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     student_phone = StringField('Student phone', render_kw={"placeholder": "Student phone"})
-    parent_name = StringField('Parent name', render_kw={"placeholder": "Parent name"}, \
+    parent_name = StringField('Parent first name', render_kw={"placeholder": "Parent first name"}, \
         validators=[InputRequired()])
     parent_last_name = StringField('Parent last name', render_kw={"placeholder": "Parent last name"})
     parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \

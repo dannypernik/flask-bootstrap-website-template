@@ -224,10 +224,6 @@ def reminders():
                 user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
             elif user and not user.password_hash:   # User exists without password
                 email_status = send_password_reset_email(user)
-                if email_status == 200:
-                    flash('Please check your email to set a password and verify your account.')
-                else:
-                    flash('Verification email did not send. Please contact ' + hello, 'error')
             else:   # User has saved password
                 flash('An account with this email already exists. Please log in.')
                 return redirect(url_for('signin'))
@@ -245,6 +241,8 @@ def reminders():
                 email_status = send_password_reset_email(user)
                 if email_status == 200:
                     flash("Welcome! Please check your inbox to verify your email.")
+                else:
+                    flash('Verification email did not send. Please contact ' + hello, 'error')
         except:
             db.session.rollback()
             flash('Test dates were not updated, please contact '+ hello, 'error')
