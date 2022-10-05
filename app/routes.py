@@ -217,13 +217,9 @@ def reminders():
             if d in selected_dates:
                 selected_date_ids.append(d.id)
     if request.method == "POST":
-        if not current_user.is_authenticated:
-            user = User(first_name=form.first_name.data, email=form.email.data)
-            email_status = send_password_reset_email(user)
-            if email_status == 200:
-                flash("Welcome! Please check your inbox to verify your email.")
-        
         selected_date_ids = request.form.getlist('test_dates')
+        if not current_user.is_authenticated:
+            user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
         try:
             db.session.add(user)
             db.session.commit()
@@ -234,6 +230,10 @@ def reminders():
                     user.remove_test_date(d)
             if current_user.is_authenticated:
                 flash('Test dates updated')
+            else:
+                email_status = send_password_reset_email(user)
+                if email_status == 200:
+                    flash("Welcome! Please check your inbox to verify your email.")
         except:
             db.session.rollback()
             flash('Test dates were not updated, please contact '+ hello, 'error')
