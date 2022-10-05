@@ -223,7 +223,7 @@ def reminders():
             if not user:
                 user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
             elif user and not user.password_hash:   # User exists without password
-                email_status = send_password_reset_email()
+                email_status = send_password_reset_email(user)
                 if email_status == 200:
                     flash('Please check your email to set a password and verify your account.')
                 else:
