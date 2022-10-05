@@ -219,7 +219,18 @@ def reminders():
     if request.method == "POST":
         selected_date_ids = request.form.getlist('test_dates')
         if not current_user.is_authenticated:
-            user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
+            user = User.query.filter_by(email=form.email.data).first()
+            if not user:
+                user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
+            elif user and not user.password_hash:   # User exists without password
+                email_status = send_password_reset_email()
+                if email_status == 200:
+                    flash('Please check your email to set a password and verify your account.')
+                else:
+                    flash('Verification email did not send. Please contact ' + hello, 'error')
+            else:   # User has saved password
+                flash('An account with this email already exists. Please log in.')
+                return redirect(url_for('signin'))
         try:
             db.session.add(user)
             db.session.commit()
