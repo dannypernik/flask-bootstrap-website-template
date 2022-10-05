@@ -35,24 +35,34 @@
         {% if current_user.is_authenticated %}
           <input id="submit" type="submit" name="submit" value="Save">
         {% else %}
-          <a href="#" data-bs-toggle="modal" data-bs-target="#signup-modal" data-text="signup">
-            <button type="button" class="btn">Save</button>
+          <a href="#" class="btn w-100" data-bs-toggle="modal" data-bs-target="#signup-modal" data-text="signup">
+            Save
           </a>
 
-          <div id="signup-modal" class="modal fade" tabindex="-1">
-            <div class="modal-dialog">
+          <div id="signup-modal" class="modal fade mt-5" tabindex="-1">
+            <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="container-fluid">
                   <div class="row">
-                    <div class="modal-header mt-2">
+                    <div class="modal-header mt-2 pb-1 border-0">
                       <h1 class="modal-title">Create your account to get reminders</h1>
                     </div>
                   </div>
                   <div class="modal-body">
-                    {{ form.hidden_tag() }}
-                    {{ form.first_name }}
-                    {{ form.email }}
-                    {{ form.submit }}
+                    <div class="row justify-content-center">
+                      <div class="col-12 col-md-5">
+                        {{ form.hidden_tag() }}
+                        {{ form.first_name }}
+                      </div>
+
+                      <div class="col-12 col-md-7">
+                        {{ form.email }}
+                      </div>
+
+                      <div class="col-12 mt-2">
+                        {{ form.submit }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
