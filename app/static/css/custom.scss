@@ -4,8 +4,9 @@ $lead-font-weight: inherit;
 $spacer: 2rem;
 $enable-smooth-scroll: false;
 $primary-color: #1C4D65;
-$secondary-color: #ababee;
-$hover-color: #03cdb2;
+$secondary-color: #54c3b8;//58bba4;
+$hover-color: #54c3b8;//03cdb2;
+$highlight-color: #e87b41;
 $body-font: 'Montserrat', 'Helvetica', sans-serif;
 $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 
@@ -16,6 +17,7 @@ $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 @import "../scss/_buttons.scss";
 @import "../scss/_modal.scss";
 @import "../scss/_close.scss";
+@import "../scss/_tables.scss";
 
 @import "menu.css";
 
@@ -103,15 +105,6 @@ input, textarea {
 
 input:focus, textarea:focus {
   border-bottom: 1px solid $primary-color;
-}
-
-input[type="submit"] {
-  margin-top: 2rem;
-  background-color: $primary-color;
-  color: white;
-  border: 2px solid $primary-color;
-  font-size: 1.9rem;
-  transition: 0.3s;
 }
 
 input[type='checkbox'] {
@@ -251,7 +244,6 @@ a:hover {
 
 a.btn:hover {
   text-decoration: none;
-  font-weight: 400;
 }
 
 a:before {
@@ -263,7 +255,7 @@ a:before {
   visibility: hidden;
 }
 
-button, .btn {
+button, .btn, input[type="submit"] {
   display: block;
   margin: 2rem auto;
   padding: 1rem 2rem;
@@ -272,6 +264,7 @@ button, .btn {
   color: white;
   transition: 0.3s;
   font-size: 1.7rem;
+  font-weight: 600;
 }
 
 a.btn {
@@ -282,7 +275,7 @@ a.btn {
   color: white;
 }
 
-button.clr {
+.btn.clr {
   background-color: transparent;
   border-color: white;
 }
@@ -291,14 +284,28 @@ button.clr {
   color: $primary-color;
   border-color: $primary-color;
   background-color: transparent;
+  font-weight: 400;
+}
+
+.btn.highlight {
+  background-color: $highlight-color;
+  border: none;
+}
+
+.btn.highlight:hover {
+  background-color: darken($highlight-color, 10%);;
+}
+
+.btn.sm {
+  font-weight: 400;
+  border-width: 1px;
   margin: 0;
   padding: 0.5rem 2rem;
 }
 
-.btn.edit {
-  display: none;
-  border-radius: 99px;
-  padding: 0.25rem 2rem;
+.btn.cta {
+  margin-top: calc(2rem + 1vw);
+  font-size: $lead-font-size;
 }
 
 .row:hover > div > .btn.edit {
@@ -558,11 +565,6 @@ div.alert {
   min-height: calc(100vh - 30rem);
 }
 
-.btn.cta {
-  margin-top: calc(2rem + 1vw);
-  font-size: $lead-font-size;
-}
-
 .inverse {
   color: white;
 }
@@ -622,6 +624,29 @@ div.alert {
   overflow: hidden;
 }
 
+.table-container {
+  overflow: overlay;
+  border: 1px solid $secondary-color;
+  border-radius: 5px;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem;
+}
+
+thead {
+  background-color: $secondary-color;
+  color: white;
+}
+
+th, td {
+  white-space: nowrap;
+}
+
+td {
+  color: $primary-color;
+}
+
 .test-date {
   width: 177px;
 }
@@ -636,4 +661,8 @@ div.alert {
 
 .slide-toggle {
   cursor: pointer;
+}
+
+.w-fit {
+  width: fit-content;
 }

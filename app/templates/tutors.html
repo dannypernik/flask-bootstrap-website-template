@@ -3,8 +3,8 @@
 {% block content %}
   <div>
     <button id="add-tutor" class="btn d-inline-block my-0 me-2">+ Add tutor</button>
-    <a href="{{ url_for('students') }}" class="btn sec me-2 py-2">Students</a>
-    <a href="{{ url_for('test_dates') }}" class="btn sec py-2">Test dates</a>
+    <a href="{{ url_for('students') }}" class="btn sec me-2">Students</a>
+    <a href="{{ url_for('test_dates') }}" class="btn sec">Test dates</a>
   </div>
 
   <form id="add-tutor-form" class="hidden-form" action="" method="post">
@@ -15,44 +15,44 @@
     {{ form.first_name }}
     {{ form.last_name }}
     {{ form.email }}
+    {{ form.phone }}
     {{ form.timezone }}
-    {{ form.status(class="my-2") }}
+    {{ form.session_reminders }}
+    {{ form.session_reminders.label(class="mt-2 ms-2") }}
     {{ form.submit(class="mb-3") }}
   </form>
   {% for status in statuses %}
-      <h1 class="mt-3">{{ status[0].title() }} tutors</h1>
+    <h1 class="mt-3">{{ status[0].title() }} tutors</h1>
 
-      {% for t in tutors %}
-        {% if t.status == status[0] %}
-          <div class="row justify-content-centered">
-            <div class="col-9 col-md-10">
-              <h2 class="my-1">{{ t.first_name }} {{ t.last_name }}</h2>
-
-              {% if status[0] == 'active' %}
-                  <ul class="mb-3">
-                    <li>{{ t.email }}</li>
-                    <li>Timezone:
-                      {% if t.timezone == -2 %}
-                          Pacific
-                        {% elif t.timezone == -1 %}
-                            Mountain
-                        {% elif t.timezone == 0 %}
-                            Central
-                        {% elif t.timezone == 1 %}
-                            Eastern
-                        {% else %}
-                            {{ t.timezone }}
-                      {% endif %}
-                    </li>
-                  </ul>
-              {% endif %}
-            </div>
-
-            <div class="col-3 col-md-2 text-end">
-              <a class="edit btn sec" href="{{ url_for('edit_tutor', id=t.id) }}">
-                Edit
+    {% for t in tutors %}
+      {% if t.status == status[0] %}
+        <div class="row justify-content-centered">
+          <div class="col-9 col-md-10">
+            <h2 class="my-1">
+              <a href="{{ url_for('edit_user', id=t.id) }}">
+                {{ t.first_name }} {{ t.last_name }}
               </a>
-            </div>
+            </h2>
+
+            {% if status[0] == 'active' %}
+              <ul class="mb-3">
+                <li>{{ t.email }}</li>
+                <li>Timezone:
+                  {% if t.timezone == -2 %}
+                      Pacific
+                    {% elif t.timezone == -1 %}
+                        Mountain
+                    {% elif t.timezone == 0 %}
+                        Central
+                    {% elif t.timezone == 1 %}
+                        Eastern
+                    {% else %}
+                        {{ t.timezone }}
+                  {% endif %}
+                </li>
+              </ul>
+            {% endif %}
+          </div>
         </div>
       {% endif %}
     {% endfor %}

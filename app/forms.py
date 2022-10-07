@@ -120,6 +120,19 @@ class StudentForm(FlaskForm):
     submit = SubmitField('Save')
 
 
+class TutorForm(FlaskForm):
+    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
+        validators=[InputRequired()])
+    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
+        validators=[InputRequired()])
+    email = StringField('Email address', render_kw={"placeholder": "Email address"})
+    phone = StringField('Phone', render_kw={"placeholder": "Phone"})
+    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
+        validators=[InputRequired()])
+    session_reminders = BooleanField('Session reminders')
+    submit = SubmitField('Save')
+
+
 class TestDateForm(FlaskForm):
     test = SelectField('Test', render_kw={'placeholder': 'Test'}, choices=[('sat','SAT'),('act','ACT')], \
         validators=[InputRequired()])
@@ -128,7 +141,7 @@ class TestDateForm(FlaskForm):
     late_date = DateField('Late deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
     other_date = DateField('Other deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
     score_date = DateField('Score release date', format='%Y-%m-%d', validators=(validators.Optional(),))
-    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('past','Past')])
+    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('school','School day'),('past','Past')])
     submit = SubmitField('Save')
 
 

@@ -3,7 +3,7 @@
 {% block container %}
   <div class="row justify-content-center">
     <div class="col-11 col-sm-9 col-lg-6">
-      <h1>Edit student</h1>
+      <h1>Edit {{ user.first_name }} {{ user.last_name }}</h1>
       <form class="" action="" method="post">
         {{ form.hidden_tag() }}
         {{ form.student_name }}
@@ -64,7 +64,7 @@
                   </div>
                 </div>
                 <div class="modal-body">
-                  <button class="btn alert d-inline me-2" type="submit" name="delete">Delete {{ student.student_name }}</button>
+                  <button class="btn sec alert d-inline me-2" type="submit" name="delete">Delete {{ student.student_name }}</button>
                   <button class="btn d-inline" data-bs-dismiss="modal">Cancel</button>
                 </div>
               </div>
@@ -75,7 +75,7 @@
 
       <div class="text-center">
         <a href="{{ url_for('students') }}">
-          <button class="btn sec">
+          <button class="btn sec sm">
             Student list
           </button>
         </a>

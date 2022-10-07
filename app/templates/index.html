@@ -120,11 +120,17 @@
           </div>
         </a>
         {% if current_user.is_authenticated %}
-            <a href="{{ url_for('logout') }}">
-              <div class="menu-link">
-                <p>Log out</p>
-              </div>
-            </a>
+          <a href="{{ url_for('logout') }}">
+            <div class="menu-link">
+              <p>Log out</p>
+            </div>
+          </a>
+        {% else %}
+          <a href="{{ url_for('signin') }}">
+            <div class="menu-link">
+              <p>Sign in</p>
+            </div>
+          </a>
         {% endif %}
       </div>
     </div>
@@ -212,12 +218,11 @@
         </div>
         <div class="row justify-content-center mt-4">
           <div class="col-md-10">
-            <p class="mb-1 fst-italic text-md-start">
-              "Just wanted to let you know my son's mood was immediately better
+            <p class=" text-md-start">
+              <i>"Just wanted to let you know my son's mood was immediately better
               after meeting with you, after being down for about a week and a half.
-              I think this is going to be so great for him. Thank you again!"
-            </p>
-            <p><strong>&#8211; Parent of Study Skills student</strong></p>
+              I think this is going to be so great for him. Thank you again!"</i>
+            <strong>&#8211; Parent of Study Skills student</strong></p>
             <a href="{{ url_for('reviews') }}" class="btn mt-0">
               See more reviews
             </a>

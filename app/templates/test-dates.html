@@ -1,89 +1,103 @@
 {% extends "base.html" %}
 
-{% block content %}
-  <div>
-    <button id="add-date" class="btn d-inline-block my-0 ms-0 me-2">+ Add date</button>
-    <a href="{{ url_for('students') }}" class="btn sec me-2 my-0 py-2">Students</a>
-    <a href="{{ url_for('tutors') }}" class="btn sec my-0 py-2">Tutors</a>
-  </div>
-  
-  <form id="add-date-form" class="hidden-form" action="" method="post">
-    <h1 class="mb-3 me-2 d-inline-block">Add test date</h1>
-    <a id="hide-form" href="#">Hide</a>
-
-    <div class="row">
-      <div class="col col-md-6">
-        {{ form.hidden_tag() }}
-        <div class="mb-2">
-          {{ form.test(class='d-inline-block') }}
-          {{ form.status(class='d-inline-block') }}
+{% block container %}
+  <div class="row justify-content-center">
+    <div class="col-11 col-lg-10">
+      {% if current_user.is_admin %}
+        <div class="mb-4">
+          <button id="add-date" class="btn d-inline-block my-0 me-2">+ Add date</button>
+          <a href="{{ url_for('students') }}" class="btn sec me-2 my-0">Students</a>
+          <a href="{{ url_for('tutors') }}" class="btn sec my-0">Tutors</a>
         </div>
-        <label for="date">Test date:</label>{{ form.date(class='mb-2') }}
-        <label for="reg_date">Registration deadline:</label>{{ form.reg_date(class='mb-2') }}
-        <label for="late_date">Late deadline:</label>{{ form.late_date(class='mb-2') }}
-        <label for="other_date">Other deadline:</label>{{ form.other_date(class='mb-2') }}
-        {{ form.submit }}
-      </div>
-    </div>
-  </form>
 
-  {% for t in tests %}
-    <h1 class="mt-4 mb-2">
-      {{ t[0].upper() }} dates
-    </h1>
-    
-    {% for d in upcoming_dates %}
-      {% if d.test == t[0] %}
-        <div class="row justify-content-centered">
-          <div class="col-9 col-md-10">
-            <h3 class="semibold my-1">
-              {{ d.date.strftime('%B %-d, %Y') }}
-              {% if d.status == 'unconfirmed' %}
-                (unconfirmed)
-              {% endif %}
-            </h3>
-            <ul>
-              {% if d.reg_date != None %}
-                <li>Registration deadline: {{ d.reg_date.strftime('%B %-d') }}</li>
-              {% endif %}
-              {% if d.late_date != None %}
-                <li>Late deadline: {{ d.late_date.strftime('%B %-d') }}</li>
-              {% endif %}
-              {% if d.other_date != None %}
-                <li>Other deadline: {{ d.other_date.strftime('%B %-d') }}</li>
-              {% endif %}
-              {% if d.score_date != None %}
-                <li>Score release date: {{ d.score_date.strftime('%B %-d') }}</li>
-              {% endif %}
-            </ul>
-          </div>
+        <form id="add-date-form" class="hidden-form" action="" method="post">
+          <h1 class="mb-3 me-2 d-inline-block">Add test date</h1>
+          <a id="hide-form" href="#">Hide</a>
 
-          <div class="col-3 col-md-2 text-end">
-            <a class="edit btn sec" href="{{ url_for('edit_date', id=d.id) }}">
-              Edit
-            </a>
+          <div class="row mb-4">
+            <div class="col col-md-6">
+              {{ form.hidden_tag() }}
+              <div class="mb-2">
+                {{ form.test(class='d-inline-block') }}
+                {{ form.status(class='d-inline-block') }}
+              </div>
+              <label for="date">Test date:</label>{{ form.date(class='mb-2') }}
+              <label for="reg_date">Registration deadline:</label>{{ form.reg_date(class='mb-2') }}
+              <label for="late_date">Late deadline:</label>{{ form.late_date(class='mb-2') }}
+              <label for="other_date">Other deadline:</label>{{ form.other_date(class='mb-2') }}
+              <label for="other_date">Score release date:</label>{{ form.score_date }}
+              {{ form.submit }}
+            </div>
           </div>
+        </form>
+      {% endif %}
+
+      {% for t in tests %}
+        <h1>{{ t[0].upper() }} dates</h1>
+        
+        <div class="table-container mb-4">
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th>Test date</th>
+                <th>Registration deadline</th>
+                <th>Late deadline</th>
+                <th>Score release date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for d in upcoming_weekend_dates %}
+                {% if d.test == t[0] %}
+                  <tr>
+                    <td>
+                      {% if current_user.is_admin %}
+                        <a href="{{ url_for('edit_date', id=d.id) }}">
+                      {% endif %}
+                      {{ d.date.strftime('%B %-d, %Y') }}</a>
+                      {% if d.status == 'unconfirmed' %}
+                        (unconfirmed)
+                      {% endif %}
+                    </td>
+                    <td>
+                      {{ d.reg_date.strftime('%B %-d') }}
+                    </td>
+                    <td>
+                      {{ d.late_date.strftime('%B %-d') }}
+                    </td>
+                    <td>
+                      {% if d.score_date != None %}
+                        {{ d.score_date.strftime('%B %-d') }}
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+                
+      {% if current_user.is_admin %}
+        {% for d in past_dates %}
+          <div class="row justify-content-centered">
+            <div class="col-9 col-md-10">
+              <h2 class="my-1">
+                <a href="{{ url_for('edit_date', id=d.id) }}">
+                  {{ d.test.upper() }} on {{ d.date.strftime('%B %-d, %Y') }}
+                </a>
+              </h2>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="text-center">
+          <a href="{{ url_for('test_reminders') }}" class="btn highlight mt-1 d-block w-fit">Get reminders for selected test dates</a>
+          <a href="{{ url_for('index') }}" class="btn sec sm">Learn more about Open Path test prep</a>
         </div>
       {% endif %}
-    {% endfor %}
-  {% endfor %}
-  
-  {% for d in past_dates %}
-    <div class="row justify-content-centered">
-      <div class="col-9 col-md-10">
-        <h2 class="my-1">
-          {{ d.test.upper() }} on {{ d.date.strftime('%B %-d, %Y') }}
-        </h2>
-      </div>
-
-      <div class="col-3 col-md-2 text-end">
-        <a class="edit btn sec" href="{{ url_for('edit_date', id=d.id) }}">
-          Edit
-        </a>
-      </div>
     </div>
-  {% endfor %}
-{% endblock content %}
+  </div>
+{% endblock container %}
 
 {% block end_scripts %}
   <script>

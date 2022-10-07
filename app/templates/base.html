@@ -143,6 +143,12 @@
                     <p>Log out</p>
                   </div>
                 </a>
+            {% else %}
+            <a href="{{ url_for('signin') }}">
+              <div class="menu-link">
+                <p>Sign in</p>
+              </div>
+            </a>
             {% endif %}
 
           </div>

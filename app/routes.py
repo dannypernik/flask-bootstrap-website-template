@@ -4,7 +4,7 @@ from flask import Flask, render_template, flash, Markup, redirect, url_for, \
 from app import app, db, login, hcaptcha
 from app.forms import InquiryForm, EmailListForm, TestStrategiesForm, SignupForm, LoginForm, \
     StudentForm, ScoreAnalysisForm, TestDateForm, UserForm, RequestPasswordResetForm, \
-        ResetPasswordForm
+        ResetPasswordForm, TutorForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
 from app.models import User, TestDate, UserTestDate
 from werkzeug.urls import url_parse
@@ -141,7 +141,7 @@ def logout():
     return redirect(url_for('signin'))
 
 
-@app.route('/start_page')
+@app.route('/start-page')
 @login_required
 def start_page():
     if current_user.is_admin:
@@ -150,7 +150,7 @@ def start_page():
         return redirect(url_for('reminders'))
 
 
-@app.route('/verify_email/<token>', methods=['GET', 'POST'])
+@app.route('/verify-email/<token>', methods=['GET', 'POST'])
 def verify_email(token):
     logout_user()
     user = User.verify_email_token(token)
@@ -166,7 +166,7 @@ def verify_email(token):
         return redirect(url_for('signin'))
 
 
-@app.route('/request_password_reset', methods=['GET', 'POST'])
+@app.route('/request-password-reset', methods=['GET', 'POST'])
 def request_password_reset():
     form = RequestPasswordResetForm()
     if form.validate_on_submit():
@@ -188,7 +188,7 @@ def request_password_reset():
     return render_template('request-password-reset.html', title='Reset password', form=form)
 
 
-@app.route('/set_password/<token>', methods=['GET', 'POST'])
+@app.route('/set-password/<token>', methods=['GET', 'POST'])
 def set_password(token):
     user = User.verify_email_token(token)
     if not user:
@@ -203,52 +203,6 @@ def set_password(token):
         flash('Your password has been saved.')
         return redirect(url_for('start_page'))
     return render_template('set-password.html', form=form)
-
-
-@app.route('/reminders', methods=['GET', 'POST'])
-def reminders():
-    form = EmailListForm()
-    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
-    selected_date_ids = []
-    if current_user.is_authenticated:
-        user = User.query.filter_by(id=current_user.id).first_or_404()
-        selected_dates = user.get_dates().all()
-        for d in upcoming_dates:
-            if d in selected_dates:
-                selected_date_ids.append(d.id)
-    if request.method == "POST":
-        selected_date_ids = request.form.getlist('test_dates')
-        if not current_user.is_authenticated:
-            user = User.query.filter_by(email=form.email.data).first()
-            if not user:
-                user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
-            elif user and not user.password_hash:   # User exists without password
-                email_status = send_password_reset_email(user)
-            else:   # User has saved password
-                flash('An account with this email already exists. Please log in.')
-                return redirect(url_for('signin'))
-        try:
-            db.session.add(user)
-            db.session.commit()
-            for d in upcoming_dates:
-                if str(d.id) in selected_date_ids:
-                    user.add_test_date(d)
-                else:
-                    user.remove_test_date(d)
-            if current_user.is_authenticated:
-                flash('Test dates updated')
-            else:
-                email_status = send_password_reset_email(user)
-                if email_status == 200:
-                    flash("Welcome! Please check your inbox to verify your email.")
-                else:
-                    flash('Verification email did not send. Please contact ' + hello, 'error')
-        except:
-            db.session.rollback()
-            flash('Test dates were not updated, please contact '+ hello, 'error')
-        return redirect(url_for('index'))
-    return render_template('reminders.html', form=form, tests=tests, \
-        upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids)
 
 
 @app.route('/users', methods=['GET', 'POST'])
@@ -291,7 +245,7 @@ def users():
         other_users=other_users, roles=roles)
 
 
-@app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit-user/<int:id>', methods=['GET', 'POST'])
 @admin_required
 def edit_user(id):
     user = User.query.get_or_404(id)
@@ -417,11 +371,12 @@ def students():
 @admin_required
 def tutors():
     form = TutorForm()
-    tutors = User.query.order_by(Tutor.first_name).filter_by(role='tutor')
+    tutors = User.query.order_by(User.first_name).filter_by(role='tutor')
     statuses = tutors.with_entities(User.status).distinct()
     if form.validate_on_submit():
         tutor = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-        email=form.email.data, timezone=form.timezone.data)
+            email=form.email.data, phone=form.phone.data, timezone=form.timezone.data, \
+            session_reminders=form.session_reminders.data, status='active', role='tutor')
         try:
             db.session.add(tutor)
             db.session.commit()
@@ -434,13 +389,12 @@ def tutors():
     return render_template('tutors.html', title="Tutors", form=form, tutors=tutors, statuses=statuses)
 
 
-@app.route('/test_dates', methods=['GET', 'POST'])
-@admin_required
+@app.route('/test-dates', methods=['GET', 'POST'])
 def test_dates():
     form = TestDateForm()
     tests = TestDate.query.with_entities(TestDate.test).distinct()
-    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
-    past_dates = TestDate.query.order_by(TestDate.date.desc()).filter(TestDate.status == 'past')
+    upcoming_weekend_dates = TestDate.query.order_by(TestDate.date).filter((TestDate.status != 'past') & (TestDate.status != 'school'))
+    upcoming_school_dates = TestDate.query.order_by(TestDate.date).filter((TestDate.status != 'past') & (TestDate.status == 'school'))
     if form.validate_on_submit():
         print(form.test.data, form.date.data)
         date = TestDate(test=form.test.data, date=form.date.data, \
@@ -455,11 +409,11 @@ def test_dates():
             flash(date.date.strftime('%b %-d') + ' could not be added', 'error')
             return redirect(url_for('test_dates'))
         return redirect(url_for('test_dates'))
-    return render_template('test-dates.html', title="Test dates", form=form, \
-        upcoming_dates=upcoming_dates, past_dates=past_dates, tests=tests)
+    return render_template('test-dates.html', title="Test dates", form=form, tests=tests, \
+        upcoming_weekend_dates=upcoming_weekend_dates, upcoming_school_dates=upcoming_school_dates)
 
 
-@app.route('/edit_date/<int:id>', methods=['GET', 'POST'])
+@app.route('/edit-date/<int:id>', methods=['GET', 'POST'])
 @admin_required
 def edit_date(id):
     form = TestDateForm()
@@ -478,7 +432,7 @@ def edit_date(id):
 
             registered_students = request.form.getlist('registered_students')
             for s in students:
-                if str(s.student_id) in registered_students:
+                if s in registered_students:
                     s.is_registered = True
                 else:
                     s.is_registered = False
@@ -506,6 +460,52 @@ def edit_date(id):
         form.score_date.data=date.score_date
         form.status.data=date.status
     return render_template('edit-date.html', title='Edit date', form=form, date=date, students=students)
+
+
+@app.route('/test-reminders', methods=['GET', 'POST'])
+def test_reminders():
+    form = EmailListForm()
+    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
+    selected_date_ids = []
+    if current_user.is_authenticated:
+        user = User.query.filter_by(id=current_user.id).first_or_404()
+        selected_dates = user.get_dates().all()
+        for d in upcoming_dates:
+            if d in selected_dates:
+                selected_date_ids.append(d.id)
+    if request.method == "POST":
+        selected_date_ids = request.form.getlist('test_dates')
+        if not current_user.is_authenticated:
+            user = User.query.filter_by(email=form.email.data).first()
+            if not user:
+                user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
+            elif user and not user.password_hash:   # User exists without password
+                email_status = send_password_reset_email(user)
+            else:   # User has saved password
+                flash('An account with this email already exists. Please log in.')
+                return redirect(url_for('signin'))
+        try:
+            db.session.add(user)
+            db.session.commit()
+            for d in upcoming_dates:
+                if str(d.id) in selected_date_ids:
+                    user.add_test_date(d)
+                else:
+                    user.remove_test_date(d)
+            if current_user.is_authenticated:
+                flash('Test dates updated')
+            else:
+                email_status = send_password_reset_email(user)
+                if email_status == 200:
+                    flash("Welcome! Please check your inbox to verify your email.")
+                else:
+                    flash('Verification email did not send. Please contact ' + hello, 'error')
+        except:
+            db.session.rollback()
+            flash('Test dates were not updated, please contact '+ hello, 'error')
+        return redirect(url_for('index'))
+    return render_template('test-reminders.html', form=form, tests=tests, \
+        upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids)
 
 
 @app.route('/griffin', methods=['GET', 'POST'])
@@ -561,7 +561,7 @@ def sat_act_data():
     return render_template('sat-act-data.html', title="SAT & ACT data")
 
 
-@app.route('/test_strategies', methods=['GET', 'POST'])
+@app.route('/test-strategies', methods=['GET', 'POST'])
 def test_strategies():
     form = TestStrategiesForm()
     if form.validate_on_submit():
@@ -586,7 +586,7 @@ def download_file (filename):
     return send_from_directory(path, filename, as_attachment=False)
 
 
-@app.route('/practice_test_sent')
+@app.route('/practice-test-sent')
 def free_test_sent():
     return render_template('practice-test-sent.html')
 
