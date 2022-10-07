@@ -5,7 +5,6 @@ $spacer: 2rem;
 $enable-smooth-scroll: false;
 $primary-color: #1C4D65;
 $secondary-color: #54c3b8;//58bba4;
-$hover-color: #54c3b8;//03cdb2;
 $highlight-color: #e87b41;
 $body-font: 'Montserrat', 'Helvetica', sans-serif;
 $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
@@ -234,7 +233,7 @@ a {
 }
 
 a:hover {
-  color: $hover-color;
+  color: $secondary-color;
 }
 
 .inverse a:hover, .inverse a:hover h2 {
@@ -325,8 +324,8 @@ a.btn {
 }
 
 button:hover, .btn:hover, input[type="submit"]:hover, .menu-link:hover {
-  background-color: $hover-color;
-  border-color: $hover-color;
+  background-color: $secondary-color;
+  border-color: $secondary-color;
   color: white;
 }
 
