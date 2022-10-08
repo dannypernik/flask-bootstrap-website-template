@@ -300,7 +300,10 @@ def edit_user(id):
             flash('Deleted ' + user.first_name)
         else:
             flash('Code error in POST request', 'error')
-        return redirect(url_for('users'))
+        if user.role == 'student' or user.role == 'tutor':
+            return redirect(url_for(user.role + 's'))
+        else:
+            return redirect(url_for('users'))
     elif request.method == "GET":
         form.first_name.data=user.first_name
         form.last_name.data=user.last_name
@@ -394,7 +397,7 @@ def test_dates():
     form = TestDateForm()
     tests = TestDate.query.with_entities(TestDate.test).distinct()
     upcoming_weekend_dates = TestDate.query.order_by(TestDate.date).filter((TestDate.status != 'past') & (TestDate.status != 'school'))
-    upcoming_school_dates = TestDate.query.order_by(TestDate.date).filter((TestDate.status != 'past') & (TestDate.status == 'school'))
+    other_dates = TestDate.query.order_by(TestDate.date).filter((TestDate.status == 'past') | (TestDate.status == 'school'))
     if form.validate_on_submit():
         print(form.test.data, form.date.data)
         date = TestDate(test=form.test.data, date=form.date.data, \
@@ -403,14 +406,14 @@ def test_dates():
         try:
             db.session.add(date)
             db.session.commit()
-            flash(date.date.strftime('%b %-d') + ' added')
+            flash(date.date.strftime('%b %-d') + date.test.upper() + ' added')
         except:
             db.session.rollback()
-            flash(date.date.strftime('%b %-d') + ' could not be added', 'error')
+            flash(date.date.strftime('%b %-d') + date.test.upper() + ' could not be added', 'error')
             return redirect(url_for('test_dates'))
         return redirect(url_for('test_dates'))
     return render_template('test-dates.html', title="Test dates", form=form, tests=tests, \
-        upcoming_weekend_dates=upcoming_weekend_dates, upcoming_school_dates=upcoming_school_dates)
+        upcoming_weekend_dates=upcoming_weekend_dates, other_dates=other_dates)
 
 
 @app.route('/edit-date/<int:id>', methods=['GET', 'POST'])

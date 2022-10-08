@@ -5608,6 +5608,7 @@ a.btn {
   border-color: #1C4D65;
   background-color: transparent;
   font-weight: 400;
+  width: fit-content;
 }
 
 .btn.highlight {
@@ -5941,6 +5942,7 @@ thead {
 
 th, td {
   white-space: nowrap;
+  width: 1%;
 }
 
 td {

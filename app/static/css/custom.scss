@@ -284,6 +284,7 @@ a.btn {
   border-color: $primary-color;
   background-color: transparent;
   font-weight: 400;
+  width: fit-content;
 }
 
 .btn.highlight {
@@ -640,6 +641,7 @@ thead {
 
 th, td {
   white-space: nowrap;
+  width: 1%;
 }
 
 td {
