@@ -65,10 +65,14 @@
                       {% endif %}
                     </td>
                     <td>
-                      {{ d.reg_date.strftime('%B %-d') }}
+                      {% if d.reg_date != None %}
+                        {{ d.reg_date.strftime('%B %-d') }}
+                      {% endif %}
                     </td>
                     <td>
-                      {{ d.late_date.strftime('%B %-d') }}
+                      {% if d.late_date != None %}
+                        {{ d.late_date.strftime('%B %-d') }}
+                      {% endif %}
                     </td>
                     <td>
                       {% if d.score_date != None %}
