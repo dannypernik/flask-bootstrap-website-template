@@ -4,8 +4,8 @@ $lead-font-weight: inherit;
 $spacer: 2rem;
 $enable-smooth-scroll: false;
 $primary-color: #1C4D65;
-$secondary-color: #54c3b8;//58bba4;
-$highlight-color: #e87b41;
+$secondary-color: #4ad1cc;//58bba4;
+$highlight-color: #d35137;//e97435;;
 $body-font: 'Montserrat', 'Helvetica', sans-serif;
 $title-font: 'Montserrat Alternates', 'Helvetica', sans-serif;
 
@@ -228,7 +228,7 @@ select {
 a {
   display: inline-block;
   text-decoration: none;
-  color: $primary-color;
+  color: darken($secondary-color, 15%);
   transition: all 0.2s ease-in-out;
 }
 
@@ -293,7 +293,7 @@ a.btn {
 }
 
 .btn.highlight:hover {
-  background-color: darken($highlight-color, 10%);;
+  background-color: darken($highlight-color, 8%);//#b03e28;
 }
 
 .btn.sm {
@@ -626,7 +626,7 @@ div.alert {
 
 .table-container {
   overflow: overlay;
-  border: 1px solid $secondary-color;
+  border: 1px solid #58adc7;
   border-radius: 5px;
 }
 
@@ -635,7 +635,7 @@ div.alert {
 }
 
 thead {
-  background-color: $secondary-color;
+  background-color: #58adc7;
   color: white;
 }
 

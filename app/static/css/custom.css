@@ -5552,12 +5552,12 @@ select {
 a {
   display: inline-block;
   text-decoration: none;
-  color: #1C4D65;
+  color: #2aa5a0;
   transition: all 0.2s ease-in-out;
 }
 
 a:hover {
-  color: #54c3b8;
+  color: #4ad1cc;
 }
 
 .inverse a:hover, .inverse a:hover h2, .inverse a:hover .h2 {
@@ -5612,12 +5612,12 @@ a.btn {
 }
 
 .btn.highlight {
-  background-color: #e87b41;
+  background-color: #d35137;
   border: none;
 }
 
 .btn.highlight:hover {
-  background-color: #db5e1b;
+  background-color: #b94129;
 }
 
 .btn.sm {
@@ -5649,8 +5649,8 @@ a.btn {
 }
 
 button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
-  background-color: #54c3b8;
-  border-color: #54c3b8;
+  background-color: #4ad1cc;
+  border-color: #4ad1cc;
   color: white;
 }
 
@@ -5896,7 +5896,7 @@ div.alert {
 .usp-icon {
   width: 7rem;
   height: 7rem;
-  fill: #54c3b8;
+  fill: #4ad1cc;
   margin-bottom: 2rem;
 }
 
@@ -5927,7 +5927,7 @@ div.alert {
 
 .table-container {
   overflow: overlay;
-  border: 1px solid #54c3b8;
+  border: 1px solid #58adc7;
   border-radius: 5px;
 }
 
@@ -5936,7 +5936,7 @@ div.alert {
 }
 
 thead {
-  background-color: #54c3b8;
+  background-color: #58adc7;
   color: white;
 }
 

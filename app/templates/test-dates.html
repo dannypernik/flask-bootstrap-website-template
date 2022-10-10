@@ -31,11 +31,13 @@
           </div>
         </form>
       {% else %}
+        <h1>National test dates</h1>
         <p>
           In addition to the weekend dates listed below, schools and districts may offer the
           SAT or ACT on a school day. Schools handle student registration for these dates, so
           please contact your school to learn more. 
         </p>
+        <a href="{{ url_for('test_reminders') }}" class="btn highlight mt-1 d-block w-fit">Get registration reminders for your test dates</a>
       {% endif %}
 
       {% for t in tests %}
@@ -106,7 +108,6 @@
         {% endfor %}
       {% else %}
         <div class="text-center">
-          <a href="{{ url_for('test_reminders') }}" class="btn highlight mt-1 d-block w-fit">Get reminders for selected test dates</a>
           <a href="{{ url_for('index') }}" class="btn sec sm">Learn more about Open Path test prep</a>
         </div>
       {% endif %}

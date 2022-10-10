@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="mb-2">
-    <button id="add-user" class="btn d-inline-block my-0 me-2">+ Add user</button>
-    <a href="{{ url_for('students') }}" class="btn sec">Students</a>
+  <div>
+    <button id="add-user" class="btn d-inline-block me-2 mt-0">+ Add user</button>
+    <a href="{{ url_for('students') }}" class="btn sec me-2 mt-0">Students</a>
+    <a href="{{ url_for('test_dates') }}" class="btn sec mt-0">Test dates</a>
   </div>
 
   <form id="add-user-form" class="hidden-form" action="" method="post">
