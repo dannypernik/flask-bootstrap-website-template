@@ -6,6 +6,13 @@ from wtforms.validators import ValidationError, InputRequired, DataRequired, \
     Email, EqualTo, Length
 from app.models import User, TestDate, UserTestDate
 
+
+def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('An account already exists for ' + user.email + '.')
+
+
 class InquiryForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
         validators=[InputRequired()])
@@ -22,13 +29,15 @@ class EmailListForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
         validators=[InputRequired()])
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
+            validate_email])
     submit = SubmitField()
 
 
 class SignupForm(FlaskForm):
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
+            validate_email])
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
         validators=[InputRequired()])
     last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
@@ -38,11 +47,6 @@ class SignupForm(FlaskForm):
     password2 = PasswordField('Repeat Password', render_kw={"placeholder": "Repeat Password"}, \
         validators=[InputRequired(), EqualTo('password',message="Passwords do not match.")])
     submit = SubmitField('Sign up')
-
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError('This email address has already been registered.')
 
 
 class LoginForm(FlaskForm):
@@ -83,7 +87,9 @@ class UserForm(FlaskForm):
         validators=[InputRequired()])
     last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
         validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"})
+    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
+            validate_email])
     phone = StringField('Phone', render_kw={"placeholder": "Phone"})
     secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
@@ -103,13 +109,15 @@ class StudentForm(FlaskForm):
         validators=[InputRequired()])
     student_last_name = StringField('Student last name', render_kw={"placeholder": "Student last name"})
     student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
+            validate_email])
     student_phone = StringField('Student phone', render_kw={"placeholder": "Student phone"})
     parent_name = StringField('Parent first name', render_kw={"placeholder": "Parent first name"}, \
         validators=[InputRequired()])
     parent_last_name = StringField('Parent last name', render_kw={"placeholder": "Parent last name"})
     parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address")])
+        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
+            validate_email])
     secondary_email = secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
     parent_phone = StringField('Parent phone', render_kw={"placeholder": "Parent phone"})
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
@@ -125,7 +133,9 @@ class TutorForm(FlaskForm):
         validators=[InputRequired()])
     last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
         validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"})
+    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
+        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
+            validate_email])
     phone = StringField('Phone', render_kw={"placeholder": "Phone"})
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
         validators=[InputRequired()])

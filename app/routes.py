@@ -81,14 +81,14 @@ def signin():
     if current_user.is_authenticated:
         flash('You are already signed in.')
         return redirect(url_for('start_page'))
-    login_form = LoginForm()
+    form = LoginForm()
     signup_form = SignupForm()
-    return render_template('signin.html', title='Sign in', login_form=login_form, signup_form=signup_form)
+    return render_template('signin.html', title='Sign in', form=form, signup_form=signup_form)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    login_form = LoginForm()
+    form = LoginForm()
     signup_form = SignupForm()
     if signup_form.validate_on_submit():
         user = User(first_name=signup_form.first_name.data, last_name=signup_form.last_name.data, \
@@ -106,7 +106,7 @@ def signup():
         if not next or url_parse(next).netloc != '':
             return redirect(url_for('start_page'))
         return redirect(next)
-    return render_template('signin.html', title='Sign in', login_form=login_form, signup_form=signup_form)
+    return render_template('signin.html', title='Sign in', form=form, signup_form=signup_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -114,11 +114,11 @@ def login():
     if current_user.is_authenticated:
         flash('You are already signed in.')
         return redirect(url_for('start_page'))
-    login_form = LoginForm()
+    form = LoginForm()
     signup_form = SignupForm()
-    if login_form.validate_on_submit():
-        user = User.query.filter_by(email=login_form.email.data).first()
-        if user is None or not user.check_password(login_form.password.data):
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('signin'))
         login_user(user)
@@ -132,7 +132,7 @@ def login():
         if not next or url_parse(next).netloc != '':
             return redirect(url_for('start_page'))
         return redirect(next)
-    return render_template('signin.html', title='Sign in', login_form=login_form, signup_form=signup_form)
+    return render_template('signin.html', title='Sign in', form=form, signup_form=signup_form)
 
 
 @app.route('/logout')
@@ -209,9 +209,10 @@ def set_password(token):
 @admin_required
 def users():
     form = UserForm()
-    active_users = User.query.order_by(User.first_name).filter((User.status=='active'))# & (User.role != 'student'))
-    other_users = User.query.order_by(User.first_name).filter((User.status != 'active') | (User.status == None))
     roles = ['parent', 'tutor', 'student', 'admin']
+    active_users = User.query.order_by(User.first_name).filter((User.status == 'active'))
+    other_users = User.query.order_by(User.first_name).filter((User.status != 'active') | (User.status == None) | \
+        (User.role.notin_(roles)) | (User.role == None))
     parents = User.query.filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
     tutors = User.query.filter_by(role='tutor')

@@ -103,6 +103,10 @@
             {% endfor %}
           {% endif %}
         {% endwith %}
+
+        {% for field, errors in form.errors.items() %}
+          <div class="alert error">{{ errors[0] }}</div>
+        {% endfor %}
       {% endblock alerts %}
 
       <div class="section-margin"></div>

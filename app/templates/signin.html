@@ -2,10 +2,6 @@
 
 {% block alerts %}
   {{ super() }}
-  
-  {% for field, errors in login_form.errors.items() %}
-    <div class="alert error">{{ errors[0] }}</div>
-  {% endfor %}
 
   {% for field, errors in signup_form.errors.items() %}
     <div class="alert error">{{ errors[0] }}</div>
@@ -19,10 +15,10 @@
         <div class="col-12 col-md-5 mb-4">
           <h1>Log in</h1>
           <form action="{{ url_for('login') }}" method="post">
-            {{ login_form.hidden_tag() }}
-            {{ login_form.email }}
-            {{ login_form.password }}
-            {{ login_form.submit }}
+            {{ form.hidden_tag() }}
+            {{ form.email }}
+            {{ form.password }}
+            {{ form.submit }}
           </form>
           <p class="mt-3 text-center">
             <a href="{{ url_for('request_password_reset') }}" class="btn sec sm">Reset password</a>
