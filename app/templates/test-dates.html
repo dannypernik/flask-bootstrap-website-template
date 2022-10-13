@@ -108,6 +108,7 @@
         {% endfor %}
       {% else %}
         <div class="text-center">
+          <a href="{{ url_for('test_reminders') }}" class="btn highlight mt-1 d-block w-fit">Get registration reminders for your test dates</a>
           <a href="{{ url_for('index') }}" class="btn sec sm">Learn more about Open Path test prep</a>
         </div>
       {% endif %}
