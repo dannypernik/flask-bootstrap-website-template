@@ -147,7 +147,7 @@ def start_page():
     if current_user.is_admin:
         return redirect(url_for('students'))
     else:
-        return redirect(url_for('reminders'))
+        return redirect(url_for('test_reminders'))
 
 
 @app.route('/verify-email/<token>', methods=['GET', 'POST'])
@@ -208,7 +208,7 @@ def set_password(token):
 @app.route('/users', methods=['GET', 'POST'])
 @admin_required
 def users():
-    form = UserForm()
+    form = UserForm(None)
     roles = ['parent', 'tutor', 'student', 'admin']
     active_users = User.query.order_by(User.first_name).filter((User.status == 'active'))
     other_users = User.query.order_by(User.first_name).filter((User.status != 'active') | (User.status == None) | \
@@ -250,7 +250,7 @@ def users():
 @admin_required
 def edit_user(id):
     user = User.query.get_or_404(id)
-    form = UserForm(obj=user)
+    form = UserForm(user.email, obj=user)
     selected_date_ids = []
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     parents = User.query.order_by(User.first_name).filter_by(role='parent')
@@ -376,7 +376,7 @@ def students():
 def tutors():
     form = TutorForm()
     tutors = User.query.order_by(User.first_name).filter_by(role='tutor')
-    statuses = tutors.with_entities(User.status).distinct()
+    statuses = User.query.with_entities(User.status).distinct()
     if form.validate_on_submit():
         tutor = User(first_name=form.first_name.data, last_name=form.last_name.data, \
             email=form.email.data, phone=form.phone.data, timezone=form.timezone.data, \
@@ -397,10 +397,10 @@ def tutors():
 def test_dates():
     form = TestDateForm()
     tests = TestDate.query.with_entities(TestDate.test).distinct()
-    upcoming_weekend_dates = TestDate.query.order_by(TestDate.date).filter((TestDate.status != 'past') & (TestDate.status != 'school'))
-    other_dates = TestDate.query.order_by(TestDate.date).filter((TestDate.status == 'past') | (TestDate.status == 'school'))
+    dates_filter = (TestDate.status == 'confirmed') | (TestDate.status == 'unconfirmed')
+    upcoming_weekend_dates = TestDate.query.order_by(TestDate.date).filter(dates_filter)
+    other_dates = TestDate.query.order_by(TestDate.date).filter(~dates_filter)
     if form.validate_on_submit():
-        print(form.test.data, form.date.data)
         date = TestDate(test=form.test.data, date=form.date.data, \
             reg_date=form.reg_date.data, late_date=form.late_date.data, \
             other_date=form.other_date.data, status=form.status.data)

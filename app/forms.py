@@ -8,9 +8,9 @@ from app.models import User, TestDate, UserTestDate
 
 
 def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError('An account already exists for ' + user.email + '.')
+    user = User.query.filter_by(email=email.data).first()
+    if user is not None:
+        raise ValidationError('An account already exists for ' + user.email + '.')
 
 
 class InquiryForm(FlaskForm):
@@ -88,8 +88,7 @@ class UserForm(FlaskForm):
     last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
         validators=[InputRequired()])
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
-            validate_email])
+        validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone', render_kw={"placeholder": "Phone"})
     secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
     timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
@@ -102,6 +101,16 @@ class UserForm(FlaskForm):
     is_admin = BooleanField('Admin')
     session_reminders = BooleanField('Session reminders')
     submit = SubmitField('Save')
+
+    def __init__(self, original_email, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.original_email = original_email
+    
+    def validate_email(self, email):
+        if email.data != self.original_email:
+            user = User.query.filter_by(email=email.data).first()
+            if user is not None:
+                raise ValidationError('An account already exists for ' + user.email + '.')
 
 
 class StudentForm(FlaskForm):
