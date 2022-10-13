@@ -111,6 +111,14 @@ def main():
     
 ### Test date reminders
     test_dates = TestDate.query.all()
+
+    # mark test dates as past
+    for d in test_dates:
+        if d.date == today:
+            d.status = 'past'
+            db.session.add(d)
+            db.session.commit()
+            print('Test date', d.date, 'marked as past')
     
     for s in students:
         for d in s.get_dates():
@@ -120,14 +128,6 @@ def main():
                 send_late_registration_reminder_email(s, d)
             elif d.date == today + datetime.timedelta(days=6):
                 send_test_reminders_email(s, d)
-
-            # mark test dates as past
-            if d.date == today:
-                d.status = 'past'
-                db.session.add(d)
-                db.session.commit()
-                print('Test date', d.date, 'marked as past')
-
 
     for id in calendars:
         bimonth_cal_events = service_cal.events().list(calendarId=id, timeMin=upcoming_start,
