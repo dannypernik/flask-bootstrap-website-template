@@ -5580,7 +5580,7 @@ a:before {
 
 button, .btn, input[type=submit] {
   display: block;
-  margin: 2rem auto;
+  margin: 0 auto 2rem;
   padding: 1rem 2rem;
   background-color: #1C4D65;
   border: 2px solid #1C4D65;
@@ -5588,6 +5588,10 @@ button, .btn, input[type=submit] {
   transition: 0.3s;
   font-size: 1.7rem;
   font-weight: 600;
+}
+
+input[type=submit] {
+  margin-top: 2rem;
 }
 
 a.btn {
