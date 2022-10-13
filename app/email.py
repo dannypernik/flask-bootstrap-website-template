@@ -128,10 +128,12 @@ def send_reminder_email(event, student, quote):
     if location is None:
         location = student.location
 
-    cc_email = [{ "Email": parent.email }]
+    cc_email = []
+    if parent.session_reminders:
+        cc_email.append({ "Email": parent.email })
     if parent.secondary_email:
         cc_email.append({ "Email": parent.secondary_email })
-    if tutor.email:
+    if tutor.session_reminders:
         cc_email.append({ "Email": tutor.email })
     
     reply_email = tutor.email

@@ -152,7 +152,6 @@ def main():
     for event in upcoming_events:
         for student in active_students:
             name = full_name(student)
-            tutor = User.query.get_or_404(student.tutor_id)
             if name in event.get('summary'):
                 reminder_list.append(name)
                 send_reminder_email(event, student, quote)
