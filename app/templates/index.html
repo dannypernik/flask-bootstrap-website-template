@@ -89,52 +89,7 @@
     </div>
   </div>
 
-  <section class="drawer" id="site-menu" data-drawer-target>
-    <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
-    <div class="drawer__wrapper">
-      <div class="drawer__header">
-        <div class="drawer__title">
-
-        </div>
-        <button class="drawer__close" data-drawer-close aria-label="Close Drawer"></button>
-      </div>
-      <div class="drawer__content">
-        <a href="{{ url_for('index') }}">
-          <div class="menu-link">
-            <p>Home</p>
-          </div>
-        </a>
-        <a href="{{ url_for('reviews') }}">
-          <div class="menu-link">
-            <p>Reviews</p>
-          </div>
-        </a>
-        <a href="{{ url_for('about') }}">
-          <div class="menu-link">
-            <p>About</p>
-          </div>
-        </a>
-        <a href="#contact" data-drawer-close>
-          <div class="menu-link">
-            <p>Contact</p>
-          </div>
-        </a>
-        {% if current_user.is_authenticated %}
-          <a href="{{ url_for('logout') }}">
-            <div class="menu-link">
-              <p>Log out</p>
-            </div>
-          </a>
-        {% else %}
-          <a href="{{ url_for('signin') }}">
-            <div class="menu-link">
-              <p>Sign in</p>
-            </div>
-          </a>
-        {% endif %}
-      </div>
-    </div>
-  </section>
+  {% include "_menu-index.html" %}
 
   <div id="free-trial" class="home-section inverse">
     <div class="row justify-content-center">

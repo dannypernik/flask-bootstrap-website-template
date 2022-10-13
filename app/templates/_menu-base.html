@@ -1,0 +1,97 @@
+<!-- https://github.com/tomaszbujnowicz/vanilla-js-drawer -->
+
+<section class="drawer" id="site-menu" data-drawer-target>
+  <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
+  <div class="drawer__wrapper">
+    <div class="drawer__header">
+      <div class="drawer__title">
+
+      </div>
+      <div class="drawer__close" data-drawer-close aria-label="Close Drawer"></div>
+    </div>
+    <div class="drawer__content">
+      <a href="{{ url_for('index') }}">
+        <div class="menu-link">
+          <p>Home</p>
+        </div>
+      </a>
+      {% if current_user.is_admin %}
+          <!-- <a data-drawer-trigger data-drawer-close aria-controls="nested-menu" aria-expanded="false">
+            <div class="menu-link">
+              <p>Admin</p>
+            </div>
+          </a> -->
+          <a href="{{ url_for('users') }}">
+            <div class="menu-link">
+              <p>Users</p>
+            </div>
+          </a>
+          <a href="{{ url_for('students') }}">
+            <div class="menu-link">
+              <p>Students</p>
+            </div>
+          </a>
+          <a href="{{ url_for('tutors') }}">
+            <div class="menu-link">
+              <p>Tutors</p>
+            </div>
+          </a>
+      {% else %}
+        <a href="{{ url_for('reviews') }}">
+          <div class="menu-link">
+            <p>Reviews</p>
+          </div>
+        </a>
+      {% endif %}
+      
+      <a href="{{ url_for('test_dates') }}">
+        <div class="menu-link">
+          <p>Test dates</p>
+        </div>
+      </a>
+      <a href="{{ url_for('about') }}">
+        <div class="menu-link">
+          <p>About</p>
+        </div>
+      </a>
+      
+      {% block contact_link %}
+        <a href="{{ url_for('index', _anchor='contact') }}">
+          <div class="menu-link">
+            <p>Contact</p>
+          </div>
+        </a>
+      {% endblock contact_link %}
+      
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}">
+          <div class="menu-link">
+            <p>Log out</p>
+          </div>
+        </a>
+      {% else %}
+        <a href="{{ url_for('signin') }}">
+          <div class="menu-link">
+            <p>Sign in</p>
+          </div>
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+<section class="drawer" id="nested-menu" data-drawer-target>
+  <div class="drawer__overlay" data-drawer-close tabindex="-1"></div>
+  <div class="drawer__wrapper">
+    <div class="drawer__header">
+      <div class="drawer__title">
+
+      </div>
+      <div class="drawer__close" data-drawer-close aria-label="Close Drawer"></div>
+    </div>
+    <div class="drawer__content">
+      
+    </div>
+  </div>
+</section>

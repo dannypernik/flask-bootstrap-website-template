@@ -6,8 +6,6 @@
       {% if current_user.is_admin %}
         <div class="mb-3">
           <button id="add-date" class="btn d-inline-block mt-0 me-2">+ Add date</button>
-          <a href="{{ url_for('students') }}" class="btn sec me-2 mt-0">Students</a>
-          <a href="{{ url_for('tutors') }}" class="btn sec mt-0">Tutors</a>
         </div>
 
         <form id="add-date-form" class="hidden-form" action="" method="post">
@@ -108,7 +106,7 @@
         {% endfor %}
       {% else %}
         <div class="text-center">
-          <a href="{{ url_for('test_reminders') }}" class="btn highlight mt-1 d-block w-fit">Get registration reminders for your test dates</a>
+          <a href="{{ url_for('test_reminders') }}" class="btn mt-1 d-block w-fit">Get registration reminders for your test dates</a>
           <a href="{{ url_for('index') }}" class="btn sec sm">Learn more about Open Path test prep</a>
         </div>
       {% endif %}

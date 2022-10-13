@@ -5658,10 +5658,6 @@ button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
   color: white;
 }
 
-.drawer__close:hover {
-  background-color: white;
-}
-
 .img-fluid {
   max-width: 100%;
   height: auto;
@@ -5746,6 +5742,13 @@ div.alert {
   padding-left: 15px;
 }
 
+.drawer__back {
+  border: solid #ddd;
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  padding: 5px;
+}
+
 .drawer__content a {
   display: inline;
 }
@@ -5759,6 +5762,7 @@ div.alert {
 
 .menu-link p {
   padding: 1.7rem;
+  cursor: pointer;
 }
 
 .site-nav {
