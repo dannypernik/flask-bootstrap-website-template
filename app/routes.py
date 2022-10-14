@@ -26,7 +26,6 @@ def dir_last_updated(folder):
 
 hello = app.config['HELLO_EMAIL']
 phone = app.config['PHONE']
-tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
 
 @app.context_processor
 def inject_values():
@@ -251,6 +250,7 @@ def users():
 def edit_user(id):
     user = User.query.get_or_404(id)
     form = UserForm(user.email, obj=user)
+    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     selected_date_ids = []
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     parents = User.query.order_by(User.first_name).filter_by(role='parent')
@@ -469,6 +469,7 @@ def edit_date(id):
 @app.route('/test-reminders', methods=['GET', 'POST'])
 def test_reminders():
     form = EmailListForm()
+    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
     upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     selected_date_ids = []
     if current_user.is_authenticated:
