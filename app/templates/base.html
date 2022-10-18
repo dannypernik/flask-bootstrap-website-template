@@ -54,9 +54,10 @@
       {% endblock styles %}
 
       {% block scripts %}
-        <script async src="{{ url_for('static', filename='js/menu.js') }}"></script>
         <script async src="https://assets.calendly.com/assets/external/widget.js"></script>
       {% endblock scripts %}
+
+      <script async src="{{ url_for('static', filename='js/menu.js') }}"></script>
     {% endblock head %}
   </head>
   <body>
