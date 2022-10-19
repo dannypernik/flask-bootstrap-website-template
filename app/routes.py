@@ -632,17 +632,17 @@ def sitemap():
                 }
                 static_urls.append(url)
 
-    # Dynamic routes with dynamic content
-    dynamic_urls = list()
-    blog_posts = Post.objects(published=True)
-    for post in blog_posts:
-        url = {
-            "loc": f"{host_base}/blog/{post.category.name}/{post.url}",
-            "lastmod": post.date_published.strftime("%Y-%m-%dT%H:%M:%SZ")
-            }
-        dynamic_urls.append(url)
+    # # Dynamic routes with dynamic content
+    # dynamic_urls = list()
+    # blog_posts = Post.objects(published=True)
+    # for post in blog_posts:
+    #     url = {
+    #         "loc": f"{host_base}/blog/{post.category.name}/{post.url}",
+    #         "lastmod": post.date_published.strftime("%Y-%m-%dT%H:%M:%SZ")
+    #         }
+    #     dynamic_urls.append(url)
 
-    xml_sitemap = render_template("public/sitemap.xml", static_urls=static_urls, dynamic_urls=dynamic_urls, host_base=host_base)
+    xml_sitemap = render_template('sitemap.xml', static_urls=static_urls, host_base=host_base) #dynamic_urls=dynamic_urls)
     response = make_response(xml_sitemap)
     response.headers["Content-Type"] = "application/xml"
 
