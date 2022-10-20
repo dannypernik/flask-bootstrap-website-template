@@ -1,6 +1,6 @@
-<p>Hi {{ user.first_name }}, we're glad you're here!</p>
+<p>Welcome, {{ user.first_name }}!</p>
 <p>
-  Please verify that you registered an account with Open Path Tutoring by clicking below:
+  Please verify that you registered an account by clicking below:
 </p>
 <p>
   <a href="{{ url_for('verify_email', token=token, _external=True) }}"
@@ -19,5 +19,3 @@
 <p>
   If you did not register an account, please reply to this email to let us know.
 </p>
-<p>Thank you,<br>
-The Open Path Team</p>

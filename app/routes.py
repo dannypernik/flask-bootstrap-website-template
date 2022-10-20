@@ -2,15 +2,13 @@ import os
 from flask import Flask, render_template, flash, Markup, redirect, url_for, \
     request, send_from_directory, send_file, make_response
 from app import app, db, login, hcaptcha
-from app.forms import InquiryForm, EmailListForm, TestStrategiesForm, SignupForm, LoginForm, \
-    StudentForm, ScoreAnalysisForm, TestDateForm, UserForm, RequestPasswordResetForm, \
-        ResetPasswordForm, TutorForm
+from app.forms import ContactForm, EmailListForm, SignupForm, LoginForm, UserForm, \
+    RequestPasswordResetForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required, login_url
-from app.models import User, TestDate, UserTestDate
+from app.models import User
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email import send_contact_email, send_verification_email, send_password_reset_email, \
-    send_test_strategies_email, send_score_analysis_email
+from app.email import send_contact_email, send_verification_email, send_password_reset_email
 from functools import wraps
 
 @app.before_request
@@ -24,12 +22,9 @@ def dir_last_updated(folder):
                    for root_path, dirs, files in os.walk(folder)
                    for f in files))
 
-hello = app.config['HELLO_EMAIL']
-phone = app.config['PHONE']
-
 @app.context_processor
 def inject_values():
-    return dict(last_updated=dir_last_updated('app/static'), hello=hello, phone=phone)
+    return dict(last_updated=dir_last_updated('app/static'))
 
 def admin_required(f):
     @login_required
@@ -47,7 +42,7 @@ def admin_required(f):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    form = InquiryForm()
+    form = ContactForm()
     if form.validate_on_submit():
         if hcaptcha.verify():
             pass
@@ -57,22 +52,18 @@ def index():
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = form.subject.data
-        email_status = send_contact_email(user, message, subject)
+        email_status = send_contact_email(user, message)
         if email_status == 200:
             flash('Please check ' + user.email + ' for a confirmation email. Thank you for reaching out!')
             return redirect(url_for('index', _anchor="home"))
         else:
             flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
+    return render_template('index.html', form=form)
 
 
 @app.route('/about')
 def about():
     return render_template('about.html', title="About")
-
-@app.route('/reviews')
-def reviews():
-    return render_template('reviews.html', title="Reviews")
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -141,12 +132,11 @@ def logout():
 
 
 @app.route('/start-page')
-@login_required
 def start_page():
     if current_user.is_admin:
-        return redirect(url_for('students'))
+        return redirect(url_for('users'))
     else:
-        return redirect(url_for('test_reminders'))
+        return redirect(url_for('index'))
 
 
 @app.route('/verify-email/<token>', methods=['GET', 'POST'])
@@ -208,30 +198,25 @@ def set_password(token):
 @admin_required
 def users():
     form = UserForm(None)
-    roles = ['parent', 'tutor', 'student', 'admin']
+    roles = ['parent', 'student', 'admin']
     active_users = User.query.order_by(User.first_name).filter((User.status == 'active'))
     other_users = User.query.order_by(User.first_name).filter((User.status != 'active') | (User.status == None) | \
         (User.role.notin_(roles)) | (User.role == None))
     parents = User.query.filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
-    tutors = User.query.filter_by(role='tutor')
-    tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
     form.parent_id.choices = parent_list
-    form.tutor_id.choices = tutor_list
     if form.validate_on_submit():
         user = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-            email=form.email.data, secondary_email=form.secondary_email.data, \
-            phone=form.phone.data, timezone=form.timezone.data, location=form.location.data, \
-            role=form.role.data, status='active', is_admin=False)
-        user.tutor_id=form.tutor_id.data
-        user.status=form.status.data
-        user.parent_id=form.parent_id.data
-        if form.tutor_id.data == 0:
-            user.tutor_id=None
-        if form.parent_id.data == 0:
-            user.parent_id=None
+            email=form.email.data, phone=form.phone.data, location=form.location.data, \
+            role=form.role.data, is_admin=False)
         if form.status.data == 'none':
             user.status=None
+        else:
+            user.status=form.status.data
+        if form.parent_id.data == 0:
+            user.parent_id=None
+        else:
+            user.parent_id=form.parent_id.data
         try:
             db.session.add(user)
             db.session.commit()
@@ -250,43 +235,24 @@ def users():
 def edit_user(id):
     user = User.query.get_or_404(id)
     form = UserForm(user.email, obj=user)
-    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
-    selected_date_ids = []
-    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
     parents = User.query.order_by(User.first_name).filter_by(role='parent')
     parent_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in parents]
-    tutors = User.query.order_by(User.first_name).filter_by(role='tutor')
-    tutor_list = [(0,'')]+[(u.id, u.first_name + " " + u.last_name) for u in tutors]
     form.parent_id.choices = parent_list
-    form.tutor_id.choices = tutor_list
     if form.validate_on_submit():
         if 'save' in request.form:
             user.first_name=form.first_name.data
             user.last_name=form.last_name.data
             user.email=form.email.data
             user.phone=form.phone.data
-            user.secondary_email=form.secondary_email.data
-            user.timezone=form.timezone.data
             user.location=form.location.data
             user.status=form.status.data
             user.role=form.role.data
             user.is_admin=form.is_admin.data
-            user.session_reminders=form.session_reminders.data
-            if form.tutor_id.data == 0:
-                user.tutor_id=None
-            else:
-                user.tutor_id=form.tutor_id.data
             if form.parent_id.data == 0:
                 user.parent_id=None
             else:
                 user.parent_id=form.parent_id.data
 
-            selected_date_ids = request.form.getlist('test_dates')
-            for d in upcoming_dates:
-                if str(d.id) in selected_date_ids:
-                    user.add_test_date(d)
-                else:
-                    user.remove_test_date(d)
             try:
                 db.session.add(user)
                 db.session.commit()
@@ -301,299 +267,24 @@ def edit_user(id):
             flash('Deleted ' + user.first_name)
         else:
             flash('Code error in POST request', 'error')
-        if user.role == 'student' or user.role == 'tutor':
-            return redirect(url_for(user.role + 's'))
-        else:
-            return redirect(url_for('users'))
+        return redirect(url_for('users'))
     elif request.method == "GET":
         form.first_name.data=user.first_name
         form.last_name.data=user.last_name
         form.email.data=user.email
         form.phone.data=user.phone
-        form.secondary_email.data=user.secondary_email
-        form.timezone.data=user.timezone
         form.location.data=user.location
         form.status.data=user.status
         form.role.data=user.role
-        form.tutor_id.data=user.tutor_id
         form.parent_id.data=user.parent_id
         form.is_admin.data=user.is_admin
-        form.session_reminders.data=user.session_reminders
-
-        selected_dates = user.get_dates().all()
-        for d in upcoming_dates:
-            if d in selected_dates:
-                selected_date_ids.append(d.id)
-
-    return render_template('edit-user.html', title='Edit User', form=form, \
-        user=user, upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids, \
-        tests=tests)
-
-
-@app.route('/students', methods=['GET', 'POST'])
-@admin_required
-def students():
-    form = StudentForm()
-    students = User.query.order_by(User.first_name).filter_by(role='student')
-    tutors = User.query.filter_by(role='tutor')
-    tutor_list = [(u.id, u.first_name + " " + u.last_name) for u in tutors]
-    form.tutor_id.choices = tutor_list
-    statuses = ['active', 'paused', 'inactive']
-    other_students = User.query.filter((User.role=='student') & (User.status.notin_(statuses)))
-    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
-    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
-    if form.validate_on_submit():
-        student = User(first_name=form.student_name.data, last_name=form.student_last_name.data, \
-            email=form.student_email.data, phone=form.student_phone.data, timezone=form.timezone.data, \
-            location=form.location.data, status=form.status.data, \
-            tutor_id=form.tutor_id.data, role='student')
-        parent = User(first_name=form.parent_name.data, last_name=form.parent_last_name.data, \
-            email=form.parent_email.data, secondary_email=form.secondary_email.data, \
-            phone=form.parent_phone.data, timezone=form.timezone.data, role='parent')
-
-        try:
-            db.session.add(parent)
-            db.session.flush()
-            student.parent_id = parent.id
-            db.session.add(student)
-            db.session.commit()
-            selected_dates = request.form.getlist('test_dates')
-            for d in upcoming_dates:
-                if str(d.date) in selected_dates:
-                    student.add_test_date(d)
-        except:
-            db.session.rollback()
-            flash(student.first_name + ' could not be added', 'error')
-            return redirect(url_for('students'))
-        flash(student.first_name + ' added')
-        return redirect(url_for('students'))
-    return render_template('students.html', title="Students", form=form, students=students, \
-        statuses=statuses, upcoming_dates=upcoming_dates, tests=tests, other_students=other_students)
-
-
-@app.route('/tutors', methods=['GET', 'POST'])
-@admin_required
-def tutors():
-    form = TutorForm()
-    tutors = User.query.order_by(User.first_name).filter_by(role='tutor')
-    statuses = User.query.with_entities(User.status).distinct()
-    if form.validate_on_submit():
-        tutor = User(first_name=form.first_name.data, last_name=form.last_name.data, \
-            email=form.email.data, phone=form.phone.data, timezone=form.timezone.data, \
-            session_reminders=form.session_reminders.data, status='active', role='tutor')
-        try:
-            db.session.add(tutor)
-            db.session.commit()
-            flash(tutor.first_name + ' added')
-        except:
-            db.session.rollback()
-            flash(tutor.first_name + ' could not be added', 'error')
-            return redirect(url_for('tutors'))
-        return redirect(url_for('tutors'))
-    return render_template('tutors.html', title="Tutors", form=form, tutors=tutors, statuses=statuses)
-
-
-@app.route('/test-dates', methods=['GET', 'POST'])
-def test_dates():
-    form = TestDateForm()
-    tests = TestDate.query.with_entities(TestDate.test).distinct()
-    dates_filter = (TestDate.status == 'confirmed') | (TestDate.status == 'unconfirmed')
-    upcoming_weekend_dates = TestDate.query.order_by(TestDate.date).filter(dates_filter)
-    other_dates = TestDate.query.order_by(TestDate.date).filter(~dates_filter)
-    if form.validate_on_submit():
-        date = TestDate(test=form.test.data, date=form.date.data, \
-            reg_date=form.reg_date.data, late_date=form.late_date.data, \
-            other_date=form.other_date.data, status=form.status.data)
-        try:
-            db.session.add(date)
-            db.session.commit()
-            flash(date.date.strftime('%b %-d') + date.test.upper() + ' added')
-        except:
-            db.session.rollback()
-            flash(date.date.strftime('%b %-d') + date.test.upper() + ' could not be added', 'error')
-            return redirect(url_for('test_dates'))
-        return redirect(url_for('test_dates'))
-    return render_template('test-dates.html', title="Test dates", form=form, tests=tests, \
-        upcoming_weekend_dates=upcoming_weekend_dates, other_dates=other_dates)
-
-
-@app.route('/edit-date/<int:id>', methods=['GET', 'POST'])
-@admin_required
-def edit_date(id):
-    form = TestDateForm()
-    date = TestDate.query.get_or_404(id)
-    students = date.students
-    print(students)
-    if form.validate_on_submit():
-        if 'save' in request.form:
-            date.test=form.test.data
-            date.date=form.date.data
-            date.reg_date=form.reg_date.data
-            date.late_date=form.late_date.data
-            date.other_date=form.other_date.data
-            date.score_date=form.score_date.data
-            date.status=form.status.data
-
-            registered_students = request.form.getlist('registered_students')
-            for s in students:
-                if s in registered_students:
-                    s.is_registered = True
-                else:
-                    s.is_registered = False
-            try:
-                db.session.add(date)
-                db.session.commit()
-                flash(date.date.strftime('%b %-d') + ' updated')
-            except:
-                db.session.rollback()
-                flash(date.date.strftime('%b %-d') + ' could not be updated', 'error')
-                return redirect(url_for('test_dates'))
-        elif 'delete' in request.form:
-            db.session.delete(date)
-            db.session.commit()
-            flash('Deleted ' + date.date.strftime('%b %-d'))
-        else:
-            flash('Code error in POST request', 'error')
-        return redirect(url_for('test_dates'))
-    elif request.method == "GET":
-        form.test.data=date.test
-        form.date.data=date.date
-        form.reg_date.data=date.reg_date
-        form.late_date.data=date.late_date
-        form.other_date.data=date.other_date
-        form.score_date.data=date.score_date
-        form.status.data=date.status
-    return render_template('edit-date.html', title='Edit date', form=form, date=date, students=students)
-
-
-@app.route('/test-reminders', methods=['GET', 'POST'])
-def test_reminders():
-    form = EmailListForm()
-    tests = sorted(set(TestDate.test for TestDate in TestDate.query.all()), reverse=True)
-    upcoming_dates = TestDate.query.order_by(TestDate.date).filter(TestDate.status != 'past')
-    selected_date_ids = []
-    if current_user.is_authenticated:
-        user = User.query.filter_by(id=current_user.id).first_or_404()
-        selected_dates = user.get_dates().all()
-        for d in upcoming_dates:
-            if d in selected_dates:
-                selected_date_ids.append(d.id)
-    if request.method == "POST":
-        selected_date_ids = request.form.getlist('test_dates')
-        if not current_user.is_authenticated:
-            user = User.query.filter_by(email=form.email.data).first()
-            if not user:
-                user = User(first_name=form.first_name.data, last_name="", email=form.email.data)
-            elif user and not user.password_hash:   # User exists without password
-                email_status = send_password_reset_email(user)
-            else:   # User has saved password
-                flash('An account with this email already exists. Please log in.')
-                return redirect(url_for('signin'))
-        try:
-            db.session.add(user)
-            db.session.commit()
-            for d in upcoming_dates:
-                if str(d.id) in selected_date_ids:
-                    user.add_test_date(d)
-                else:
-                    user.remove_test_date(d)
-            if current_user.is_authenticated:
-                flash('Test dates updated')
-            else:
-                email_status = send_password_reset_email(user)
-                if email_status == 200:
-                    flash("Welcome! Please check your inbox to verify your email.")
-                else:
-                    flash('Verification email did not send. Please contact ' + hello, 'error')
-        except:
-            db.session.rollback()
-            flash('Test dates were not updated, please contact '+ hello, 'error')
-        return redirect(url_for('index'))
-    return render_template('test-reminders.html', form=form, tests=tests, \
-        upcoming_dates=upcoming_dates, selected_date_ids=selected_date_ids)
-
-
-@app.route('/griffin', methods=['GET', 'POST'])
-def griffin():
-    form = ScoreAnalysisForm()
-    school='Griffin School'
-    test='ACT'
-    if form.validate_on_submit():
-        student = User(first_name=form.student_first_name.data, last_name=form.student_last_name.data)
-        parent = User(first_name=form.parent_first_name.data, email=form.parent_email.data)
-        email_status = send_score_analysis_email(student, parent, school)
-        if email_status == 200:
-            return render_template('score-analysis-requested.html', email=form.parent_email.data)
-        else:
-            flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('school.html', form=form, school=school, test=test)
-
-
-@app.route('/appamada', methods=['GET', 'POST'])
-def appamada():
-    form = ScoreAnalysisForm()
-    school='Appamada School'
-    test='mini SAT'
-    if form.validate_on_submit():
-        student = User(first_name=form.student_first_name.data, last_name=form.student_last_name.data)
-        parent = User(first_name=form.parent_first_name.data, email=form.parent_email.data)
-        email_status = send_score_analysis_email(student, parent, school)
-        if email_status == 200:
-            return render_template('score-analysis-requested.html', email=form.parent_email.data)
-        else:
-            flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('school.html', form=form, school=school, test=test)
-
-
-@app.route('/huntington-surrey', methods=['GET', 'POST'])
-def huntington_surrey():
-    form = ScoreAnalysisForm()
-    school='Huntington-Surrey School'
-    test='SAT'
-    if form.validate_on_submit():
-        student = User(first_name=form.student_first_name.data, last_name=form.student_last_name.data)
-        parent = User(first_name=form.parent_first_name.data, email=form.parent_email.data)
-        email_status = send_score_analysis_email(student, parent, school)
-        if email_status == 200:
-            return render_template('score-analysis-requested.html', email=form.parent_email.data)
-        else:
-            flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('school.html', form=form, school=school, test=test)
-
-
-@app.route('/sat-act-data')
-def sat_act_data():
-    return render_template('sat-act-data.html', title="SAT & ACT data")
-
-
-@app.route('/test-strategies', methods=['GET', 'POST'])
-def test_strategies():
-    form = TestStrategiesForm()
-    if form.validate_on_submit():
-        relation = form.relation.data
-        if relation == 'student':
-            student = User(first_name=form.first_name.data, email=form.email.data)
-            parent = User(first_name=form.parent_name.data, email=form.parent_email.data)
-        elif relation == 'parent':
-            parent = User(first_name=form.first_name.data, email=form.email.data)
-            student = User(first_name=form.student_name.data)
-        email_status = send_test_strategies_email(student, parent, relation)
-        if email_status == 200:
-            return render_template('test-strategies-sent.html', email=form.email.data, relation=relation)
-        else:
-            flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('test-strategies.html', form=form)
+    return render_template('edit-user.html', title='Edit User', form=form, user=user)
 
 
 @app.route("/download/<filename>")
 def download_file (filename):
     path = os.path.join(app.root_path, 'static/files/')
     return send_from_directory(path, filename, as_attachment=False)
-
-
-@app.route('/practice-test-sent')
-def free_test_sent():
-    return render_template('practice-test-sent.html')
 
 
 @app.route('/favicon.ico')
@@ -609,7 +300,6 @@ def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
 
 @app.route("/sitemap")
-@app.route("/sitemap/")
 @app.route("/sitemap.xml")
 def sitemap():
     """

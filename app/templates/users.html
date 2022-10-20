@@ -14,8 +14,6 @@
     {{ form.last_name }}
     {{ form.email }}
     {{ form.phone }}
-    {{ form.secondary_email }}
-    {{ form.timezone }}
     {{ form.location }}
     <div class="d-none">
       {{ form.status }}
@@ -30,10 +28,6 @@
         <h3 class="mb-1">Parent:</h3>
         {{ form.parent_id }}
       </div>
-      <div id="tutor-div" class="mb-2">
-        <h3 class="mb-1">Tutor:</h3>
-        {{ form.tutor_id }}
-      </div>
     </div>
   
     {{ form.submit(class="mb-3") }}
@@ -41,9 +35,9 @@
 
   
   {% for r in roles %}
-    <h1 class="slide-toggle mb-2 mt-3">Active {{ r }}s</h1>
+    <h1 class="slide-toggle mb-2 mt-3">{{ r.title() }}s</h1>
     <div id="active-{{ r }}s" class="user-list">
-      {% for u in active_users %}
+      {% for u in users %}
         {% if u.role == r %}
           <div class="row">
             <div class="col">
@@ -60,75 +54,10 @@
                   {{ u.phone }}
                 </a>{% endif %}
               </p>
-              <ul>
-              {% if u.role == 'student' %}
-                <li>
-                  Parent:
-                  {% if u.parent_id %}
-                    <a href="{{ url_for('edit_user', id=u.parent_id) }}">
-                      {{ u.parent.first_name }} {{ u.parent.last_name }}
-                    </a>
-                  {% else %}
-                    None
-                  {% endif %}
-                </li>
-                <li>
-                  Tutor:
-                  {% if u.tutor_id %}
-                    <a href="{{ url_for('edit_user', id=u.tutor_id) }}">
-                      {{ u.tutor.first_name }} {{ u.tutor.last_name }}
-                    </a>
-                  {% else %}
-                    None  
-                  {% endif %}
-                </li>
-
-                {% elif u.role == 'tutor' %}
-                  <li>Students:
-                    {% for s in u.students %}
-                      <a href="{{ url_for('edit_user', id=s.id) }}">
-                        {{ s.first_name }} {{ s.last_name }}{{ "," if not loop.last else "" }}
-                      </a>
-                    {% endfor %}
-                  </li>
-                
-                {% elif u.role == 'parent' %}
-                  <li>Children:
-                    {% for c in u.children %}
-                      <a href="{{ url_for('edit_user', id=c.id) }}">
-                        {{ c.first_name }} {{ c.last_name }}{{ "," if not loop.last else "" }}
-                      </a>
-                    {% endfor %}
-                  </li>
-                {% endif %}
-
-                <li>Tests:
-                  {% for d in u.test_dates %}
-                    <a href="{{ url_for('edit_date', id=d.test_date_id) }}">
-                      {{ d.test_dates.date.strftime('%b %-d, %Y') }}
-                    </a>{{ ";" if not loop.last else "" }}
-                  {% endfor %}
-                </li>
-              </ul>
             </div>
           </div>
         {% endif %}
       {% endfor %}
-    </div>
-  {% endfor %}
-
-  <h1 class="slide-toggle mt-2">Other users</h1>
-  {% for u in other_users %}
-    <div class="row mb-3">
-      <div class="col">
-        <h3 class="mb-1">
-          <a class="semibold" href="{{ url_for('edit_user', id=u.id) }}">
-            {{ u.first_name }} {{ u.last_name }}
-          </a>
-          ({% if u.status %}{{ u.status.title() }}{% else %}None{% endif %}
-            {{ u.role }})
-        </h3>
-      </div>
     </div>
   {% endfor %}
 {% endblock content %}
@@ -171,6 +100,4 @@
       e.target.value = !x[2] ? x[1] : + x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     });
   </script>
-
-  <script src="{{ url_for('static', filename='js/toggle-parent-tutor.js') }}"></script>
 {% endblock end_scripts %}

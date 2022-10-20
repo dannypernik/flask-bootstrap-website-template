@@ -22,7 +22,6 @@ bootstrap = Bootstrap(app)
 hcaptcha = hCaptcha(app)
 
 from app import routes, models, errors
-app.config['TEMPLATES_AUTO_RELOAD'] = True
 login.login_message = u'Please sign in to access this page.'
 
 if not app.debug:
@@ -43,7 +42,7 @@ if not app.debug:
 
         if not os.path.exists('logs'):
             os.mkdir('logs')
-        file_handler = RotatingFileHandler('logs/tutoring.log', maxBytes=10240,
+        file_handler = RotatingFileHandler('logs/app.log', maxBytes=10240,
                                            backupCount=10)
         file_handler.setFormatter(logging.Formatter(
             '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
@@ -51,4 +50,3 @@ if not app.debug:
         app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Open Path Tutoring')

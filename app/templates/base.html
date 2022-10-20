@@ -7,39 +7,11 @@
           {% if title %}
             {{ title }} -
           {% endif %}
-          Open Path Tutoring
+          Base Template
         {% endblock title %}
       </title>
 
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-      <!-- Google Tag Manager -->
-      <script async>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-T7HJRW6');</script>
-      <!-- End Google Tag Manager -->
-
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-64JMLPC3H8"></script>
-      <script async>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-64JMLPC3H8');
-      </script>
-
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-186105291-1"></script>
-      <script async>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-186105291-1');
-      </script>
 
       <!-- favicons -->
       <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicons/favicon.svg' ) }}" sizes="any">
@@ -53,81 +25,71 @@
           <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css', u=last_updated) }}">
       {% endblock styles %}
 
-      {% block scripts %}
-        <script async src="https://assets.calendly.com/assets/external/widget.js"></script>
-      {% endblock scripts %}
-
       <script async src="{{ url_for('static', filename='js/menu.js') }}"></script>
     {% endblock head %}
   </head>
   <body>
-    {% block body %}
-      <!-- Google Tag Manager (noscript) -->
-      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7HJRW6"
-      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-      <!-- End Google Tag Manager (noscript) -->
-    {% endblock body %}
-  <div class="content">
-    {% block navbar %}
-      <div class="site-nav">
-        <div class="row justify-content-center">
-          <div class="col-10">
-            <div class="row">
-              <div class="col-9">
-                <a href="{{ url_for('index') }}">
-                  <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
-                </a>
-              </div>
-              <div class="col-3">
-                <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
-                  <div id="menu-title" class="d-none d-sm-block">
-                    {% if current_user.is_authenticated %}
-                      {{ current_user.first_name }} {{ current_user.last_name }}
-                    {% else %}
-                      Menu
-                    {% endif %}
-                  </div>
-                  <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
-                </a>
+    <div class="content">
+      {% block navbar %}
+        <div class="site-nav">
+          <div class="row justify-content-center">
+            <div class="col-10">
+              <div class="row">
+                <div class="col-9">
+                  <a href="{{ url_for('index') }}">
+                    <img id="nav-img" src="{{ url_for('static', filename='img/logo-header.svg') }}" alt="Open Path Tutoring">
+                  </a>
+                </div>
+                <div class="col-3">
+                  <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
+                    <div id="menu-title" class="d-none d-sm-block">
+                      {% if current_user.is_authenticated %}
+                        {{ current_user.first_name }} {{ current_user.last_name }}
+                      {% else %}
+                        Menu
+                      {% endif %}
+                    </div>
+                    <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="nav-gap"></div>
-      
-      {% block alerts %}
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="alert {{ category }}" role="alert">{{ message }}</div>
+        <div class="nav-gap"></div>
+        
+        {% block alerts %}
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert {{ category }}" role="alert">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          {% if form %}
+            {% for field, errors in form.errors.items() %}
+              <div class="alert error">{{ errors[0] }}</div>
             {% endfor %}
           {% endif %}
-        {% endwith %}
+        {% endblock alerts %}
 
-        {% if form %}
-          {% for field, errors in form.errors.items() %}
-            <div class="alert error">{{ errors[0] }}</div>
-          {% endfor %}
-        {% endif %}
-      {% endblock alerts %}
+        <div class="section-margin"></div>
 
-      <div class="section-margin"></div>
+        {% include '_menu-base.html' %}
 
-      {% include '_menu-base.html' %}
+      {% endblock navbar %}
 
-    {% endblock navbar %}
+      {% block container %}
+        <div class="row justify-content-center">
+          <div class="col-11 col-sm-10 col-lg-8">
 
-    {% block container %}
-      <div class="row justify-content-center">
-        <div class="col-11 col-sm-10 col-lg-8">
+            {% block content %}{% endblock content %}
 
-          {% block content %}{% endblock content %}
-
+          </div>
         </div>
-      </div>
-    {% endblock container %}
-  </div>
+      {% endblock container %}
+    </div>
 
     {% block footer %}
       <footer class="footer inverse">
@@ -135,15 +97,14 @@
           <div class="col-sm-10">
             <p class="mb-2 mt-3">
               <img src="{{ url_for('static', filename='img/phone.svg') }}"/>
-              <a class="ms-2" href="tel:+1{{ phone }}">{{ phone }}</a>
+              <a class="ms-2" href="tel:"></a>
             </p>
             <p class="mb-2">
               <img src="{{ url_for('static', filename='img/mail.svg') }}"/>
-              <a class="ms-2" href="mailto:{{ hello }}" target="_blank">{{ hello }}</a>
+              <a class="ms-2" href="mailto:" target="_blank"></a>
             </p>
             <p>
               <span class="me-3 h2">&copy;</span><script>document.write(new Date().getFullYear())</script>
-              Open Path Tutoring LLC
             </p>
           </div>
         </div>

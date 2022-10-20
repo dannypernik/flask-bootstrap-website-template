@@ -1,6 +1,0 @@
-Hi {{ student.first_name }}, this is an automated reminder that the late registration deadline for the {{ test_date.test.upper() }} on {{ td }} is coming up on {{ late_dl }}. This is also the deadline for cancelling or changing your test date.
-
-If you're already registered, then well done! If you have decided against taking the test on this date, reply to this email with your updated plans so that you only receive relevant reminders.
-
-All the best,
-The Open Path Team

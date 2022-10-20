@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, \
-    SubmitField, IntegerField, RadioField, SelectField, validators
+    SubmitField, IntegerField, SelectField, validators
 from wtforms.fields.html5 import DateField
 from wtforms.validators import ValidationError, InputRequired, DataRequired, \
     Email, EqualTo, Length
-from app.models import User, TestDate, UserTestDate
+from app.models import User
 
 
 def validate_email(self, email):
@@ -13,7 +13,7 @@ def validate_email(self, email):
         raise ValidationError('An account already exists for ' + user.email + '.')
 
 
-class InquiryForm(FlaskForm):
+class ContactForm(FlaskForm):
     first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
         validators=[InputRequired()])
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
@@ -72,12 +72,6 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField('Reset password')
 
 
-def get_tutors():
-    return User.query.filter_by(role='tutor')
-
-def get_parents():
-    return User.query.filter_by(role='parent')
-
 def full_name(User):
     return User.first_name + " " + User.last_name
 
@@ -90,16 +84,11 @@ class UserForm(FlaskForm):
     email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
         validators=[InputRequired(), Email(message="Please enter a valid email address")])
     phone = StringField('Phone', render_kw={"placeholder": "Phone"})
-    secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
-    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
-        validators=[InputRequired()])
     location = StringField('Location', render_kw={"placeholder": "Location"})
     status = SelectField('Status', choices=[('none','None'),('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('tutor','Tutor'),('admin','Admin')])
-    tutor_id = SelectField('Tutor', coerce=int)
+    role = SelectField('Role', choices=[('student', 'Student'),('parent', 'Parent'),('admin','Admin')])
     parent_id = SelectField('Parent', coerce=int)
     is_admin = BooleanField('Admin')
-    session_reminders = BooleanField('Session reminders')
     submit = SubmitField('Save')
 
     def __init__(self, original_email, *args, **kwargs):
@@ -111,83 +100,3 @@ class UserForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user is not None:
                 raise ValidationError('An account already exists for ' + user.email + '.')
-
-
-class StudentForm(FlaskForm):
-    student_name = StringField('Student first name', render_kw={"placeholder": "Student first name"}, \
-        validators=[InputRequired()])
-    student_last_name = StringField('Student last name', render_kw={"placeholder": "Student last name"})
-    student_email = StringField('Student Email address', render_kw={"placeholder": "Student Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
-            validate_email])
-    student_phone = StringField('Student phone', render_kw={"placeholder": "Student phone"})
-    parent_name = StringField('Parent first name', render_kw={"placeholder": "Parent first name"}, \
-        validators=[InputRequired()])
-    parent_last_name = StringField('Parent last name', render_kw={"placeholder": "Parent last name"})
-    parent_email = StringField('Parent Email address', render_kw={"placeholder": "Parent Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
-            validate_email])
-    secondary_email = secondary_email = StringField('Secondary email', render_kw={"placeholder": "Secondary email"})
-    parent_phone = StringField('Parent phone', render_kw={"placeholder": "Parent phone"})
-    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
-        validators=[InputRequired()])
-    location = StringField('Location', render_kw={"placeholder": "Location"})
-    status = SelectField('Status', choices=[('active', 'Active'),('paused','Paused'),('inactive','Inactive')])
-    tutor_id = SelectField('Tutor', coerce=int)
-    submit = SubmitField('Save')
-
-
-class TutorForm(FlaskForm):
-    first_name = StringField('First name', render_kw={"placeholder": "First name"}, \
-        validators=[InputRequired()])
-    last_name = StringField('Last name', render_kw={"placeholder": "Last name"}, \
-        validators=[InputRequired()])
-    email = StringField('Email address', render_kw={"placeholder": "Email address"}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address"), \
-            validate_email])
-    phone = StringField('Phone', render_kw={"placeholder": "Phone"})
-    timezone = IntegerField('Timezone', render_kw={"placeholder": "Timezone"}, \
-        validators=[InputRequired()])
-    session_reminders = BooleanField('Session reminders')
-    submit = SubmitField('Save')
-
-
-class TestDateForm(FlaskForm):
-    test = SelectField('Test', render_kw={'placeholder': 'Test'}, choices=[('sat','SAT'),('act','ACT')], \
-        validators=[InputRequired()])
-    date = DateField('Test date', format='%Y-%m-%d', validators=[InputRequired()])
-    reg_date = DateField('Registration deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
-    late_date = DateField('Late deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
-    other_date = DateField('Other deadline', format='%Y-%m-%d', validators=(validators.Optional(),))
-    score_date = DateField('Score release date', format='%Y-%m-%d', validators=(validators.Optional(),))
-    status = SelectField('Status', choices=[('confirmed','Confirmed'),('unconfirmed','Unconfirmed'),('school','School day'),('past','Past')])
-    submit = SubmitField('Save')
-
-
-class TestStrategiesForm(FlaskForm):
-    first_name = StringField('Your first name', render_kw={'placeholder': 'Your first name'}, \
-        validators=[InputRequired()])
-    email = StringField('Email address', render_kw={'placeholder': 'Email address'}, \
-        validators=[InputRequired(), Email(message="Please enter a valid email address")])
-    relation = RadioField('I am a:', choices=[('parent','Parent'),('student','Student')], \
-        validators=[InputRequired()])
-    parent_name = StringField('Parent\'s name', render_kw={'placeholder': 'Parent\'s name'})
-    parent_email = StringField('Parent\'s email', render_kw={'placeholder': 'Parent\'s email'})
-    student_name = StringField('Student\'s name', render_kw={'placeholder': 'Student\'s name'})
-    #pronouns = RadioField('Student\'s preferred pronouns:', choices=[("he","He/him"),("she","She/her"),("they","They/them")], \
-    #    validators=[InputRequired()])
-    submit = SubmitField('Send me 10 Strategies to Master the SAT & ACT')
-
-
-class ScoreAnalysisForm(FlaskForm):
-    student_first_name = StringField('Student\'s first name', render_kw={'placeholder': 'Student\'s first name'}, \
-        validators=[InputRequired()])
-    student_last_name = StringField('Student\'s last name', render_kw={'placeholder': 'Student\'s last name'}, \
-        validators=[InputRequired()])
-    school = StringField('School', render_kw={'placeholder': 'Student\'s school'}, \
-        validators=[InputRequired()])
-    parent_first_name = StringField('Parent\'s first name', render_kw={'placeholder': 'Parent\'s first name'}, \
-        validators=[InputRequired()])
-    parent_email = StringField('Parent\'s email address', render_kw={'placeholder': 'Parent\'s email address'}, \
-        validators=[InputRequired(), Email(message='Please enter a valid email address')])
-    submit = SubmitField('Send me the score analysis')

@@ -16,39 +16,13 @@
         </div>
       </a>
       {% if current_user.is_admin %}
-          <!-- <a data-drawer-trigger data-drawer-close aria-controls="nested-menu" aria-expanded="false">
-            <div class="menu-link">
-              <p>Admin</p>
-            </div>
-          </a> -->
-          <a href="{{ url_for('users') }}">
-            <div class="menu-link">
-              <p>Users</p>
-            </div>
-          </a>
-          <a href="{{ url_for('students') }}">
-            <div class="menu-link">
-              <p>Students</p>
-            </div>
-          </a>
-          <a href="{{ url_for('tutors') }}">
-            <div class="menu-link">
-              <p>Tutors</p>
-            </div>
-          </a>
-      {% else %}
-        <a href="{{ url_for('reviews') }}">
+        <a href="{{ url_for('users') }}">
           <div class="menu-link">
-            <p>Reviews</p>
+            <p>Users</p>
           </div>
         </a>
       {% endif %}
       
-      <a href="{{ url_for('test_dates') }}">
-        <div class="menu-link">
-          <p>Test dates</p>
-        </div>
-      </a>
       <a href="{{ url_for('about') }}">
         <div class="menu-link">
           <p>About</p>
@@ -76,7 +50,6 @@
           </div>
         </a>
       {% endif %}
-
     </div>
   </div>
 </section>
