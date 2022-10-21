@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block navbar %}{% endblock navbar %}
+
+{% block container %}
+  <div id="home-1" class="inverse text-center">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div id="home-alert" class="row justify-content-center alert {{ category }}">
+            <div class="col-sm-11 col-md-10 col-lg-9">
+              <div role="alert">{{ message }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <nav class="row justify-content-center g-0">
+      <div class="col-11 col-md-10">
+        <div class="row justify-content-center justify-content-md-end">
+          <div class="home-nav col col-md-7 col-lg-6 col-xl-5">
+            <div class="d-none d-md-block"><a href="#home" data-text="home">home</a></div>
+            <div><a href="{{ url_for('about') }}" data-text="about">about</a></div>
+            <div><a href="#contact" data-text="contact">contact</a></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="row justify-content-center">
+      <div class="col-11 col-sm-12">
+        <img id="home-logo" class="img-fluid"
+          src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
+        <h1 id="home-title">Something Great</h1>
+        <h1 id="home-tagline">This is what you've been looking for</h1>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col col-sm-11">
+        <a href="" class="cta btn">
+          Call to action
+        </a>
+
+        <div class="home-next">
+          <a href="#home-2">
+            <h2>
+              Learn more
+            </h2>
+            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi
+                bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row sticky-header justify-content-center">
+    <div class="col-10">
+      <div class="row">
+        <div class="col-9">
+          <a href="#contact">
+            <img id="nav-img" src="{{ url_for('static', filename='img/logo-white.svg') }}">
+          </a>
+        </div>
+        <div class="col-3">
+          <a id="menu-btn" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
+            <div id="menu-title" class="d-none d-sm-block">Menu</div>
+            <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "_menu-index.html" %}
+
+  <div id="home-2" class="home-section">
+    <div class="row justify-content-center">
+      <div class="col-11 col-sm-10 col-lg-8">
+        <h1 class="mb-4">
+          
+        </h1>
+        <div class="text-center">
+          <a class="cta btn mb-2" href="#contact">
+            Get in touch
+          </a>
+        </div>
+        <div class="home-next">
+          <a href="#home-3">
+            <h2>
+              Section 3
+            </h2>
+            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="home-3" class="home-section">
+    <div class="row text-center justify-content-center">
+      <div class="col-10">
+        <div class="row justify-content-center">
+          <h1 class="page-title">Section 3 title</h1>
+        </div>
+        <div class="row justify-content-center">
+          
+        </div>
+        <div class="home-next">
+          <a href="#contact">
+            <h2>
+              Have a question?
+            </h2>
+            <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact" class="home-section end">
+    <div class="row justify-content-center">
+      <div class="col-11 col-md-8">
+        <h1 class="page-title mb-4">Get in touch</h1>
+
+        <form id="inquiry-form" action="" method="post">
+          {{ form.hidden_tag() }}
+          <p class="mb-3">{{ form.first_name }}</p>
+          <p class="mb-3">{{ form.email }}</p>
+          <p class="mb-3">{{ form.phone }}</p>
+          <p class="mb-3">{{ form.message(rows='4') }}</p>
+          {{ hcaptcha }}
+          {{ form.submit }}
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock container %}
+
+{% block end_scripts %}
+  <script src="{{ url_for('static', filename='js/zenscroll-min.js') }}"></script>
+  <script>
+    zenscroll.setup(null, 0);
+  </script>
+
+  <script>
+    function onSubmit(token) {
+     document.getElementById("inquiry-form").submit();
+    }
+  </script>
+{% endblock end_scripts %}

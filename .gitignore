@@ -4,9 +4,4 @@
 __pycache__
 /venv/
 /logs/
-/certs/
 app.db
-token.json
-credentials.json
-app/static/img/favicons/favicon.svg
-app/static/img/favicons/favicon.ico

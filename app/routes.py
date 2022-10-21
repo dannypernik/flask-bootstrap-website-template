@@ -40,6 +40,7 @@ def admin_required(f):
 
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/home', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = ContactForm()
@@ -48,7 +49,7 @@ def index():
             pass
         else:
             flash('A computer has questioned your humanity. Please try again.', 'error')
-            return render_template('index.html', form=form, last_updated=dir_last_updated('app/static'))
+            return redirect(url_for('home'))
         user = User(first_name=form.first_name.data, email=form.email.data, phone=form.phone.data)
         message = form.message.data
         subject = form.subject.data
@@ -58,7 +59,7 @@ def index():
             return redirect(url_for('index', _anchor="home"))
         else:
             flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('index.html', form=form)
+    return render_template('home.html', form=form)
 
 
 @app.route('/about')
@@ -136,7 +137,7 @@ def start_page():
     if current_user.is_admin:
         return redirect(url_for('users'))
     else:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
 
 @app.route('/verify-email/<token>', methods=['GET', 'POST'])
@@ -286,7 +287,6 @@ def download_file (filename):
     path = os.path.join(app.root_path, 'static/files/')
     return send_from_directory(path, filename, as_attachment=False)
 
-
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'img/favicons/favicon.ico')
@@ -300,6 +300,7 @@ def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
 
 @app.route("/sitemap")
+@app.route("/sitemap/")
 @app.route("/sitemap.xml")
 def sitemap():
     """
@@ -332,7 +333,7 @@ def sitemap():
     #         }
     #     dynamic_urls.append(url)
 
-    xml_sitemap = render_template('sitemap.xml', static_urls=static_urls, host_base=host_base) #dynamic_urls=dynamic_urls)
+    xml_sitemap = render_template('sitemap/sitemap.xml', static_urls=static_urls, host_base=host_base) #dynamic_urls=dynamic_urls)
     response = make_response(xml_sitemap)
     response.headers["Content-Type"] = "application/xml"
 

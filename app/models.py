@@ -8,14 +8,14 @@ from flask_login import UserMixin
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(32), index=True)
-    last_name = db.Column(db.String(32), index=True)
+    first_name = db.Column(db.String(32))
+    last_name = db.Column(db.String(32))
     email = db.Column(db.String(64), unique=True, index=True)
-    phone = db.Column(db.String(32), index=True)
+    phone = db.Column(db.String(32))
     password_hash = db.Column(db.String(128))
     location = db.Column(db.String(128))
-    status = db.Column(db.String(24), index=True)
-    role = db.Column(db.String(24), index=True)
+    status = db.Column(db.String(24))
+    role = db.Column(db.String(24))
     parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     children = db.relationship('User',
         primaryjoin=(id==parent_id),

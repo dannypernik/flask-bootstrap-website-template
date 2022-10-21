@@ -34,7 +34,7 @@ if not app.debug:
             secure = ()
         mail_handler = SMTPHandler(
             mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
-            fromaddr='no-reply@' + app.config['MAIL_SERVER'],
+            fromaddr=app.config['MAIL_USERNAME'],
             toaddrs=app.config['ADMINS'], subject='App Bug',
             credentials=auth, secure=secure)
         mail_handler.setLevel(logging.ERROR)
@@ -50,3 +50,4 @@ if not app.debug:
         app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
+        app.logger.info('App startup')

@@ -1,6 +1,6 @@
 {
-  "name": "Open Path",
-  "short_name": "Open Path",
+  "name": "Default",
+  "short_name": "Default",
   "icons": [
     { "src": "./icon-192.png", "type": "image/png", "sizes": "192x192" },
     { "src": "./icon-512.png", "type": "image/png", "sizes": "512x512" }

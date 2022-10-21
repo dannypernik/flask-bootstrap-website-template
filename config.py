@@ -23,5 +23,4 @@ class Config(object):
     ADMINS = [os.environ.get('ADMINS')]
     HELLO_EMAIL = os.environ.get('HELLO_EMAIL')
     PHONE = os.environ.get('PHONE')
-    GMAIL_USERNAME = os.environ.get('GMAIL_USERNAME')
     SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID')

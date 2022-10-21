@@ -1,1 +1,1 @@
-# openpathtutoring
+# Flask + Bootstrap website template

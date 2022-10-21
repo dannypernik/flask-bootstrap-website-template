@@ -5443,6 +5443,10 @@ input, textarea {
   color: #1C4D65;
 }
 
+textarea::placeholder {
+  color: #aaa;
+}
+
 input:focus, textarea:focus {
   border-bottom: 1px solid #1C4D65;
 }
@@ -5590,6 +5594,22 @@ button, .btn, input[type=submit] {
   font-weight: 600;
 }
 
+button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
+  background-color: #4ad1cc;
+  border-color: #4ad1cc;
+  color: white;
+}
+
+.inverse button, .inverse .btn, .inverse input[type=submit] {
+  background-color: #4ad1cc;
+  border-color: #4ad1cc;
+}
+
+.inverse button:hover, .inverse .btn:hover, .inverse input[type=submit]:hover {
+  background-color: #2aa5a0;
+  border-color: #2aa5a0;
+}
+
 input[type=submit] {
   margin-top: 2rem;
 }
@@ -5649,12 +5669,6 @@ a.btn {
 .btn.alert:hover {
   background-color: #d61212;
   border-color: #d61212;
-  color: white;
-}
-
-button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
-  background-color: #4ad1cc;
-  border-color: #4ad1cc;
   color: white;
 }
 
@@ -5794,35 +5808,21 @@ div.alert {
   z-index: 100;
 }
 
-#home {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student-xl.webp) center top no-repeat;
+#home-1 {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/stars.jpg) center top no-repeat;
   background-attachment: fixed;
   background-size: cover;
   min-height: 100vh;
   overflow: auto;
 }
 
-#free-trial {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2-xl.webp) center top no-repeat;
+#home-2 {
   background-attachment: fixed;
   background-size: cover;
 }
 
-@media screen and (max-width: 1200px) {
-  #home {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student-lg.webp);
-  }
-  #free-trial {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2-lg.webp);
-  }
-}
 @media screen and (max-width: 575px) {
-  #home {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/student.jpg);
-    background-attachment: scroll;
-  }
-  #free-trial {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/student2.jpg);
+  #home-1, #home-2 {
     background-attachment: scroll;
   }
 }
