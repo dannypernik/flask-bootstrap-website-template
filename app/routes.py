@@ -40,7 +40,6 @@ def admin_required(f):
 
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/home', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = ContactForm()
@@ -59,7 +58,7 @@ def index():
             return redirect(url_for('index', _anchor="home"))
         else:
             flash('Email failed to send, please contact ' + hello, 'error')
-    return render_template('home.html', form=form)
+    return render_template('index.html', form=form)
 
 
 @app.route('/about')

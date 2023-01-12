@@ -30,9 +30,9 @@
     <div class="row justify-content-center">
       <div class="col-11 col-sm-12">
         <img id="home-logo" class="img-fluid"
-          src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="">
+          src="{{ url_for('static', filename='img/logo.svg') }}" alt="">
         <h1 id="home-title">Something Great</h1>
-        <h1 id="home-tagline">This is what you've been looking for</h1>
+        <h1 id="home-tagline">Make it yours.</h1>
       </div>
     </div>
     <div class="row justify-content-center">
@@ -43,9 +43,9 @@
 
         <div class="home-next">
           <a href="#home-2">
-            <h2>
+            <h4>
               Learn more
-            </h2>
+            </h4>
             <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi
                 bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -56,25 +56,7 @@
     </div>
   </div>
 
-  <div class="row sticky-header justify-content-center">
-    <div class="col-10">
-      <div class="row">
-        <div class="col-9">
-          <a href="#contact">
-            <img id="nav-img" src="{{ url_for('static', filename='img/logo-white.svg') }}">
-          </a>
-        </div>
-        <div class="col-3">
-          <a id="menu-btn" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
-            <div id="menu-title" class="d-none d-sm-block">Menu</div>
-            <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {% include "_menu-index.html" %}
+  {% include "_header-index.html" %}
 
   <div id="home-2" class="home-section">
     <div class="row justify-content-center">
@@ -89,9 +71,9 @@
         </div>
         <div class="home-next">
           <a href="#home-3">
-            <h2>
+            <h4>
               Section 3
-            </h2>
+            </h4>
             <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -113,9 +95,9 @@
         </div>
         <div class="home-next">
           <a href="#contact">
-            <h2>
+            <h4>
               Have a question?
-            </h2>
+            </h4>
             <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-chevron-down"
                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>

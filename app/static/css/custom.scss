@@ -443,14 +443,14 @@ div.alert {
   cursor: pointer;
 }
 
-.site-nav {
-  height: 60px;
-  position: fixed;
-  left: 0;
-  width: 100%;
+.sticky-header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  border: none;
+  border-bottom: 1px solid $primary-color;
   background-color: $primary-color;
-  border: 1px solid $primary-color;
-  z-index: 5;
+  z-index: 100;
 }
 
 .nav-gap {
@@ -462,16 +462,6 @@ div.alert {
   overflow: unset;
 }
 
-.sticky-header {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  border: none;
-  border-bottom: 1px solid $primary-color;
-  background-color: $primary-color;
-  z-index: 100;
-}
-
 // Home page
 
 // X-large backgrounds //
@@ -479,7 +469,7 @@ div.alert {
 // #home-1 photo by Derek Thomson on Unsplash: https://unsplash.com/photos/NqJYQ3m_rVA
 
 #home-1 {
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/stars.jpg) center top no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/simon-berger-twukN12EN7c-unsplash.jpg) center bottom no-repeat;
   background-attachment: fixed;
   background-size: cover;
   min-height: 100vh;
@@ -496,14 +486,14 @@ div.alert {
 #home-logo {
   position: relative;
   display: block;
-  margin: 0 auto 3rem;
+  margin: 3rem auto;
   height: calc(80px + 3vw);
 }
 
 #home-title {
   font-family: "Montserrat Alternates", sans-serif;
   font-size: calc(1.8rem + 3vw);
-  font-weight: 400;
+  font-weight: 1000;
 }
 
 #home-tagline {

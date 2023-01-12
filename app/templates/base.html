@@ -19,7 +19,7 @@
       <link rel="manifest" href="{{ url_for('static', filename='img/favicons/manifest.webmanifest') }}">
 
       {% block styles %}
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&display=swap"
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;1000&family=Montserrat+Alternates&display=swap"
           rel="stylesheet">
           <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
           <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css', u=last_updated) }}">
@@ -31,31 +31,9 @@
   <body>
     <div class="content">
       {% block navbar %}
-        <div class="site-nav">
-          <div class="row justify-content-center">
-            <div class="col-10">
-              <div class="row">
-                <div class="col-9">
-                  <a href="{{ url_for('index') }}">
-                    <img id="nav-img" src="{{ url_for('static', filename='img/logo-white.svg') }}" alt="Open Path Tutoring">
-                  </a>
-                </div>
-                <div class="col-3">
-                  <a id="menu-btn" href="#" data-drawer-trigger aria-controls="site-menu" aria-expanded="false">
-                    <div id="menu-title" class="d-none d-sm-block">
-                      {% if current_user.is_authenticated %}
-                        {{ current_user.first_name }} {{ current_user.last_name }}
-                      {% else %}
-                        Menu
-                      {% endif %}
-                    </div>
-                    <img id="menu-icon" src="{{ url_for('static', filename='img/menu.svg') }}" alt="">
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
+        {% include "_header-base.html" %}
+
         <div class="nav-gap"></div>
         
         {% block alerts %}
@@ -75,8 +53,6 @@
         {% endblock alerts %}
 
         <div class="section-margin"></div>
-
-        {% include '_menu-base.html' %}
 
       {% endblock navbar %}
 
@@ -104,7 +80,8 @@
               <a class="ms-2" href="mailto:" target="_blank"></a>
             </p>
             <p>
-              <span class="me-3 h2">&copy;</span><script>document.write(new Date().getFullYear())</script>
+              <span class="me-3 h5">&copy;</span>
+              <span><script>document.write(new Date().getFullYear())</script></span>
             </p>
           </div>
         </div>
