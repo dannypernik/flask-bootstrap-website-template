@@ -36,7 +36,9 @@
       <div class="drawer__close" data-drawer-close aria-label="Close Drawer"></div>
     </div>
     <div class="drawer__content">
-      <a href="{{ url_for('index') }}">
+      {% block home_link %}
+        <a href="{{ url_for('index') }}">
+      {% endblock home_link %}
         <div class="menu-link">
           <p>Home</p>
         </div>

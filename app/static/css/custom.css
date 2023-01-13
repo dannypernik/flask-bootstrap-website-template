@@ -188,6 +188,11 @@
 :root {
   font-size: var(--bs-root-font-size);
 }
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
 
 body {
   margin: 0;
@@ -6651,6 +6656,7 @@ progress {
 }
 html {
   height: 100%;
+  scroll-padding-top: 60px;
 }
 
 body {
@@ -7072,6 +7078,13 @@ div.alert {
 
 #home-1 {
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/simon-berger-twukN12EN7c-unsplash.jpg) center bottom no-repeat;
+}
+
+#home-3 {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../img/te-lun-ou-yang-TFZlTFOWReA-unsplash.jpg) center bottom no-repeat;
+}
+
+#home-1, #home-3 {
   background-attachment: fixed;
   background-size: cover;
   min-height: 100vh;
@@ -7079,7 +7092,7 @@ div.alert {
 }
 
 @media screen and (max-width: 575px) {
-  #home-1, #home-2 {
+  #home-1, #home-3 {
     background-attachment: scroll;
   }
 }
@@ -7128,8 +7141,7 @@ div.alert {
 .home-section {
   min-height: 100vh;
   overflow: auto;
-  margin-top: -60px;
-  padding-top: calc(7rem + 3vw);
+  padding-top: calc(3rem + 2vw);
 }
 
 .home-section.end {

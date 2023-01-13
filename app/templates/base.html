@@ -33,8 +33,6 @@
       {% block navbar %}
         
         {% include "_header-base.html" %}
-
-        <div class="nav-gap"></div>
         
         {% block alerts %}
           {% with messages = get_flashed_messages(with_categories=true) %}
