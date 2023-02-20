@@ -6260,7 +6260,7 @@ progress {
 }
 @media (min-width: 992px) {
   .modal-lg,
-.modal-xl {
+  .modal-xl {
     --bs-modal-width: 800px;
   }
 }
@@ -6301,7 +6301,7 @@ progress {
     border-radius: 0;
   }
   .modal-fullscreen-sm-down .modal-header,
-.modal-fullscreen-sm-down .modal-footer {
+  .modal-fullscreen-sm-down .modal-footer {
     border-radius: 0;
   }
   .modal-fullscreen-sm-down .modal-body {
@@ -6321,7 +6321,7 @@ progress {
     border-radius: 0;
   }
   .modal-fullscreen-md-down .modal-header,
-.modal-fullscreen-md-down .modal-footer {
+  .modal-fullscreen-md-down .modal-footer {
     border-radius: 0;
   }
   .modal-fullscreen-md-down .modal-body {
@@ -6341,7 +6341,7 @@ progress {
     border-radius: 0;
   }
   .modal-fullscreen-lg-down .modal-header,
-.modal-fullscreen-lg-down .modal-footer {
+  .modal-fullscreen-lg-down .modal-footer {
     border-radius: 0;
   }
   .modal-fullscreen-lg-down .modal-body {
@@ -6361,7 +6361,7 @@ progress {
     border-radius: 0;
   }
   .modal-fullscreen-xl-down .modal-header,
-.modal-fullscreen-xl-down .modal-footer {
+  .modal-fullscreen-xl-down .modal-footer {
     border-radius: 0;
   }
   .modal-fullscreen-xl-down .modal-body {
@@ -6381,7 +6381,7 @@ progress {
     border-radius: 0;
   }
   .modal-fullscreen-xxl-down .modal-header,
-.modal-fullscreen-xxl-down .modal-footer {
+  .modal-fullscreen-xxl-down .modal-footer {
     border-radius: 0;
   }
   .modal-fullscreen-xxl-down .modal-body {
@@ -6664,29 +6664,32 @@ body {
   font-family: "Montserrat", "Helvetica", sans-serif;
   color: #1C4D65;
   font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.4;
   display: flex;
   flex-direction: column;
   -ms-overflow-style: none;
 }
-
 body::-webkit-scrollbar {
   display: none;
 }
 
-p {
-  margin-bottom: 2rem;
+.content {
+  flex: 1 0 auto;
 }
 
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
-  margin-bottom: 1rem;
-  font-weight: 400;
-  line-height: 1.2;
+.row {
+  margin: 0;
+}
+
+p, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  margin-bottom: 2rem;
 }
 
 h1, .h1 {
-  font-family: "Montserrat Alternates", "Helvetica", sans-serif;
   font-size: calc(2.3rem + 1vw);
-  margin-bottom: 2rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
 }
 
 h2, .h2 {
@@ -6709,9 +6712,86 @@ h6, .h6 {
   font-size: calc(1.4rem + 0.25vw);
 }
 
-.row {
-  margin-left: 0;
-  margin-right: 0;
+a {
+  display: inline-block;
+  text-decoration: none;
+  color: #2aa5a0;
+  transition: all 0.2s ease-in-out;
+}
+a:hover {
+  color: #4ad1cc;
+}
+a:before {
+  display: block;
+  font-weight: 600;
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+a.btn {
+  display: inline-block;
+}
+a.btn:hover {
+  text-decoration: none;
+}
+
+button, .btn, input[type=submit] {
+  display: block;
+  margin: 2rem auto;
+  padding: 1rem 2rem;
+  background-color: #1C4D65;
+  border: 2px solid #1C4D65;
+  color: white;
+  transition: 0.3s;
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+button:hover, .btn:hover, input[type=submit]:hover {
+  background-color: #4ad1cc;
+  border-color: #4ad1cc;
+  color: white;
+}
+button .btn.clr, .btn .btn.clr, input[type=submit] .btn.clr {
+  background-color: transparent;
+  border-color: white;
+}
+button .btn.sec, .btn .btn.sec, input[type=submit] .btn.sec {
+  color: #1C4D65;
+  border-color: #1C4D65;
+  background-color: transparent;
+  font-weight: 400;
+  width: fit-content;
+}
+button.highlight, .btn.highlight, input[type=submit].highlight {
+  background-color: #d35137;
+  border: none;
+}
+button.highlight:hover, .btn.highlight:hover, input[type=submit].highlight:hover {
+  background-color: #b94129;
+}
+button.sm, .btn.sm, input[type=submit].sm {
+  font-weight: 400;
+  border-width: 1px;
+  margin-top: 1rem;
+  padding: 0.5rem 2rem;
+}
+button.cta, .btn.cta, input[type=submit].cta {
+  margin-top: calc(2rem + 1vw);
+  font-size: calc(2rem + 0.1vw);
+}
+button .row:hover > div > .btn.edit, .btn .row:hover > div > .btn.edit, input[type=submit] .row:hover > div > .btn.edit {
+  display: inline-block;
+}
+button.alert, .btn.alert, input[type=submit].alert {
+  color: #850017;
+  border-color: #850017;
+  background-color: transparent;
+}
+button.alert:hover, .btn.alert:hover, input[type=submit].alert:hover {
+  background-color: #850017;
+  border-color: #850017;
+  color: white;
 }
 
 input, textarea {
@@ -6724,7 +6804,6 @@ input, textarea {
   outline: none;
   color: #1C4D65;
 }
-
 input:focus, textarea:focus {
   border-bottom: 1px solid #1C4D65;
 }
@@ -6827,127 +6906,23 @@ select {
   padding: 0.5rem 1rem;
 }
 
-.semibold {
-  font-weight: 600;
+.inverse {
+  color: white;
 }
-
-a {
-  display: inline-block;
-  text-decoration: none;
-  color: #2aa5a0;
-  transition: all 0.2s ease-in-out;
+.inverse a {
+  color: white;
 }
-
-a:hover {
-  color: #4ad1cc;
-}
-
 .inverse a:hover, .inverse a:hover h2, .inverse a:hover .h2 {
   font-weight: 600;
   color: white;
 }
-
-a.btn:hover {
-  text-decoration: none;
-}
-
-a:before {
-  display: block;
-  font-weight: 600;
-  content: attr(data-text);
-  height: 0;
-  overflow: hidden;
-  visibility: hidden;
-}
-
-button, .btn, input[type=submit] {
-  display: block;
-  margin: 0 auto 2rem;
-  padding: 1rem 2rem;
-  background-color: #1C4D65;
-  border: 2px solid #1C4D65;
-  color: white;
-  transition: 0.3s;
-  font-size: 1.7rem;
-  font-weight: 600;
-}
-
-button:hover, .btn:hover, input[type=submit]:hover, .menu-link:hover {
-  background-color: #4ad1cc;
-  border-color: #4ad1cc;
-  color: white;
-}
-
 .inverse button, .inverse .btn, .inverse input[type=submit] {
   background-color: #4ad1cc;
   border-color: #4ad1cc;
 }
-
 .inverse button:hover, .inverse .btn:hover, .inverse input[type=submit]:hover {
   background-color: #2aa5a0;
   border-color: #2aa5a0;
-}
-
-input[type=submit] {
-  margin-top: 2rem;
-}
-
-a.btn {
-  display: inline-block;
-}
-
-.white {
-  color: white;
-}
-
-.btn.clr {
-  background-color: transparent;
-  border-color: white;
-}
-
-.btn.sec {
-  color: #1C4D65;
-  border-color: #1C4D65;
-  background-color: transparent;
-  font-weight: 400;
-  width: fit-content;
-}
-
-.btn.highlight {
-  background-color: #d35137;
-  border: none;
-}
-
-.btn.highlight:hover {
-  background-color: #b94129;
-}
-
-.btn.sm {
-  font-weight: 400;
-  border-width: 1px;
-  margin: 0;
-  padding: 0.5rem 2rem;
-}
-
-.btn.cta {
-  margin-top: calc(2rem + 1vw);
-  font-size: calc(2rem + 0.1vw);
-}
-
-.row:hover > div > .btn.edit {
-  display: inline-block;
-}
-
-.btn.alert {
-  color: #d61212;
-  border-color: #d61212;
-  background-color: transparent;
-}
-
-.btn.alert:hover {
-  background-color: #d61212;
-  border-color: #d61212;
-  color: white;
 }
 
 .img-fluid {
@@ -6955,56 +6930,42 @@ a.btn {
   height: auto;
 }
 
-#home-alert {
-  width: 100%;
-}
-
-div.alert {
+div.message {
   padding: 0.5rem 0;
   text-align: center;
+  width: 100%;
   font-size: 1.5rem;
   margin-bottom: 0;
   color: #004085;
-  background-color: #cce5ff;
-  border-color: #b8daff;
+  background-color: white;
+  border-color: white;
 }
-
-.alert.error {
+div.message.error {
   color: #850017;
-  background-color: #ffd4db;
-  border-color: #ffd4db;
+  background-color: white;
+  border-color: white;
 }
-
-.alert a {
+div.message a {
   text-decoration: underline;
   white-space: nowrap;
 }
 
-.section-margin {
+.title-margin {
   padding-top: calc(2rem + 3vw);
-}
-
-.page-title {
-  font-family: "Montserrat Alternates", "Helvetica", sans-serif;
-  font-size: calc(2.25rem + 1vw);
-}
-
-.content {
-  flex: 1 0 auto;
 }
 
 #contact {
   position: relative;
 }
 
-.footer {
-  flex-shrink: 0;
-  width: 100%;
-  bottom: 0;
-  padding: 20px;
+.sticky-header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  border: none;
+  border-bottom: 1px solid #1C4D65;
   background-color: #1C4D65;
-  color: white;
-  margin-top: 11rem;
+  z-index: 100;
 }
 
 #nav-img {
@@ -7034,46 +6995,34 @@ div.alert {
   padding-left: 15px;
 }
 
-.drawer__back {
-  border: solid #ddd;
-  border-width: 0 1px 1px 0;
-  display: inline-block;
-  padding: 5px;
-}
-
 .drawer__content a {
   display: inline;
 }
 
 .menu-link {
   height: 60px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid white;
   color: #1C4D65;
   transition: 0.3s;
 }
-
+.menu-link:hover {
+  background-color: #4ad1cc;
+  border-color: #4ad1cc;
+  color: white;
+}
 .menu-link p {
   padding: 1.7rem;
   cursor: pointer;
 }
 
-.sticky-header {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  border: none;
-  border-bottom: 1px solid #1C4D65;
-  background-color: #1C4D65;
-  z-index: 100;
-}
-
-.nav-gap {
-  height: 60px;
+.footer {
+  flex-shrink: 0;
   width: 100%;
-}
-
-#free-trial {
-  overflow: unset;
+  bottom: 0;
+  padding: 20px;
+  background-color: #1C4D65;
+  color: white;
+  margin-top: 11rem;
 }
 
 #home-1 {
@@ -7104,9 +7053,7 @@ div.alert {
 }
 
 #home-title {
-  font-family: "Montserrat Alternates", sans-serif;
   font-size: calc(1.8rem + 3vw);
-  font-weight: 1000;
 }
 
 #home-tagline {
@@ -7121,11 +7068,9 @@ div.alert {
   background-color: transparent;
   border: none;
 }
-
 .home-nav li {
   list-style: none;
 }
-
 .home-nav a {
   color: white;
   font-size: 2rem;
@@ -7133,8 +7078,7 @@ div.alert {
   padding: calc(3rem + 2vw) 0;
   text-transform: capitalize;
 }
-
-.home-nav a:focus, .home-nav a:hover {
+.home-nav a:hover, .home-nav a:focus {
   font-weight: 600;
 }
 
@@ -7143,17 +7087,8 @@ div.alert {
   overflow: auto;
   padding-top: calc(3rem + 2vw);
 }
-
 .home-section.end {
   min-height: calc(100vh - 30rem);
-}
-
-.inverse {
-  color: white;
-}
-
-.inverse a {
-  color: white;
 }
 
 .home-next {
@@ -7166,82 +7101,19 @@ div.alert {
   font-size: 1rem;
 }
 
-.usp {
-  margin-top: calc(2rem + 2vw);
-}
-
-.usp-icon {
-  width: 7rem;
-  height: 7rem;
-  fill: #4ad1cc;
-  margin-bottom: 2rem;
-}
-
-.usp-title {
-  margin-bottom: 1.5rem;
-}
-
-.usp-text {
-  color: #888;
-}
-
-.profile-pic {
+.profile-img {
   display: block;
   border-radius: 100%;
   margin: 0 auto 2rem;
   max-height: 155px;
 }
 
-.review-img {
-  height: 100px;
-  margin-bottom: 2rem;
-}
-
-.student-list, .user-list {
-  transition: height 0.2s ease-out;
-  overflow: hidden;
-}
-
-.table-container {
-  overflow: overlay;
-  border: 1px solid #58adc7;
-  border-radius: 5px;
-}
-
-.table > :not(caption) > * > * {
-  padding: 1rem;
-}
-
-thead {
-  background-color: #58adc7;
+.white {
   color: white;
 }
 
-th, td {
-  white-space: nowrap;
-  width: 1%;
-}
-
-td {
-  color: #1C4D65;
-}
-
-.test-date {
-  width: 177px;
-}
-
-.hidden-form, #parent-info, #student-info, #inactive-students {
-  height: 0px;
-  transition: height 0.5s ease-out;
-  overflow: hidden;
-}
-
-.slide-toggle {
-  cursor: pointer;
-}
-
-.w-fit {
-  width: fit-content;
+.semibold {
+  font-weight: 600;
 }
 
 /*# sourceMappingURL=custom.css.map */
