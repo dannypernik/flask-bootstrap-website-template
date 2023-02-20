@@ -1,13 +1,14 @@
 $font-size-root: 10px;
+$body-font-size: 1.8rem;
 $lead-font-size: calc(2rem + 0.1vw);
 $lead-font-weight: inherit;
+$body-font: 'Montserrat', 'Helvetica', sans-serif;
 $spacer: 2rem;
 $primary-color: #1C4D65;
 $secondary-color: #4ad1cc;//58bba4;
 $highlight-color: #d35137;//e97435;
 $message-color: #004085;
 $alert-color: #850017;
-$body-font: 'Montserrat', 'Helvetica', sans-serif;
 
 @import "../scss/bootstrap-reboot.scss";
 @import "bootstrap/bootstrap-grid.min.css";
@@ -31,7 +32,7 @@ body {
   height: 100%;
   font-family: $body-font;
   color: $primary-color;
-  font-size: 1.6rem;
+  font-size: $body-font-size;
   font-weight: 400;
   line-height: 1.4;
   display: flex;
