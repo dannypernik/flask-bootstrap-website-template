@@ -61,11 +61,6 @@ def index():
     return render_template('index.html', form=form)
 
 
-@app.route('/about')
-def about():
-    return render_template('about.html', title="About")
-
-
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if current_user.is_authenticated:
@@ -337,3 +332,27 @@ def sitemap():
     response.headers["Content-Type"] = "application/xml"
 
     return response
+
+
+def TemplateRenderer(app):
+    def register_template_endpoint(name, endpoint):
+        @app.route('/' + name, endpoint=endpoint)
+        def route_handler():
+            title = name.replace('-', ' ').capitalize()
+            return render_template(name + '.html', title=title)
+    return register_template_endpoint
+
+endpoints = []
+for r in app.url_map._rules:
+    endpoints.append(r.endpoint)
+
+template_list = []
+for f in os.listdir('app/templates'):
+    if f.endswith('html') and not f.startswith('_'):
+        template_list.append(f[0:-5])
+
+register_template_endpoint = TemplateRenderer(app)
+for path in template_list:
+    endpoint = path.replace('-','_')
+    if endpoint not in endpoints:
+        register_template_endpoint(path, endpoint)
